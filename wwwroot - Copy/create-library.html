@@ -1,0 +1,856 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>إنشاء مكتبة | AdminAPI</title>
+  <style>
+    :root{
+      --bg:#ffffff;
+      --panel:#ffffff;
+      --sidebar:#fbfcfd;
+      --ink:#16202a;
+      --muted:#6f7a84;
+      --line:#e7ebef;
+      --brand:#0f766e;
+      --brand-deep:#0b5c56;
+      --accent:#c88b33;
+      --danger:#bf4f45;
+      --success:#16805b;
+      --soft:#f5f8fa;
+      --soft-brand:#eef7f6;
+      --shadow:0 24px 60px rgba(15,23,42,.08);
+    }
+
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      min-height:100vh;
+      background:var(--bg);
+      color:var(--ink);
+      font-family:"Cairo","Tajawal","Segoe UI",Tahoma,sans-serif;
+    }
+
+    button,input,textarea,select,a{font:inherit}
+    a{text-decoration:none;color:inherit}
+
+    .app{
+      display:grid;
+      grid-template-columns:290px minmax(0,1fr);
+      min-height:100vh;
+    }
+
+    .sidebar{
+      background:var(--sidebar);
+      border-left:1px solid var(--line);
+      padding:22px 18px;
+      display:flex;
+      flex-direction:column;
+      gap:18px;
+      position:sticky;
+      top:0;
+      height:100vh;
+    }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      padding:10px 6px;
+    }
+
+    .brand-mark{
+      width:42px;
+      height:42px;
+      border-radius:14px;
+      display:grid;
+      place-items:center;
+      color:#fff;
+      font-weight:800;
+      background:linear-gradient(135deg,var(--brand),var(--accent));
+      box-shadow:0 14px 30px rgba(15,118,110,.18);
+    }
+
+    .brand strong{
+      display:block;
+      font-size:18px;
+    }
+
+    .brand span{
+      color:var(--muted);
+      font-size:13px;
+    }
+
+    .session-card{
+      padding:16px;
+      border-radius:22px;
+      background:#fff;
+      border:1px solid var(--line);
+      box-shadow:var(--shadow);
+    }
+
+    .session-card h3{
+      margin:0 0 12px;
+      font-size:16px;
+    }
+
+    .session-line{
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      padding:6px 0;
+      color:var(--muted);
+      font-size:13px;
+    }
+
+    .nav{
+      display:grid;
+      gap:8px;
+      overflow:auto;
+      padding-left:4px;
+    }
+
+    .nav-label{
+      color:var(--muted);
+      font-size:12px;
+      font-weight:800;
+      padding:6px 10px 2px;
+    }
+
+    .nav-btn{
+      width:100%;
+      min-height:46px;
+      border:1px solid transparent;
+      background:transparent;
+      color:var(--ink);
+      border-radius:16px;
+      text-align:right;
+      padding:0 14px;
+      cursor:pointer;
+      font-weight:700;
+    }
+
+    .nav-btn:hover{
+      background:#fff;
+      border-color:var(--line);
+    }
+
+    .nav-btn.active{
+      background:var(--soft-brand);
+      color:var(--brand);
+      border-color:rgba(15,118,110,.12);
+    }
+
+    .sidebar-actions{
+      margin-top:auto;
+      display:grid;
+      gap:10px;
+    }
+
+    .side-link,
+    .side-btn{
+      min-height:44px;
+      border-radius:14px;
+      border:1px solid var(--line);
+      background:#fff;
+      display:grid;
+      place-items:center;
+      color:var(--brand);
+      font-weight:800;
+      cursor:pointer;
+    }
+
+    .main{
+      padding:22px;
+    }
+
+    .topbar,
+    .intro,
+    .form-card{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:28px;
+      box-shadow:var(--shadow);
+    }
+
+    .topbar{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:14px;
+      padding:16px 18px;
+      margin-bottom:18px;
+    }
+
+    .topbar h1{
+      margin:0;
+      font-size:28px;
+    }
+
+    .topbar p{
+      margin:4px 0 0;
+      color:var(--muted);
+      font-size:14px;
+    }
+
+    .topbar-actions{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+
+    .top-btn{
+      min-height:42px;
+      padding:0 14px;
+      border-radius:14px;
+      border:1px solid var(--line);
+      background:#fff;
+      color:var(--brand);
+      cursor:pointer;
+      font-weight:800;
+    }
+
+    .intro{
+      padding:22px;
+      margin-bottom:18px;
+      background:
+        linear-gradient(135deg, rgba(15,118,110,.07), rgba(200,139,51,.05)),
+        var(--soft);
+    }
+
+    .intro h2{
+      margin:0 0 8px;
+      font-size:30px;
+    }
+
+    .intro p{
+      margin:0;
+      color:var(--muted);
+      line-height:1.9;
+      max-width:820px;
+    }
+
+    .form-card{
+      padding:22px;
+    }
+
+    .form-head{
+      margin-bottom:18px;
+    }
+
+    .form-head h3{
+      margin:0 0 6px;
+      font-size:24px;
+    }
+
+    .form-head p{
+      margin:0;
+      color:var(--muted);
+      line-height:1.8;
+      font-size:14px;
+    }
+
+    .form-grid{
+      display:grid;
+      grid-template-columns:repeat(2,1fr);
+      gap:16px;
+    }
+
+    .steps{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-bottom:18px;
+    }
+
+    .step-chip{
+      min-height:42px;
+      padding:0 14px;
+      border-radius:999px;
+      border:1px solid var(--line);
+      background:#fff;
+      color:var(--muted);
+      font-weight:800;
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+    }
+
+    .step-chip.active{
+      color:var(--brand);
+      background:var(--soft-brand);
+      border-color:rgba(15,118,110,.12);
+    }
+
+    .field{
+      display:grid;
+      gap:7px;
+    }
+
+    .field.full{
+      grid-column:1 / -1;
+    }
+
+    .field label{
+      color:var(--muted);
+      font-size:14px;
+      font-weight:700;
+    }
+
+    .field input,
+    .field select,
+    .field textarea{
+      min-height:48px;
+      border-radius:16px;
+      border:1px solid var(--line);
+      background:#fff;
+      padding:12px 14px;
+      outline:none;
+    }
+
+    .field textarea{
+      min-height:110px;
+      resize:vertical;
+    }
+
+    .field input:focus,
+    .field select:focus,
+    .field textarea:focus{
+      border-color:rgba(15,118,110,.28);
+      box-shadow:0 0 0 4px rgba(15,118,110,.08);
+    }
+
+    .code-box{
+      min-height:48px;
+      display:flex;
+      align-items:center;
+      padding:12px 14px;
+      border-radius:16px;
+      border:1px dashed rgba(15,118,110,.22);
+      background:rgba(15,118,110,.04);
+      color:var(--brand);
+      font-weight:800;
+      letter-spacing:.4px;
+    }
+
+    .field small{
+      color:var(--muted);
+      font-size:12px;
+      line-height:1.7;
+    }
+
+    .section-block{
+      margin-top:24px;
+      padding-top:18px;
+      border-top:1px dashed var(--line);
+    }
+
+    .section-block h4{
+      margin:0 0 6px;
+      font-size:18px;
+    }
+
+    .section-block p{
+      margin:0 0 14px;
+      color:var(--muted);
+      line-height:1.8;
+      font-size:14px;
+    }
+
+    .actions{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top:20px;
+    }
+
+    .step-panel{
+      display:none;
+    }
+
+    .step-panel.active{
+      display:block;
+    }
+
+    .step-nav{
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top:20px;
+    }
+
+    .btn{
+      min-height:48px;
+      padding:0 18px;
+      border:0;
+      border-radius:16px;
+      cursor:pointer;
+      font-weight:800;
+    }
+
+    .btn.primary{
+      color:#fff;
+      background:linear-gradient(135deg,var(--brand),var(--brand-deep));
+    }
+
+    .btn.secondary{
+      color:#fff;
+      background:linear-gradient(135deg,var(--accent),#b97a26);
+    }
+
+    .message{
+      display:none;
+      margin-top:16px;
+      padding:13px 14px;
+      border-radius:16px;
+      line-height:1.8;
+      font-size:14px;
+    }
+
+    .message.show{
+      display:block;
+    }
+
+    .message.error{
+      color:var(--danger);
+      background:rgba(191,79,69,.08);
+      border:1px solid rgba(191,79,69,.16);
+    }
+
+    .message.success{
+      color:var(--success);
+      background:rgba(22,128,91,.08);
+      border:1px solid rgba(22,128,91,.16);
+    }
+
+    @media (max-width:1180px){
+      .app{
+        grid-template-columns:1fr;
+      }
+
+      .sidebar{
+        position:static;
+        height:auto;
+      }
+    }
+
+    @media (max-width:760px){
+      .topbar,
+      .form-grid{
+        grid-template-columns:1fr;
+        display:grid;
+      }
+
+      .topbar-actions{
+        width:100%;
+      }
+    }
+  </style>
+<link rel="stylesheet" href="/theme.css">
+</head>
+<body>
+  <main class="app">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-mark">A</div>
+        <div>
+          <strong>لوحة المدير</strong>
+          <span>AdminAPI Control</span>
+        </div>
+      </div>
+
+      <section class="session-card">
+        <h3>الجلسة الحالية</h3>
+        <div class="session-line"><span>اسم المستخدم</span><b id="sessionUsername">-</b></div>
+        <div class="session-line"><span>الدور</span><b id="sessionRole">-</b></div>
+        <div class="session-line"><span>المعرّف</span><b id="sessionUserId">-</b></div>
+      </section>
+
+      <nav class="nav">
+        <div class="nav-label">الأقسام الرئيسية</div>
+        <a class="nav-btn" href="/admin.html">نظرة عامة</a>
+        <a class="nav-btn" href="/libraries.html">المكتبات</a>
+        <a class="nav-btn active" href="/create-library.html">إنشاء مكتبة</a>
+      </nav>
+
+      <div class="sidebar-actions">
+        <a class="side-link" href="/">صفحة الدخول</a>
+        <a class="side-link" href="/swagger">Swagger</a>
+        <button class="side-btn" id="logoutBtn" type="button">تسجيل الخروج</button>
+      </div>
+    </aside>
+
+    <section class="main">
+      <section class="topbar">
+        <div>
+          <h1>إنشاء مكتبة جديدة</h1>
+          <p>نموذج مبسط وسريع لإضافة مكتبة جديدة مع توليد تلقائي لكود المكتبة.</p>
+        </div>
+        <div class="topbar-actions">
+          <a class="top-btn" href="/libraries.html">الرجوع إلى المكتبات</a>
+        </div>
+      </section>
+
+      <section class="intro">
+        <h2>أدخل المعلومات الأساسية فقط</h2>
+        <p>
+          كود المكتبة يتولد تلقائيًا بصيغة `LIB-PHONE-LOCATION`.
+          يمكنك تعبئة الحقول الإضافية فقط إذا كنت تحتاجها الآن.
+        </p>
+      </section>
+
+      <section class="form-card">
+        <div class="form-head">
+          <h3>البيانات الأساسية</h3>
+          <p>قسّمت النموذج إلى مراحل أبسط حتى يكون الإدخال أوضح وأسرع.</p>
+        </div>
+
+        <form id="libraryForm">
+          <div class="steps">
+            <div class="step-chip active" id="chip1">1 التفاصيل العامة</div>
+            <div class="step-chip" id="chip2">2 بيانات المالك</div>
+            <div class="step-chip" id="chip3">3 المالية</div>
+          </div>
+
+          <input id="libraryCode" type="hidden">
+          <input id="status" type="hidden" value="Active">
+
+          <section class="step-panel active" id="step1">
+            <div class="form-grid">
+              <div class="field">
+                <label for="libraryName">اسم المكتبة</label>
+                <input id="libraryName" required>
+              </div>
+
+              <div class="field">
+                <label for="province">المحافظة</label>
+                <select id="province">
+                  <option value="">اختر المحافظة</option>
+                  <option value="بغداد">بغداد</option>
+                  <option value="البصرة">البصرة</option>
+                  <option value="نينوى">نينوى</option>
+                  <option value="أربيل">أربيل</option>
+                  <option value="النجف">النجف</option>
+                  <option value="كربلاء">كربلاء</option>
+                  <option value="السليمانية">السليمانية</option>
+                  <option value="دهوك">دهوك</option>
+                  <option value="الأنبار">الأنبار</option>
+                  <option value="ديالى">ديالى</option>
+                  <option value="صلاح الدين">صلاح الدين</option>
+                  <option value="كركوك">كركوك</option>
+                  <option value="بابل">بابل</option>
+                  <option value="واسط">واسط</option>
+                  <option value="ميسان">ميسان</option>
+                  <option value="ذي قار">ذي قار</option>
+                  <option value="المثنى">المثنى</option>
+                  <option value="القادسية">القادسية</option>
+                </select>
+              </div>
+
+              <div class="field full">
+                <label for="address">العنوان</label>
+                <input id="address">
+              </div>
+
+              <div class="field full">
+                <label>كود المكتبة</label>
+                <div class="code-box" id="libraryCodePreview">LIB-0000-BGD</div>
+                <small>يتحدث تلقائيًا اعتمادًا على رقم الهاتف ورمز المحافظة الإنجليزي.</small>
+              </div>
+            </div>
+            <div class="step-nav">
+              <span></span>
+              <button class="btn secondary" type="button" id="nextToStep2">التالي</button>
+            </div>
+          </section>
+
+          <section class="step-panel" id="step2">
+            <div class="form-grid">
+              <div class="field">
+                <label for="ownerName">اسم صاحب المكتبة</label>
+                <input id="ownerName">
+              </div>
+
+              <div class="field">
+                <label for="ownerPhone">رقم الهاتف</label>
+                <input id="ownerPhone">
+              </div>
+
+              <div class="field">
+                <label for="ownerPhone2">الهاتف البديل</label>
+                <input id="ownerPhone2">
+              </div>
+
+              <div class="field full">
+                <label for="city">المدينة</label>
+                <input id="city">
+              </div>
+            </div>
+            <div class="step-nav">
+              <button class="btn secondary" type="button" id="backToStep1">السابق</button>
+              <button class="btn secondary" type="button" id="nextToStep3">التالي</button>
+            </div>
+          </section>
+
+          <section class="step-panel" id="step3">
+            <div class="form-grid">
+              <div class="field">
+                <label for="creditLimit">حد الائتمان</label>
+                <input id="creditLimit" type="number" step="0.01" value="0">
+              </div>
+
+              <div class="field">
+                <label for="currentBalance">الرصيد الحالي</label>
+                <input id="currentBalance" type="number" step="0.01" value="0">
+              </div>
+
+              <div class="field full">
+                <label for="notes">ملاحظات</label>
+                <textarea id="notes"></textarea>
+              </div>
+            </div>
+            <div class="step-nav">
+              <button class="btn secondary" type="button" id="backToStep2">السابق</button>
+              <div>
+                <button class="btn secondary" type="button" id="resetBtn">تفريغ الحقول</button>
+                <button class="btn primary" type="submit">حفظ المكتبة</button>
+              </div>
+            </div>
+          </section>
+        </form>
+
+        <div class="message error" id="errorBox"></div>
+        <div class="message success" id="successBox"></div>
+      </section>
+    </section>
+  </main>
+
+  <script src="js/auth.js"></script>
+  <script>
+    const session = readJson("adminSession");
+
+    function byId(id) {
+      return document.getElementById(id);
+    }
+
+    function readJson(key) {
+      try {
+        return JSON.parse(localStorage.getItem(key) || "null");
+      } catch {
+        return null;
+      }
+    }
+
+    function getSessionData() {
+      if (session?.accessToken) {
+        return session;
+      }
+
+      if (!window.Auth) {
+        return null;
+      }
+
+      return {
+        accessToken: Auth.getAccessToken(),
+        username: Auth.getUsername(),
+        roleCode: Auth.getRoleCode(),
+        userId: Auth.getStoredValue ? Auth.getStoredValue("userId") : null
+      };
+    }
+
+    function requireSession() {
+      const currentSession = getSessionData();
+      if (!currentSession?.accessToken) {
+        window.location.href = "/";
+        throw new Error("لا توجد جلسة مدير.");
+      }
+    }
+
+    function requireOfficeAccess() {
+      if (window.Auth) {
+        if (!Auth.requireAuth()) {
+          throw new Error("تعذر التحقق من الجلسة الحالية.");
+        }
+
+        if (!Auth.canManageArea("offices")) {
+          Auth.redirectToDefaultPage("لا تملك صلاحية إدارة قسم المكاتب.");
+          throw new Error("لا تملك صلاحية إدارة قسم المكاتب.");
+        }
+      }
+
+      requireSession();
+    }
+
+    function renderSession() {
+      const currentSession = getSessionData() || {};
+      byId("sessionUsername").textContent = (window.Auth ? Auth.getUsername() : currentSession.username) || "-";
+      byId("sessionRole").textContent = (window.Auth ? Auth.getDisplayName() : currentSession.roleCode) || "-";
+      byId("sessionUserId").textContent = currentSession.userId || "-";
+    }
+
+    function showMessage(id, message) {
+      const target = byId(id);
+      target.textContent = message;
+      target.classList.add("show");
+    }
+
+    function hideMessages() {
+      byId("errorBox").textContent = "";
+      byId("successBox").textContent = "";
+      byId("errorBox").classList.remove("show");
+      byId("successBox").classList.remove("show");
+    }
+
+    async function requestJson(url, options = {}) {
+      const currentSession = getSessionData();
+      const response = await fetch(url, {
+        ...options,
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${currentSession?.accessToken || ""}`,
+          ...(options.headers || {})
+        }
+      });
+
+      const text = await response.text();
+      let data = null;
+
+      try {
+        data = text ? JSON.parse(text) : null;
+      } catch {
+        data = text;
+      }
+
+      if (!response.ok) {
+        throw new Error(typeof data === "string" ? data : (data?.title || data?.message || `HTTP ${response.status}`));
+      }
+
+      return data;
+    }
+
+    const provinceCodeMap = {
+      "بغداد": "BGD",
+      "البصرة": "BAS",
+      "نينوى": "NIN",
+      "أربيل": "ERB",
+      "النجف": "NJF",
+      "كربلاء": "KRB",
+      "السليمانية": "SLM",
+      "دهوك": "DHK",
+      "الأنبار": "ANB",
+      "ديالى": "DYL",
+      "صلاح الدين": "SLD",
+      "كركوك": "KRK",
+      "بابل": "BAB",
+      "واسط": "WAS",
+      "ميسان": "MSN",
+      "ذي قار": "DQR",
+      "المثنى": "MTH",
+      "القادسية": "QAD"
+    };
+
+    function normalizePhonePart(value) {
+      const digits = (value || "").replace(/\D/g, "");
+      if (!digits) {
+        return "0000";
+      }
+
+      return digits.slice(-4).padStart(4, "0");
+    }
+
+    function generateLibraryCode() {
+      const province = byId("province").value.trim();
+      const provinceCode = provinceCodeMap[province] || "IRQ";
+      const phoneCode = normalizePhonePart(byId("ownerPhone").value);
+      const code = `LIB-${phoneCode}-${provinceCode}`;
+      byId("libraryCode").value = code;
+      byId("libraryCodePreview").textContent = code;
+    }
+
+    function setStep(stepNumber) {
+      [1, 2, 3].forEach((step) => {
+        byId(`step${step}`).classList.toggle("active", step === stepNumber);
+        byId(`chip${step}`).classList.toggle("active", step === stepNumber);
+      });
+    }
+
+    function buildPayload() {
+      generateLibraryCode();
+
+      return {
+        libraryCode: byId("libraryCode").value.trim(),
+        libraryName: byId("libraryName").value.trim(),
+        ownerName: byId("ownerName").value.trim() || null,
+        ownerPhone: byId("ownerPhone").value.trim() || null,
+        ownerPhone2: byId("ownerPhone2").value.trim() || null,
+        address: byId("address").value.trim() || null,
+        province: byId("province").value.trim() || null,
+        city: byId("city").value.trim() || null,
+        latitude: null,
+        longitude: null,
+        status: byId("status").value,
+        creditLimit: Number(byId("creditLimit").value || 0),
+        currentBalance: Number(byId("currentBalance").value || 0),
+        notes: byId("notes").value.trim() || null
+      };
+    }
+
+    async function submitForm(event) {
+      event.preventDefault();
+      hideMessages();
+
+      const payload = buildPayload();
+
+      if (!payload.libraryName) {
+        showMessage("errorBox", "اسم المكتبة حقل مطلوب.");
+        return;
+      }
+
+      try {
+        const data = await requestJson("/api/Libraries", {
+          method: "POST",
+          body: JSON.stringify(payload)
+        });
+
+        showMessage("successBox", `تم إنشاء المكتبة بنجاح: ${data.libraryName}`);
+        setTimeout(() => {
+          window.location.href = "offices.html";
+        }, 900);
+      } catch (error) {
+        showMessage("errorBox", error.message || "تعذر إنشاء المكتبة.");
+      }
+    }
+
+    byId("libraryForm").addEventListener("submit", submitForm);
+    byId("province").addEventListener("change", generateLibraryCode);
+    byId("ownerPhone").addEventListener("input", generateLibraryCode);
+    byId("nextToStep2").addEventListener("click", () => setStep(2));
+    byId("backToStep1").addEventListener("click", () => setStep(1));
+    byId("nextToStep3").addEventListener("click", () => setStep(3));
+    byId("backToStep2").addEventListener("click", () => setStep(2));
+    byId("resetBtn").addEventListener("click", () => {
+      byId("libraryForm").reset();
+      byId("creditLimit").value = "0";
+      byId("currentBalance").value = "0";
+      hideMessages();
+      setStep(1);
+      generateLibraryCode();
+    });
+    byId("logoutBtn").addEventListener("click", () => {
+      if (window.Auth) {
+        Auth.logout();
+        return;
+      }
+
+      localStorage.removeItem("adminSession");
+      window.location.href = "/";
+    });
+
+    requireOfficeAccess();
+    renderSession();
+    generateLibraryCode();
+  </script>
+</body>
+</html>
+

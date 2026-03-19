@@ -1,0 +1,475 @@
+2026-03-19 06:02:46.692 +00:00 [INF] Secret provider configured: Environment
+2026-03-19 06:02:47.196 +00:00 [ERR] Failed executing DbCommand (11ms) [Parameters=[], CommandType='"Text"', CommandTimeout='15']
+SELECT "MigrationId", "ProductVersion"
+FROM "__EFMigrationsHistory"
+ORDER BY "MigrationId";
+2026-03-19 06:02:47.824 +00:00 [INF] Database migrations applied successfully.
+2026-03-19 06:02:48.192 +00:00 [INF] Role catalog normalized. Reassigned 0 admin users, 0 library accounts, removed 2 obsolete roles.
+2026-03-19 06:02:52.929 +00:00 [INF] Secret provider configured: Environment
+2026-03-19 06:02:53.567 +00:00 [INF] Database migrations applied successfully.
+2026-03-19 06:02:53.797 +00:00 [INF] Role catalog normalized. Reassigned 0 admin users, 0 library accounts, removed 0 obsolete roles.
+2026-03-19 06:02:58.257 +00:00 [INF] Secret provider configured: Environment
+2026-03-19 06:02:58.852 +00:00 [INF] Database migrations applied successfully.
+2026-03-19 06:02:59.078 +00:00 [INF] Role catalog normalized. Reassigned 0 admin users, 0 library accounts, removed 0 obsolete roles.
+2026-03-19 06:03:03.361 +00:00 [INF] Secret provider configured: Environment
+2026-03-19 06:03:04.170 +00:00 [INF] Database migrations applied successfully.
+2026-03-19 06:03:04.398 +00:00 [INF] Role catalog normalized. Reassigned 0 admin users, 0 library accounts, removed 0 obsolete roles.
+2026-03-19 06:03:08.729 +00:00 [INF] Secret provider configured: Environment
+2026-03-19 06:03:09.341 +00:00 [INF] Database migrations applied successfully.
+2026-03-19 06:03:09.565 +00:00 [INF] Role catalog normalized. Reassigned 0 admin users, 0 library accounts, removed 0 obsolete roles.
+2026-03-19 06:03:14.969 +00:00 [INF] Secret provider configured: Environment
+2026-03-19 06:03:15.589 +00:00 [INF] Database migrations applied successfully.
+2026-03-19 06:03:15.806 +00:00 [INF] Role catalog normalized. Reassigned 0 admin users, 0 library accounts, removed 0 obsolete roles.
+2026-03-19 06:03:23.046 +00:00 [INF] Secret provider configured: Environment
+2026-03-19 06:03:23.692 +00:00 [INF] Database migrations applied successfully.
+2026-03-19 06:03:23.926 +00:00 [INF] Role catalog normalized. Reassigned 0 admin users, 0 library accounts, removed 0 obsolete roles.
+2026-03-19 06:03:33.172 +00:00 [INF] Secret provider configured: Environment
+2026-03-19 06:03:33.844 +00:00 [INF] Database migrations applied successfully.
+2026-03-19 06:03:34.103 +00:00 [INF] Role catalog normalized. Reassigned 0 admin users, 0 library accounts, removed 0 obsolete roles.
+2026-03-19 06:03:51.840 +00:00 [INF] Secret provider configured: Environment
+2026-03-19 06:03:52.463 +00:00 [INF] Database migrations applied successfully.
+2026-03-19 06:03:52.680 +00:00 [INF] Role catalog normalized. Reassigned 0 admin users, 0 library accounts, removed 0 obsolete roles.
+2026-03-19 06:04:22.356 +00:00 [INF] Secret provider configured: Environment
+2026-03-19 06:04:22.987 +00:00 [INF] Database migrations applied successfully.
+2026-03-19 06:04:23.215 +00:00 [INF] Role catalog normalized. Reassigned 0 admin users, 0 library accounts, removed 0 obsolete roles.
+2026-03-19 06:04:51.130 +00:00 [INF] Secret provider configured: Environment
+2026-03-19 06:04:51.805 +00:00 [INF] Database migrations applied successfully.
+2026-03-19 06:04:52.039 +00:00 [INF] Role catalog normalized. Reassigned 0 admin users, 0 library accounts, removed 0 obsolete roles.
+2026-03-19 06:04:52.181 +00:00 [INF] Bootstrap admin 'superadmin' created with role 'super_admin'.
+2026-03-19 06:04:52.246 +00:00 [WRN] Storing keys in a directory '/app/.aspnet/DataProtection-Keys' that may not be persisted outside of the container. Protected data will be unavailable when container is destroyed. For more information go to https://aka.ms/aspnet/dataprotectionwarning
+2026-03-19 06:04:52.258 +00:00 [WRN] No XML encryptor configured. Key {8ef49993-e404-4c2c-9404-1506be384340} may be persisted to storage in unencrypted form.
+2026-03-19 06:04:52.265 +00:00 [WRN] Overriding HTTP_PORTS '8080' and HTTPS_PORTS ''. Binding to values defined by URLS instead 'http://+:8080'.
+2026-03-19 06:04:56.052 +00:00 [INF] HTTP GET /health/ready responded 200 in 73.0506 ms
+2026-03-19 06:05:09.579 +00:00 [INF] Secret provider configured: Environment
+2026-03-19 06:05:10.226 +00:00 [INF] Database migrations applied successfully.
+2026-03-19 06:05:10.492 +00:00 [INF] Role catalog normalized. Reassigned 0 admin users, 0 library accounts, removed 0 obsolete roles.
+2026-03-19 06:05:10.597 +00:00 [INF] Bootstrap admin 'superadmin' synchronized with role 'super_admin'.
+2026-03-19 06:05:10.653 +00:00 [WRN] Storing keys in a directory '/app/.aspnet/DataProtection-Keys' that may not be persisted outside of the container. Protected data will be unavailable when container is destroyed. For more information go to https://aka.ms/aspnet/dataprotectionwarning
+2026-03-19 06:05:10.664 +00:00 [WRN] No XML encryptor configured. Key {9217922f-35c8-406d-a724-5dadebe3839d} may be persisted to storage in unencrypted form.
+2026-03-19 06:05:10.672 +00:00 [WRN] Overriding HTTP_PORTS '8080' and HTTPS_PORTS ''. Binding to values defined by URLS instead 'http://+:8080'.
+2026-03-19 06:05:14.506 +00:00 [INF] HTTP GET /health/ready responded 200 in 67.6166 ms
+2026-03-19 06:05:29.589 +00:00 [INF] HTTP GET /health/ready responded 200 in 7.3029 ms
+2026-03-19 06:05:44.675 +00:00 [INF] HTTP GET /health/ready responded 200 in 7.2420 ms
+2026-03-19 06:05:59.748 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.9806 ms
+2026-03-19 06:06:14.824 +00:00 [INF] HTTP GET /health/ready responded 200 in 5.2204 ms
+2026-03-19 06:06:29.885 +00:00 [INF] HTTP GET /health/ready responded 200 in 6.2189 ms
+2026-03-19 06:06:44.972 +00:00 [INF] HTTP GET /health/ready responded 200 in 5.1792 ms
+2026-03-19 06:07:00.082 +00:00 [INF] HTTP GET /health/ready responded 200 in 8.0946 ms
+2026-03-19 06:07:15.184 +00:00 [INF] HTTP GET /health/ready responded 200 in 7.1196 ms
+2026-03-19 06:07:30.252 +00:00 [INF] HTTP GET /health/ready responded 200 in 5.6319 ms
+2026-03-19 06:07:45.325 +00:00 [INF] HTTP GET /health/ready responded 200 in 5.5464 ms
+2026-03-19 06:08:00.384 +00:00 [INF] HTTP GET /health/ready responded 200 in 5.1258 ms
+2026-03-19 06:08:15.457 +00:00 [INF] HTTP GET /health/ready responded 200 in 5.3118 ms
+2026-03-19 06:08:30.526 +00:00 [INF] HTTP GET /health/ready responded 200 in 5.0531 ms
+2026-03-19 06:08:45.610 +00:00 [INF] HTTP GET /health/ready responded 200 in 5.2113 ms
+2026-03-19 06:09:00.673 +00:00 [INF] HTTP GET /health/ready responded 200 in 6.5297 ms
+2026-03-19 06:09:15.763 +00:00 [INF] HTTP GET /health/ready responded 200 in 5.6797 ms
+2026-03-19 06:09:30.834 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.7806 ms
+2026-03-19 06:09:45.913 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.9027 ms
+2026-03-19 06:10:00.964 +00:00 [INF] HTTP GET /health/ready responded 200 in 5.2636 ms
+2026-03-19 06:10:09.909 +00:00 [INF] HTTP GET /index.html responded 200 in 7.7187 ms
+2026-03-19 06:10:09.931 +00:00 [INF] HTTP GET /js/auth.js responded 200 in 1.1950 ms
+2026-03-19 06:10:10.226 +00:00 [INF] HTTP GET /index.html responded 304 in 0.2880 ms
+2026-03-19 06:10:16.049 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.8112 ms
+2026-03-19 06:10:21.047 +00:00 [WRN] HTTP POST /api/auth/admin-login responded 401 in 97.2500 ms
+2026-03-19 06:10:31.113 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.8477 ms
+2026-03-19 06:10:46.198 +00:00 [INF] HTTP GET /health/ready responded 200 in 5.0862 ms
+2026-03-19 06:11:01.249 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.7006 ms
+2026-03-19 06:11:16.341 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.7158 ms
+2026-03-19 06:11:31.376 +00:00 [INF] HTTP POST /api/auth/admin-login responded 200 in 54.3822 ms
+2026-03-19 06:11:31.391 +00:00 [INF] HTTP GET /dashboard.html responded 200 in 0.9247 ms
+2026-03-19 06:11:31.407 +00:00 [INF] HTTP GET /health/ready responded 200 in 5.5314 ms
+2026-03-19 06:11:31.418 +00:00 [INF] HTTP GET /js/components.js responded 200 in 0.9546 ms
+2026-03-19 06:11:41.479 +00:00 [INF] HTTP GET /search.html responded 200 in 0.9969 ms
+2026-03-19 06:11:41.505 +00:00 [INF] HTTP GET /js/global-search.js responded 200 in 1.6136 ms
+2026-03-19 06:11:42.282 +00:00 [INF] HTTP GET /offices.html responded 200 in 1.0653 ms
+2026-03-19 06:11:42.388 +00:00 [WRN] The query uses the 'First'/'FirstOrDefault' operator without 'OrderBy' and filter operators. This may lead to unpredictable results.
+2026-03-19 06:11:42.398 +00:00 [INF] HTTP GET /api/libraries/stats responded 200 in 55.6290 ms
+2026-03-19 06:11:42.412 +00:00 [INF] HTTP GET /api/libraries/search responded 200 in 70.0374 ms
+2026-03-19 06:11:43.797 +00:00 [INF] HTTP GET /users.html responded 200 in 400.5251 ms
+2026-03-19 06:11:43.875 +00:00 [INF] HTTP GET /api/libraryaccounts responded 200 in 21.3401 ms
+2026-03-19 06:11:43.878 +00:00 [INF] HTTP GET /api/adminusers responded 200 in 24.4010 ms
+2026-03-19 06:11:44.189 +00:00 [INF] HTTP GET /api/libraryaccounts responded 200 in 4.8798 ms
+2026-03-19 06:11:44.189 +00:00 [INF] HTTP GET /api/adminusers responded 200 in 4.9259 ms
+2026-03-19 06:11:45.987 +00:00 [INF] HTTP GET /reports.html responded 200 in 1.0313 ms
+2026-03-19 06:11:46.076 +00:00 [INF] HTTP GET /api/auditlogs/metrics responded 200 in 16.2245 ms
+2026-03-19 06:11:46.092 +00:00 [INF] HTTP GET /api/auditlogs responded 200 in 32.1700 ms
+2026-03-19 06:11:46.504 +00:00 [INF] HTTP GET /health/ready responded 200 in 5.6224 ms
+2026-03-19 06:12:01.568 +00:00 [INF] HTTP GET /health/ready responded 200 in 5.5386 ms
+2026-03-19 06:12:04.904 +00:00 [INF] HTTP GET /performance.html responded 200 in 0.6690 ms
+2026-03-19 06:12:04.929 +00:00 [INF] HTTP GET /js/performance.js responded 200 in 0.7688 ms
+2026-03-19 06:12:05.043 +00:00 [INF] HTTP GET /api/libraries/stats responded 200 in 22.0829 ms
+2026-03-19 06:12:05.045 +00:00 [INF] HTTP GET /api/libraries responded 200 in 23.9623 ms
+2026-03-19 06:12:10.274 +00:00 [WRN] HTTP GET /.well-known/appspecific/com.chrome.devtools.json responded 401 in 1.9354 ms
+2026-03-19 06:12:10.556 +00:00 [INF] HTTP GET /performance.html responded 304 in 0.1220 ms
+2026-03-19 06:12:10.588 +00:00 [WRN] HTTP GET /.well-known/appspecific/com.chrome.devtools.json responded 401 in 0.3650 ms
+2026-03-19 06:12:10.686 +00:00 [INF] HTTP GET /api/libraries/stats responded 200 in 2.0517 ms
+2026-03-19 06:12:10.686 +00:00 [INF] HTTP GET /api/libraries responded 200 in 2.0452 ms
+2026-03-19 06:12:16.644 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.9344 ms
+2026-03-19 06:12:21.180 +00:00 [INF] HTTP GET /index.html responded 200 in 0.5033 ms
+2026-03-19 06:12:21.213 +00:00 [WRN] HTTP GET /.well-known/appspecific/com.chrome.devtools.json responded 401 in 0.3647 ms
+2026-03-19 06:12:31.722 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.8154 ms
+2026-03-19 06:12:46.815 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.9239 ms
+2026-03-19 06:13:01.878 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.9304 ms
+2026-03-19 06:13:16.968 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.5893 ms
+2026-03-19 06:13:32.039 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.4569 ms
+2026-03-19 06:13:47.121 +00:00 [INF] HTTP GET /health/ready responded 200 in 5.2018 ms
+2026-03-19 06:14:02.183 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.3822 ms
+2026-03-19 06:14:17.261 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.4464 ms
+2026-03-19 06:14:32.324 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.3238 ms
+2026-03-19 06:14:47.402 +00:00 [INF] HTTP GET /health/ready responded 200 in 5.0057 ms
+2026-03-19 06:15:02.461 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.7144 ms
+2026-03-19 06:15:17.537 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.9807 ms
+2026-03-19 06:15:32.602 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.9689 ms
+2026-03-19 06:15:47.689 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.5877 ms
+2026-03-19 06:16:02.748 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.5064 ms
+2026-03-19 06:16:17.825 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.5151 ms
+2026-03-19 06:16:32.890 +00:00 [INF] HTTP GET /health/ready responded 200 in 5.0243 ms
+2026-03-19 06:16:47.982 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.7748 ms
+2026-03-19 06:17:03.105 +00:00 [INF] HTTP GET /health/ready responded 200 in 6.6223 ms
+2026-03-19 06:17:18.201 +00:00 [INF] HTTP GET /health/ready responded 200 in 5.4228 ms
+2026-03-19 06:17:33.260 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.9096 ms
+2026-03-19 06:17:48.341 +00:00 [INF] HTTP GET /health/ready responded 200 in 5.5457 ms
+2026-03-19 06:18:03.409 +00:00 [INF] HTTP GET /health/ready responded 200 in 7.0127 ms
+2026-03-19 06:18:18.495 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.9989 ms
+2026-03-19 06:18:33.559 +00:00 [INF] HTTP GET /health/ready responded 200 in 5.4731 ms
+2026-03-19 06:18:48.643 +00:00 [INF] HTTP GET /health/ready responded 200 in 5.2649 ms
+2026-03-19 06:19:03.712 +00:00 [INF] HTTP GET /health/ready responded 200 in 5.1154 ms
+2026-03-19 06:19:18.786 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.9563 ms
+2026-03-19 06:19:33.852 +00:00 [INF] HTTP GET /health/ready responded 200 in 6.1053 ms
+2026-03-19 06:19:48.937 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.7597 ms
+2026-03-19 06:20:03.990 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.8579 ms
+2026-03-19 06:20:19.053 +00:00 [INF] HTTP GET /health/ready responded 200 in 5.1810 ms
+2026-03-19 06:20:34.133 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.6548 ms
+2026-03-19 06:20:49.204 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.5369 ms
+2026-03-19 06:21:04.273 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.5405 ms
+2026-03-19 06:21:19.355 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.6921 ms
+2026-03-19 06:21:34.413 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.3075 ms
+2026-03-19 06:21:49.501 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.2309 ms
+2026-03-19 06:22:04.569 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.3222 ms
+2026-03-19 06:22:19.632 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.5045 ms
+2026-03-19 06:22:34.687 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.0655 ms
+2026-03-19 06:22:49.765 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.1969 ms
+2026-03-19 06:23:04.830 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.5716 ms
+2026-03-19 06:23:19.914 +00:00 [INF] HTTP GET /health/ready responded 200 in 5.5132 ms
+2026-03-19 06:23:34.976 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.2510 ms
+2026-03-19 06:23:50.056 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.3767 ms
+2026-03-19 06:24:05.129 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.2993 ms
+2026-03-19 06:24:20.222 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.2635 ms
+2026-03-19 06:24:35.273 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.3969 ms
+2026-03-19 06:24:50.361 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.8796 ms
+2026-03-19 06:25:05.416 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.7314 ms
+2026-03-19 06:25:20.496 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.3680 ms
+2026-03-19 06:25:35.549 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.8059 ms
+2026-03-19 06:25:50.626 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.5389 ms
+2026-03-19 06:26:05.691 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.8933 ms
+2026-03-19 06:26:20.763 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.6305 ms
+2026-03-19 06:26:35.827 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.5124 ms
+2026-03-19 06:26:50.908 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.4518 ms
+2026-03-19 06:27:05.977 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.7768 ms
+2026-03-19 06:27:21.070 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.3753 ms
+2026-03-19 06:27:36.147 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.4294 ms
+2026-03-19 06:27:51.240 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.2550 ms
+2026-03-19 06:28:06.297 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.7838 ms
+2026-03-19 06:28:21.376 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.9903 ms
+2026-03-19 06:28:36.448 +00:00 [INF] HTTP GET /health/ready responded 200 in 5.2820 ms
+2026-03-19 06:28:51.543 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.5685 ms
+2026-03-19 06:29:06.628 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.6758 ms
+2026-03-19 06:29:21.697 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.5675 ms
+2026-03-19 06:29:36.799 +00:00 [INF] HTTP GET /health/ready responded 200 in 5.4812 ms
+2026-03-19 06:29:51.883 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.4147 ms
+2026-03-19 06:30:06.959 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.4419 ms
+2026-03-19 06:30:22.029 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.6980 ms
+2026-03-19 06:30:37.110 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.5095 ms
+2026-03-19 06:30:52.194 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.3915 ms
+2026-03-19 06:31:07.269 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.1999 ms
+2026-03-19 06:31:22.343 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.7812 ms
+2026-03-19 06:31:37.406 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.4026 ms
+2026-03-19 06:31:52.477 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.4854 ms
+2026-03-19 06:32:07.546 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.7340 ms
+2026-03-19 06:32:22.632 +00:00 [INF] HTTP GET /health/ready responded 200 in 5.3381 ms
+2026-03-19 06:32:37.706 +00:00 [INF] HTTP GET /health/ready responded 200 in 5.0330 ms
+2026-03-19 06:32:52.800 +00:00 [INF] HTTP GET /health/ready responded 200 in 6.4057 ms
+2026-03-19 06:33:07.866 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.9091 ms
+2026-03-19 06:33:22.933 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.6705 ms
+2026-03-19 06:33:38.001 +00:00 [INF] HTTP GET /health/ready responded 200 in 5.1399 ms
+2026-03-19 06:33:53.111 +00:00 [INF] HTTP GET /health/ready responded 200 in 6.7894 ms
+2026-03-19 06:34:08.187 +00:00 [INF] HTTP GET /health/ready responded 200 in 5.6984 ms
+2026-03-19 06:34:23.289 +00:00 [INF] HTTP GET /health/ready responded 200 in 5.1190 ms
+2026-03-19 06:34:38.352 +00:00 [INF] HTTP GET /health/ready responded 200 in 5.0918 ms
+2026-03-19 06:34:53.458 +00:00 [INF] HTTP GET /health/ready responded 200 in 5.1311 ms
+2026-03-19 06:35:08.512 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.3418 ms
+2026-03-19 06:35:23.614 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.5361 ms
+2026-03-19 06:35:38.674 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.9939 ms
+2026-03-19 06:35:53.774 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.7174 ms
+2026-03-19 06:36:08.845 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.7877 ms
+2026-03-19 06:36:23.966 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.5630 ms
+2026-03-19 06:36:39.036 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.2539 ms
+2026-03-19 06:36:54.095 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.3940 ms
+2026-03-19 06:37:09.164 +00:00 [INF] HTTP GET /health/ready responded 200 in 5.0324 ms
+2026-03-19 06:37:24.231 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.3479 ms
+2026-03-19 06:37:39.303 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.3012 ms
+2026-03-19 06:37:54.387 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.7181 ms
+2026-03-19 06:38:09.444 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.3316 ms
+2026-03-19 06:38:24.507 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.7282 ms
+2026-03-19 06:38:39.578 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.8724 ms
+2026-03-19 06:38:54.650 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.2286 ms
+2026-03-19 06:39:09.700 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.4351 ms
+2026-03-19 06:39:24.783 +00:00 [INF] HTTP GET /health/ready responded 200 in 5.2933 ms
+2026-03-19 06:39:39.853 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.5649 ms
+2026-03-19 06:39:54.940 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.3293 ms
+2026-03-19 06:40:09.997 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.4201 ms
+2026-03-19 06:40:25.075 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.3665 ms
+2026-03-19 06:40:40.136 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.3432 ms
+2026-03-19 06:40:55.215 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.3928 ms
+2026-03-19 06:41:10.266 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.4165 ms
+2026-03-19 06:41:25.345 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.2713 ms
+2026-03-19 06:41:40.408 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.5467 ms
+2026-03-19 06:41:55.474 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.6647 ms
+2026-03-19 06:42:10.529 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.8554 ms
+2026-03-19 06:42:25.603 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.3975 ms
+2026-03-19 06:42:40.672 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.5270 ms
+2026-03-19 06:42:55.752 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.5861 ms
+2026-03-19 06:43:10.807 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.4553 ms
+2026-03-19 06:43:25.868 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.5922 ms
+2026-03-19 06:43:40.925 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.5200 ms
+2026-03-19 06:43:55.998 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.3260 ms
+2026-03-19 06:44:11.071 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.3929 ms
+2026-03-19 06:44:26.132 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.1988 ms
+2026-03-19 06:44:41.180 +00:00 [INF] HTTP GET /health/ready responded 200 in 5.1817 ms
+2026-03-19 06:44:56.253 +00:00 [INF] HTTP GET /health/ready responded 200 in 7.7550 ms
+2026-03-19 06:45:11.321 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.6521 ms
+2026-03-19 06:45:26.377 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.2451 ms
+2026-03-19 06:45:41.452 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.4255 ms
+2026-03-19 06:45:56.520 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.4027 ms
+2026-03-19 06:46:11.583 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.4484 ms
+2026-03-19 06:46:26.663 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.3495 ms
+2026-03-19 06:46:41.723 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.2883 ms
+2026-03-19 06:46:56.813 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.5510 ms
+2026-03-19 06:47:11.896 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.3636 ms
+2026-03-19 06:47:26.981 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.8722 ms
+2026-03-19 06:47:42.051 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.3974 ms
+2026-03-19 06:47:57.106 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.2318 ms
+2026-03-19 06:48:12.158 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.8769 ms
+2026-03-19 06:48:27.230 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.2511 ms
+2026-03-19 06:48:42.289 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.5855 ms
+2026-03-19 06:48:57.343 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.6027 ms
+2026-03-19 06:49:12.405 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.9499 ms
+2026-03-19 06:49:27.482 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.9376 ms
+2026-03-19 06:49:42.550 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.8214 ms
+2026-03-19 06:49:57.629 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.5245 ms
+2026-03-19 06:50:12.686 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.2507 ms
+2026-03-19 06:50:27.741 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.2597 ms
+2026-03-19 06:50:42.813 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.7574 ms
+2026-03-19 06:50:57.890 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.6342 ms
+2026-03-19 06:51:12.959 +00:00 [INF] HTTP GET /health/ready responded 200 in 5.2426 ms
+2026-03-19 06:51:28.034 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.4744 ms
+2026-03-19 06:51:43.098 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.5406 ms
+2026-03-19 06:51:58.165 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.4876 ms
+2026-03-19 06:52:13.216 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.9587 ms
+2026-03-19 06:52:28.289 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.2764 ms
+2026-03-19 06:52:43.353 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.3697 ms
+2026-03-19 06:52:58.439 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.4651 ms
+2026-03-19 06:53:13.511 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.2777 ms
+2026-03-19 06:53:28.570 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.1104 ms
+2026-03-19 06:53:43.626 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.4100 ms
+2026-03-19 06:53:58.687 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.5579 ms
+2026-03-19 06:54:13.764 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.3294 ms
+2026-03-19 06:54:28.831 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.6640 ms
+2026-03-19 06:54:43.921 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.3419 ms
+2026-03-19 06:54:58.991 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.3059 ms
+2026-03-19 06:55:14.068 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.5363 ms
+2026-03-19 06:55:29.153 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.6735 ms
+2026-03-19 06:55:44.354 +00:00 [INF] HTTP GET /health/ready responded 200 in 121.9982 ms
+2026-03-19 06:55:59.412 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.8265 ms
+2026-03-19 06:56:14.479 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.0572 ms
+2026-03-19 06:56:29.544 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.2888 ms
+2026-03-19 06:56:44.611 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.1123 ms
+2026-03-19 06:56:59.671 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.5747 ms
+2026-03-19 06:57:14.754 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.5229 ms
+2026-03-19 06:57:29.817 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.2934 ms
+2026-03-19 06:57:44.873 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.7515 ms
+2026-03-19 06:57:59.959 +00:00 [INF] HTTP GET /health/ready responded 200 in 5.6363 ms
+2026-03-19 06:58:15.023 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.5911 ms
+2026-03-19 06:58:30.100 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.7702 ms
+2026-03-19 06:58:45.168 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.4955 ms
+2026-03-19 06:59:00.240 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.5594 ms
+2026-03-19 06:59:15.301 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.9308 ms
+2026-03-19 06:59:30.358 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.5653 ms
+2026-03-19 06:59:45.416 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.4311 ms
+2026-03-19 07:00:00.479 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.8730 ms
+2026-03-19 07:00:15.562 +00:00 [INF] HTTP GET /health/ready responded 200 in 7.0907 ms
+2026-03-19 07:00:30.643 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.4958 ms
+2026-03-19 07:00:45.698 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.5185 ms
+2026-03-19 07:01:00.776 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.6456 ms
+2026-03-19 07:01:15.845 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.8201 ms
+2026-03-19 07:01:30.900 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.2381 ms
+2026-03-19 07:01:45.958 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.5065 ms
+2026-03-19 07:02:01.034 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.7932 ms
+2026-03-19 07:02:16.106 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.3283 ms
+2026-03-19 07:02:31.174 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.7546 ms
+2026-03-19 07:02:46.231 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.4624 ms
+2026-03-19 07:03:01.290 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.3369 ms
+2026-03-19 07:03:16.360 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.3886 ms
+2026-03-19 07:03:31.424 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.2915 ms
+2026-03-19 07:03:46.505 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.2189 ms
+2026-03-19 07:04:01.565 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.5788 ms
+2026-03-19 07:04:16.645 +00:00 [INF] HTTP GET /health/ready responded 200 in 6.4395 ms
+2026-03-19 07:04:31.712 +00:00 [INF] HTTP GET /health/ready responded 200 in 5.2242 ms
+2026-03-19 07:04:46.807 +00:00 [INF] HTTP GET /health/ready responded 200 in 6.1114 ms
+2026-03-19 07:05:02.252 +00:00 [INF] HTTP GET /health/ready responded 200 in 14.6834 ms
+2026-03-19 07:05:17.309 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.2602 ms
+2026-03-19 07:05:32.406 +00:00 [INF] HTTP GET /health/ready responded 200 in 5.8689 ms
+2026-03-19 07:05:47.483 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.2662 ms
+2026-03-19 07:06:02.551 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.4814 ms
+2026-03-19 07:06:17.609 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.3479 ms
+2026-03-19 07:06:32.679 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.7031 ms
+2026-03-19 07:06:47.738 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.9292 ms
+2026-03-19 07:07:02.785 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.2931 ms
+2026-03-19 07:07:17.867 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.4106 ms
+2026-03-19 07:07:32.919 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.7031 ms
+2026-03-19 07:07:48.000 +00:00 [INF] HTTP GET /health/ready responded 200 in 5.1138 ms
+2026-03-19 07:08:03.058 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.9788 ms
+2026-03-19 07:08:18.138 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.4035 ms
+2026-03-19 07:08:33.195 +00:00 [INF] HTTP GET /health/ready responded 200 in 5.2441 ms
+2026-03-19 07:08:48.262 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.3586 ms
+2026-03-19 07:09:03.340 +00:00 [INF] HTTP GET /health/ready responded 200 in 6.3487 ms
+2026-03-19 07:09:18.428 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.9246 ms
+2026-03-19 07:09:33.480 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.9451 ms
+2026-03-19 07:09:48.545 +00:00 [INF] HTTP GET /health/ready responded 200 in 5.6031 ms
+2026-03-19 07:10:03.611 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.3909 ms
+2026-03-19 07:10:18.690 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.2428 ms
+2026-03-19 07:10:33.755 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.6463 ms
+2026-03-19 07:10:48.824 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.4678 ms
+2026-03-19 07:11:03.899 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.3899 ms
+2026-03-19 07:11:18.958 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.6113 ms
+2026-03-19 07:11:34.022 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.5434 ms
+2026-03-19 07:11:49.089 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.3798 ms
+2026-03-19 07:12:04.166 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.5009 ms
+2026-03-19 07:12:19.251 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.9345 ms
+2026-03-19 07:12:34.317 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.3687 ms
+2026-03-19 07:12:49.391 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.5696 ms
+2026-03-19 07:13:04.494 +00:00 [INF] HTTP GET /health/ready responded 200 in 5.7562 ms
+2026-03-19 07:13:19.555 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.2793 ms
+2026-03-19 07:13:34.633 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.7807 ms
+2026-03-19 07:13:49.700 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.6718 ms
+2026-03-19 07:14:04.759 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.2443 ms
+2026-03-19 07:14:19.841 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.6526 ms
+2026-03-19 07:14:34.899 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.2755 ms
+2026-03-19 07:14:49.967 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.5010 ms
+2026-03-19 07:15:05.043 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.9944 ms
+2026-03-19 07:15:20.119 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.5721 ms
+2026-03-19 07:15:35.175 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.4283 ms
+2026-03-19 07:15:50.243 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.4175 ms
+2026-03-19 07:16:05.321 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.8279 ms
+2026-03-19 07:16:20.397 +00:00 [INF] HTTP GET /health/ready responded 200 in 5.7804 ms
+2026-03-19 07:16:35.468 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.5181 ms
+2026-03-19 07:16:50.537 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.4856 ms
+2026-03-19 07:17:05.604 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.5023 ms
+2026-03-19 07:17:20.674 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.6951 ms
+2026-03-19 07:17:35.736 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.3609 ms
+2026-03-19 07:17:50.790 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.2453 ms
+2026-03-19 07:18:05.862 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.3671 ms
+2026-03-19 07:18:20.930 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.5292 ms
+2026-03-19 07:18:35.988 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.2592 ms
+2026-03-19 07:18:51.064 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.0934 ms
+2026-03-19 07:19:06.114 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.4024 ms
+2026-03-19 07:19:21.178 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.3393 ms
+2026-03-19 07:19:36.244 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.5239 ms
+2026-03-19 07:19:51.328 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.9970 ms
+2026-03-19 07:20:06.381 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.5670 ms
+2026-03-19 07:20:21.452 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.3966 ms
+2026-03-19 07:20:36.528 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.2695 ms
+2026-03-19 07:20:51.580 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.7207 ms
+2026-03-19 07:21:06.650 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.5488 ms
+2026-03-19 07:21:21.702 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.4603 ms
+2026-03-19 07:21:36.758 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.6578 ms
+2026-03-19 07:21:51.823 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.3429 ms
+2026-03-19 07:22:06.883 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.3374 ms
+2026-03-19 07:22:21.947 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.9497 ms
+2026-03-19 07:22:37.019 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.6074 ms
+2026-03-19 07:22:52.087 +00:00 [INF] HTTP GET /health/ready responded 200 in 5.4864 ms
+2026-03-19 07:23:07.161 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.4512 ms
+2026-03-19 07:23:22.221 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.2802 ms
+2026-03-19 07:23:37.281 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.2170 ms
+2026-03-19 07:23:52.357 +00:00 [INF] HTTP GET /health/ready responded 200 in 5.1660 ms
+2026-03-19 07:24:07.429 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.5860 ms
+2026-03-19 07:24:22.506 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.6090 ms
+2026-03-19 07:24:37.562 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.8423 ms
+2026-03-19 07:24:52.615 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.6003 ms
+2026-03-19 07:25:07.667 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.6298 ms
+2026-03-19 07:25:22.738 +00:00 [INF] HTTP GET /health/ready responded 200 in 5.7603 ms
+2026-03-19 07:25:37.807 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.6094 ms
+2026-03-19 07:25:52.863 +00:00 [INF] HTTP GET /health/ready responded 200 in 5.1855 ms
+2026-03-19 07:26:07.967 +00:00 [INF] HTTP GET /health/ready responded 200 in 6.5489 ms
+2026-03-19 07:26:23.050 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.6581 ms
+2026-03-19 07:26:38.112 +00:00 [INF] HTTP GET /health/ready responded 200 in 5.3259 ms
+2026-03-19 07:26:53.169 +00:00 [INF] HTTP GET /health/ready responded 200 in 5.5993 ms
+2026-03-19 07:27:08.238 +00:00 [INF] HTTP GET /health/ready responded 200 in 6.5676 ms
+2026-03-19 07:27:23.307 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.6097 ms
+2026-03-19 07:27:38.384 +00:00 [INF] HTTP GET /health/ready responded 200 in 5.3352 ms
+2026-03-19 07:27:53.467 +00:00 [INF] HTTP GET /health/ready responded 200 in 5.0050 ms
+2026-03-19 07:28:08.547 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.7181 ms
+2026-03-19 07:28:23.598 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.9797 ms
+2026-03-19 07:28:38.665 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.7711 ms
+2026-03-19 07:28:53.724 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.4948 ms
+2026-03-19 07:29:08.782 +00:00 [INF] HTTP GET /health/ready responded 200 in 5.7991 ms
+2026-03-19 07:29:23.850 +00:00 [INF] HTTP GET /health/ready responded 200 in 7.0436 ms
+2026-03-19 07:29:38.915 +00:00 [INF] HTTP GET /health/ready responded 200 in 5.2203 ms
+2026-03-19 07:29:53.971 +00:00 [INF] HTTP GET /health/ready responded 200 in 8.4988 ms
+2026-03-19 07:30:09.034 +00:00 [INF] HTTP GET /health/ready responded 200 in 5.9402 ms
+2026-03-19 07:30:24.108 +00:00 [INF] HTTP GET /health/ready responded 200 in 8.4068 ms
+2026-03-19 07:30:39.175 +00:00 [INF] HTTP GET /health/ready responded 200 in 8.0073 ms
+2026-03-19 07:30:54.249 +00:00 [INF] HTTP GET /health/ready responded 200 in 7.1462 ms
+2026-03-19 07:31:09.349 +00:00 [INF] HTTP GET /health/ready responded 200 in 7.6611 ms
+2026-03-19 07:31:24.413 +00:00 [INF] HTTP GET /health/ready responded 200 in 6.2565 ms
+2026-03-19 07:31:39.479 +00:00 [INF] HTTP GET /health/ready responded 200 in 6.8351 ms
+2026-03-19 07:31:54.531 +00:00 [INF] HTTP GET /health/ready responded 200 in 6.9067 ms
+2026-03-19 07:32:09.596 +00:00 [INF] HTTP GET /health/ready responded 200 in 7.1208 ms
+2026-03-19 07:32:24.665 +00:00 [INF] HTTP GET /health/ready responded 200 in 9.2679 ms
+2026-03-19 07:32:39.828 +00:00 [INF] HTTP GET /health/ready responded 200 in 10.1156 ms
+2026-03-19 07:32:54.889 +00:00 [INF] HTTP GET /health/ready responded 200 in 6.6828 ms
+2026-03-19 07:33:09.963 +00:00 [INF] HTTP GET /health/ready responded 200 in 11.9300 ms
+2026-03-19 07:33:25.040 +00:00 [INF] HTTP GET /health/ready responded 200 in 14.9535 ms
+2026-03-19 07:33:40.121 +00:00 [INF] HTTP GET /health/ready responded 200 in 9.9218 ms
+2026-03-19 07:33:55.189 +00:00 [INF] HTTP GET /health/ready responded 200 in 10.4506 ms
+2026-03-19 07:34:10.266 +00:00 [INF] HTTP GET /health/ready responded 200 in 15.9991 ms
+2026-03-19 07:34:25.341 +00:00 [INF] HTTP GET /health/ready responded 200 in 10.8280 ms
+2026-03-19 07:34:40.412 +00:00 [INF] HTTP GET /health/ready responded 200 in 10.3637 ms
+2026-03-19 07:34:55.466 +00:00 [INF] HTTP GET /health/ready responded 200 in 6.9284 ms
+2026-03-19 07:35:10.542 +00:00 [INF] HTTP GET /health/ready responded 200 in 6.3669 ms
+2026-03-19 07:35:25.622 +00:00 [INF] HTTP GET /health/ready responded 200 in 7.8559 ms
+2026-03-19 07:35:40.683 +00:00 [INF] HTTP GET /health/ready responded 200 in 5.3945 ms
+2026-03-19 07:35:55.761 +00:00 [INF] HTTP GET /health/ready responded 200 in 6.2305 ms
+2026-03-19 07:36:10.846 +00:00 [INF] HTTP GET /health/ready responded 200 in 6.5251 ms
+2026-03-19 07:36:25.920 +00:00 [INF] HTTP GET /health/ready responded 200 in 7.3372 ms
+2026-03-19 07:36:40.974 +00:00 [INF] HTTP GET /health/ready responded 200 in 6.5760 ms
+2026-03-19 07:36:56.064 +00:00 [INF] HTTP GET /health/ready responded 200 in 6.7031 ms
+2026-03-19 07:37:11.124 +00:00 [INF] HTTP GET /health/ready responded 200 in 9.2551 ms
+2026-03-19 07:37:26.194 +00:00 [INF] HTTP GET /health/ready responded 200 in 5.4878 ms
+2026-03-19 07:37:41.275 +00:00 [INF] HTTP GET /health/ready responded 200 in 8.0359 ms
+2026-03-19 07:37:56.365 +00:00 [INF] HTTP GET /health/ready responded 200 in 6.1374 ms
+2026-03-19 07:38:11.443 +00:00 [INF] HTTP GET /health/ready responded 200 in 5.5345 ms
+2026-03-19 07:38:26.498 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.8593 ms
+2026-03-19 07:38:41.632 +00:00 [INF] HTTP GET /health/ready responded 200 in 6.3492 ms
+2026-03-19 07:38:56.705 +00:00 [INF] HTTP GET /health/ready responded 200 in 5.7146 ms
+2026-03-19 07:39:11.776 +00:00 [INF] HTTP GET /health/ready responded 200 in 10.9310 ms
+2026-03-19 07:39:26.838 +00:00 [INF] HTTP GET /health/ready responded 200 in 6.2787 ms
+2026-03-19 07:39:41.917 +00:00 [INF] HTTP GET /health/ready responded 200 in 5.7553 ms
+2026-03-19 07:39:56.995 +00:00 [INF] HTTP GET /health/ready responded 200 in 5.4694 ms
+2026-03-19 07:40:12.061 +00:00 [INF] HTTP GET /health/ready responded 200 in 5.2120 ms
+2026-03-19 07:40:27.126 +00:00 [INF] HTTP GET /health/ready responded 200 in 4.4682 ms
+2026-03-19 07:40:42.203 +00:00 [INF] HTTP GET /health/ready responded 200 in 5.4023 ms
+2026-03-19 07:40:57.276 +00:00 [INF] HTTP GET /health/ready responded 200 in 8.3704 ms
+2026-03-19 07:41:12.347 +00:00 [INF] HTTP GET /health/ready responded 200 in 6.7645 ms
+2026-03-19 07:41:27.409 +00:00 [INF] HTTP GET /health/ready responded 200 in 5.3247 ms
+2026-03-19 07:41:42.470 +00:00 [INF] HTTP GET /health/ready responded 200 in 6.0086 ms
+2026-03-19 07:41:57.523 +00:00 [INF] HTTP GET /health/ready responded 200 in 5.4098 ms
+2026-03-19 07:42:12.602 +00:00 [INF] HTTP GET /health/ready responded 200 in 6.2406 ms
+2026-03-19 07:42:27.663 +00:00 [INF] HTTP GET /health/ready responded 200 in 5.8166 ms
+2026-03-19 07:42:42.737 +00:00 [INF] HTTP GET /health/ready responded 200 in 5.0837 ms
+2026-03-19 07:42:57.808 +00:00 [INF] HTTP GET /health/ready responded 200 in 5.9160 ms
+2026-03-19 07:43:12.879 +00:00 [INF] HTTP GET /health/ready responded 200 in 7.4165 ms
+2026-03-19 07:43:27.964 +00:00 [INF] HTTP GET /health/ready responded 200 in 11.1586 ms
+2026-03-19 07:43:43.039 +00:00 [INF] HTTP GET /health/ready responded 200 in 9.7149 ms
+2026-03-19 07:43:58.093 +00:00 [INF] HTTP GET /health/ready responded 200 in 6.4297 ms

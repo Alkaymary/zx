@@ -1,0 +1,108 @@
+2026-03-19 00:14:42.548 +03:00 [INF] Executed DbCommand (18ms) [Parameters=[], CommandType='"Text"', CommandTimeout='15']
+SELECT r.id, r.code, r.created_at, r.guard_name, r.name
+FROM roles AS r
+ORDER BY r.id
+2026-03-19 00:14:42.673 +03:00 [INF] Executed DbCommand (4ms) [Parameters=[], CommandType='"Text"', CommandTimeout='15']
+SELECT r.id, r.code, r.created_at, r.guard_name, r.name
+FROM roles AS r
+2026-03-19 00:14:42.717 +03:00 [INF] Executed DbCommand (5ms) [Parameters=[], CommandType='"Text"', CommandTimeout='15']
+SELECT a.id, a.created_at, a.email, a.full_name, a.last_login_at, a.password_hash, a.phone_number, a.role_id, a.status, a.updated_at, a.username, r.id, r.code, r.created_at, r.guard_name, r.name
+FROM admin_users AS a
+INNER JOIN roles AS r ON a.role_id = r.id
+2026-03-19 00:14:42.781 +03:00 [INF] Executed DbCommand (4ms) [Parameters=[], CommandType='"Text"', CommandTimeout='15']
+SELECT l.id, l.created_at, l.full_name, l.last_login_at, l.library_id, l.password_hash, l.phone_number, l.role_id, l.status, l.updated_at, l.username, r.id, r.code, r.created_at, r.guard_name, r.name
+FROM library_accounts AS l
+INNER JOIN roles AS r ON l.role_id = r.id
+2026-03-19 00:14:42.813 +03:00 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='15']
+SELECT DISTINCT u.role_id
+FROM (
+    SELECT a.role_id
+    FROM admin_users AS a
+    UNION ALL
+    SELECT l.role_id
+    FROM library_accounts AS l
+) AS u
+2026-03-19 00:14:42.823 +03:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='15']
+SELECT r.id, r.code, r.created_at, r.guard_name, r.name
+FROM roles AS r
+2026-03-19 00:14:42.828 +03:00 [INF] Role catalog normalized. Reassigned 0 admin users, 0 library accounts, removed 0 obsolete roles.
+2026-03-19 00:14:42.942 +03:00 [INF] User profile is available. Using 'C:\Users\aslaa\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2026-03-19 00:14:43.110 +03:00 [INF] Now listening on: https://localhost:5059
+2026-03-19 00:14:43.111 +03:00 [INF] Now listening on: http://localhost:5058
+2026-03-19 00:14:43.166 +03:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-03-19 00:14:43.167 +03:00 [INF] Hosting environment: Development
+2026-03-19 00:14:43.168 +03:00 [INF] Content root path: C:\xampp\htdocs\all\k\MyApi
+2026-03-19 00:14:43.862 +03:00 [INF] Request starting HTTP/2 GET https://localhost:5059/office-pos-add.html?id=8 - null null
+2026-03-19 00:14:43.922 +03:00 [INF] The file /office-pos-add.html was not modified
+2026-03-19 00:14:43.950 +03:00 [INF] HTTP GET /office-pos-add.html responded 304 in 36.9289 ms
+2026-03-19 00:14:43.958 +03:00 [INF] Request finished HTTP/2 GET https://localhost:5059/office-pos-add.html?id=8 - 304 null text/html 102.7082ms
+2026-03-19 00:14:44.000 +03:00 [INF] Request starting HTTP/2 GET https://localhost:5059/.well-known/appspecific/com.chrome.devtools.json - null null
+2026-03-19 00:14:44.000 +03:00 [INF] Request starting HTTP/2 GET https://localhost:5059/js/components.js - null null
+2026-03-19 00:14:44.000 +03:00 [INF] Request starting HTTP/2 GET https://localhost:5059/_framework/aspnetcore-browser-refresh.js - null null
+2026-03-19 00:14:44.008 +03:00 [INF] The file /js/components.js was not modified
+2026-03-19 00:14:44.018 +03:00 [INF] HTTP GET /js/components.js responded 304 in 10.2276 ms
+2026-03-19 00:14:44.023 +03:00 [INF] Request finished HTTP/2 GET https://localhost:5059/js/components.js - 304 null text/javascript 22.2881ms
+2026-03-19 00:14:44.063 +03:00 [INF] Request starting HTTP/2 GET https://localhost:5059/_vs/browserLink - null null
+2026-03-19 00:14:44.107 +03:00 [INF] Request finished HTTP/2 GET https://localhost:5059/_framework/aspnetcore-browser-refresh.js - 200 16495 application/javascript; charset=utf-8 106.5137ms
+2026-03-19 00:14:44.110 +03:00 [INF] Request starting HTTP/2 GET https://localhost:5059/api/libraries/8 - application/json null
+2026-03-19 00:14:44.110 +03:00 [INF] Request starting HTTP/2 GET https://localhost:5059/api/libraryaccounts?libraryId=8&limit=200 - application/json null
+2026-03-19 00:14:44.160 +03:00 [INF] Request finished HTTP/2 GET https://localhost:5059/_vs/browserLink - 200 null text/javascript; charset=UTF-8 96.6611ms
+2026-03-19 00:14:44.201 +03:00 [INF] Request starting HTTP/2 GET https://localhost:5059/favicon.ico - null null
+2026-03-19 00:14:44.260 +03:00 [INF] Authorization failed. These requirements were not met:
+DenyAnonymousAuthorizationRequirement: Requires an authenticated user.
+2026-03-19 00:14:44.260 +03:00 [INF] Authorization failed. These requirements were not met:
+DenyAnonymousAuthorizationRequirement: Requires an authenticated user.
+2026-03-19 00:14:44.267 +03:00 [INF] AuthenticationScheme: Bearer was challenged.
+2026-03-19 00:14:44.267 +03:00 [INF] AuthenticationScheme: Bearer was challenged.
+2026-03-19 00:14:44.269 +03:00 [WRN] HTTP GET /favicon.ico responded 401 in 38.9213 ms
+2026-03-19 00:14:44.270 +03:00 [WRN] HTTP GET /.well-known/appspecific/com.chrome.devtools.json responded 401 in 264.1000 ms
+2026-03-19 00:14:44.273 +03:00 [INF] Request finished HTTP/2 GET https://localhost:5059/favicon.ico - 401 0 null 71.6694ms
+2026-03-19 00:14:44.274 +03:00 [INF] Request finished HTTP/2 GET https://localhost:5059/.well-known/appspecific/com.chrome.devtools.json - 401 0 null 274.0203ms
+2026-03-19 00:14:44.328 +03:00 [INF] Executing endpoint 'MyApi.Controllers.LibraryAccountsController.GetAll (MyApi)'
+2026-03-19 00:14:44.328 +03:00 [INF] Executing endpoint 'MyApi.Controllers.LibrariesController.GetById (MyApi)'
+2026-03-19 00:14:44.348 +03:00 [INF] Route matched with {action = "GetAll", controller = "LibraryAccounts"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.IEnumerable`1[MyApi.Dtos.LibraryAccountResponseDto]]] GetAll(MyApi.Dtos.LibraryAccountQueryDto, System.Threading.CancellationToken) on controller MyApi.Controllers.LibraryAccountsController (MyApi).
+2026-03-19 00:14:44.348 +03:00 [INF] Route matched with {action = "GetById", controller = "Libraries"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[MyApi.Dtos.LibraryResponseDto]] GetById(Int32, System.Threading.CancellationToken) on controller MyApi.Controllers.LibrariesController (MyApi).
+2026-03-19 00:14:44.534 +03:00 [INF] Executed DbCommand (31ms) [Parameters=[@__query_LibraryId_Value_0='?' (DbType = Int32), @__p_1='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='15']
+SELECT l1.id AS "Id", l1.library_id AS "LibraryId", l0.library_name AS "LibraryName", l1.role_id AS "RoleId", r.name AS "RoleName", l1.full_name AS "FullName", l1.username AS "Username", l1.phone_number AS "PhoneNumber", l1.status AS "Status", l1.last_login_at AS "LastLoginAt", l1.created_at AS "CreatedAt", l1.updated_at AS "UpdatedAt", (
+    SELECT count(*)::int
+    FROM pos_devices AS p
+    WHERE l1.id = p.activated_by_account_id) AS "ActivatedDevicesCount"
+FROM (
+    SELECT l.id, l.created_at, l.full_name, l.last_login_at, l.library_id, l.phone_number, l.role_id, l.status, l.updated_at, l.username
+    FROM library_accounts AS l
+    WHERE l.library_id = @__query_LibraryId_Value_0
+    ORDER BY l.id
+    LIMIT @__p_1
+) AS l1
+INNER JOIN libraries AS l0 ON l1.library_id = l0.id
+INNER JOIN roles AS r ON l1.role_id = r.id
+ORDER BY l1.id
+2026-03-19 00:14:44.573 +03:00 [INF] Executed DbCommand (8ms) [Parameters=[@__id_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='15']
+SELECT l.id AS "Id", l.library_code AS "LibraryCode", l.library_name AS "LibraryName", l.owner_name AS "OwnerName", l.owner_phone AS "OwnerPhone", l.owner_phone_2 AS "OwnerPhone2", l.address AS "Address", l.province AS "Province", l.city AS "City", l.latitude AS "Latitude", l.longitude AS "Longitude", l.status AS "Status", l.credit_limit AS "CreditLimit", l.current_balance AS "CurrentBalance", l.notes AS "Notes", l.created_at AS "CreatedAt", l.updated_at AS "UpdatedAt", (
+    SELECT count(*)::int
+    FROM library_accounts AS l0
+    WHERE l.id = l0.library_id) AS "AccountsCount", (
+    SELECT count(*)::int
+    FROM pos_devices AS p
+    WHERE l.id = p.library_id) AS "PosDevicesCount"
+FROM libraries AS l
+WHERE l.id = @__id_0
+LIMIT 1
+2026-03-19 00:14:44.578 +03:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[MyApi.Dtos.LibraryAccountResponseDto, MyApi, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-03-19 00:14:44.585 +03:00 [INF] Executing OkObjectResult, writing value of type 'MyApi.Dtos.LibraryResponseDto'.
+2026-03-19 00:14:44.604 +03:00 [INF] Executed action MyApi.Controllers.LibrariesController.GetById (MyApi) in 241.8841ms
+2026-03-19 00:14:44.604 +03:00 [INF] Executed action MyApi.Controllers.LibraryAccountsController.GetAll (MyApi) in 246.2255ms
+2026-03-19 00:14:44.608 +03:00 [INF] Executed endpoint 'MyApi.Controllers.LibrariesController.GetById (MyApi)'
+2026-03-19 00:14:44.609 +03:00 [INF] Executed endpoint 'MyApi.Controllers.LibraryAccountsController.GetAll (MyApi)'
+2026-03-19 00:14:44.626 +03:00 [INF] HTTP GET /api/libraries/8 responded 200 in 501.2645 ms
+2026-03-19 00:14:44.626 +03:00 [INF] HTTP GET /api/libraryaccounts responded 200 in 498.1344 ms
+2026-03-19 00:14:44.633 +03:00 [INF] Request finished HTTP/2 GET https://localhost:5059/api/libraries/8 - 200 null application/json; charset=utf-8 522.8844ms
+2026-03-19 00:14:44.633 +03:00 [INF] Request finished HTTP/2 GET https://localhost:5059/api/libraryaccounts?libraryId=8&limit=200 - 200 null application/json; charset=utf-8 522.8528ms
+2026-03-19 00:14:44.764 +03:00 [INF] Executed DbCommand (13ms) [Parameters=[@p0='?' (DbType = Int32), @p1='?', @p2='?', @p3='?', @p4='?' (DbType = Int64), @p5='?', @p6='?', @p7='?', @p8='?' (DbType = DateTime), @p9='?', @p10='?', @p11='?', @p12='?', @p13='?', @p14='?', @p15='?' (DbType = Int32), @p16='?'], CommandType='"Text"', CommandTimeout='15']
+INSERT INTO audit_logs (account_id, account_type, account_username, action_name, duration_ms, endpoint, http_method, ip_address, operation_date, query_string, request_payload, response_payload, role_code, security_level, status, status_code, trace_identifier)
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9, @p10, @p11, @p12, @p13, @p14, @p15, @p16)
+RETURNING id;
+2026-03-19 00:14:44.843 +03:00 [INF] Executed DbCommand (17ms) [Parameters=[@p0='?' (DbType = Int32), @p1='?', @p2='?', @p3='?', @p4='?' (DbType = Int64), @p5='?', @p6='?', @p7='?', @p8='?' (DbType = DateTime), @p9='?', @p10='?', @p11='?', @p12='?', @p13='?', @p14='?', @p15='?' (DbType = Int32), @p16='?'], CommandType='"Text"', CommandTimeout='15']
+INSERT INTO audit_logs (account_id, account_type, account_username, action_name, duration_ms, endpoint, http_method, ip_address, operation_date, query_string, request_payload, response_payload, role_code, security_level, status, status_code, trace_identifier)
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9, @p10, @p11, @p12, @p13, @p14, @p15, @p16)
+RETURNING id;

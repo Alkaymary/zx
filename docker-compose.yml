@@ -1,0 +1,70 @@
+name: ${COMPOSE_PROJECT_NAME:-myapi}
+
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-myapi}
+      POSTGRES_USER: ${POSTGRES_USER:-myapi}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-myapi_dev_password_2026}
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ./docker/backups:/backups
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U \"$POSTGRES_USER\" -d \"$POSTGRES_DB\""]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+      start_period: 5s
+    networks:
+      - myapi-network
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      ASPNETCORE_ENVIRONMENT: ${ASPNETCORE_ENVIRONMENT:-Development}
+      ASPNETCORE_URLS: http://+:8080
+      Database__ApplyMigrationsOnStartup: ${MYAPI_DATABASE_APPLY_MIGRATIONS_ON_STARTUP:-true}
+      MYAPI_CONNECTION_STRING: Host=db;Port=5432;Database=${POSTGRES_DB:-myapi};Username=${POSTGRES_USER:-myapi};Password=${POSTGRES_PASSWORD:-myapi_dev_password_2026};Include Error Detail=true
+      MYAPI_JWT_ISSUER: ${MYAPI_JWT_ISSUER:-MyApi}
+      MYAPI_JWT_AUDIENCE: ${MYAPI_JWT_AUDIENCE:-MyApiClient}
+      MYAPI_JWT_SECRET: ${MYAPI_JWT_SECRET:-myapi_local_dev_jwt_secret_key_2026_baghdad_001}
+      MYAPI_BOOTSTRAP_ADMIN_ENABLED: ${MYAPI_BOOTSTRAP_ADMIN_ENABLED:-true}
+      MYAPI_BOOTSTRAP_ADMIN_FULLNAME: ${MYAPI_BOOTSTRAP_ADMIN_FULLNAME:-Super Admin}
+      MYAPI_BOOTSTRAP_ADMIN_USERNAME: ${MYAPI_BOOTSTRAP_ADMIN_USERNAME:-superadmin}
+      MYAPI_BOOTSTRAP_ADMIN_EMAIL: ${MYAPI_BOOTSTRAP_ADMIN_EMAIL:-superadmin@example.local}
+      MYAPI_BOOTSTRAP_ADMIN_PHONE: ${MYAPI_BOOTSTRAP_ADMIN_PHONE:-07700000000}
+      MYAPI_BOOTSTRAP_ADMIN_ROLE: ${MYAPI_BOOTSTRAP_ADMIN_ROLE:-super_admin}
+      MYAPI_BOOTSTRAP_ADMIN_PASSWORD: ${MYAPI_BOOTSTRAP_ADMIN_PASSWORD:-admin123456}
+      Serilog__EnableFileLogging: "true"
+      Serilog__FilePath: /app/logs/myapi-.log
+      SERILOG_SEQ_URL: ${SERILOG_SEQ_URL:-}
+    ports:
+      - "${MYAPI_HTTP_PORT:-8080}:8080"
+    volumes:
+      - ./logs:/app/logs
+    healthcheck:
+      test: ["CMD-SHELL", "curl --fail --silent http://localhost:8080/health/ready || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+    networks:
+      - myapi-network
+
+networks:
+  myapi-network:
+    driver: bridge
+
+volumes:
+  postgres-data:
+    name: ${COMPOSE_PROJECT_NAME:-myapi}-postgres-data

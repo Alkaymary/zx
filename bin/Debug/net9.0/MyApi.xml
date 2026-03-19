@@ -1,0 +1,639 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>MyApi</name>
+    </assembly>
+    <members>
+        <member name="M:MyApi.Controllers.AdminUsersController.GetAll(MyApi.Dtos.AdminUserQueryDto,System.Threading.CancellationToken)">
+            <summary>
+            Returns admin users with optional filters.
+            </summary>
+        </member>
+        <member name="M:MyApi.Controllers.AdminUsersController.GetByQuery(MyApi.Dtos.AdminUserQueryDto,System.Threading.CancellationToken)">
+            <summary>
+            Returns admin users using query string filters.
+            </summary>
+        </member>
+        <member name="M:MyApi.Controllers.AdminUsersController.GetById(System.Int32,System.Threading.CancellationToken)">
+            <summary>
+            Returns one admin user by id.
+            </summary>
+        </member>
+        <member name="M:MyApi.Controllers.AdminUsersController.Create(MyApi.Dtos.CreateAdminUserDto,System.Threading.CancellationToken)">
+            <summary>
+            Creates a new admin user.
+            </summary>
+        </member>
+        <member name="M:MyApi.Controllers.AdminUsersController.Update(System.Int32,MyApi.Dtos.UpdateAdminUserDto,System.Threading.CancellationToken)">
+            <summary>
+            Updates an existing admin user.
+            </summary>
+        </member>
+        <member name="M:MyApi.Controllers.AdminUsersController.UpdateByQuery(MyApi.Dtos.AdminUserQueryDto,MyApi.Dtos.UpdateAdminUserDto,System.Threading.CancellationToken)">
+            <summary>
+            Updates one admin user selected by query string filters.
+            </summary>
+        </member>
+        <member name="M:MyApi.Controllers.AdminUsersController.Delete(System.Int32,System.Threading.CancellationToken)">
+            <summary>
+            Deletes an admin user by id.
+            </summary>
+        </member>
+        <member name="M:MyApi.Controllers.AdminUsersController.DeleteByQuery(MyApi.Dtos.AdminUserQueryDto,System.Threading.CancellationToken)">
+            <summary>
+            Deletes one admin user selected by query string filters.
+            </summary>
+        </member>
+        <member name="M:MyApi.Controllers.AuditLogsController.GetAll(MyApi.Dtos.AuditLogQueryDto,System.Threading.CancellationToken)">
+            <summary>
+            Returns audit logs with filtering and pagination.
+            </summary>
+        </member>
+        <member name="M:MyApi.Controllers.AuditLogsController.GetById(System.Int32,System.Threading.CancellationToken)">
+            <summary>
+            Returns one audit log with the full request and response payloads.
+            </summary>
+        </member>
+        <member name="M:MyApi.Controllers.AuditLogsController.GetMetrics(MyApi.Dtos.AuditLogQueryDto,System.Threading.CancellationToken)">
+            <summary>
+            Returns summary metrics for the audit log dashboard.
+            </summary>
+        </member>
+        <member name="M:MyApi.Controllers.PackagesController.GetAll(System.Threading.CancellationToken)">
+            <summary>
+            Returns all packages.
+            </summary>
+        </member>
+        <member name="M:MyApi.Controllers.PackagesController.GetById(System.Int32,System.Threading.CancellationToken)">
+            <summary>
+            Returns one package by id.
+            </summary>
+        </member>
+        <member name="M:MyApi.Controllers.PackagesController.Create(MyApi.Dtos.CreatePackageDto,System.Threading.CancellationToken)">
+            <summary>
+            Creates a new package.
+            </summary>
+        </member>
+        <member name="M:MyApi.Controllers.PackagesController.Update(System.Int32,MyApi.Dtos.UpdatePackageDto,System.Threading.CancellationToken)">
+            <summary>
+            Updates an existing package.
+            </summary>
+        </member>
+        <member name="M:MyApi.Controllers.PackagesController.Delete(System.Int32,System.Threading.CancellationToken)">
+            <summary>
+            Deletes a package by id.
+            </summary>
+        </member>
+        <member name="M:MyApi.Controllers.LibraryFinancialController.GetMySummary(System.Threading.CancellationToken)">
+            <summary>
+            Returns the financial summary for the current library account.
+            </summary>
+        </member>
+        <member name="M:MyApi.Controllers.LibraryFinancialController.GetMyStatement(System.Threading.CancellationToken)">
+            <summary>
+            Returns the financial statement for the current library account.
+            </summary>
+        </member>
+        <member name="M:MyApi.Controllers.AdminQrCodesController.GetLibraryMetrics(System.Int32,System.Threading.CancellationToken)">
+            <summary>
+            Returns QR metrics for one library for admin dashboard usage.
+            </summary>
+        </member>
+        <member name="M:MyApi.Controllers.AdminQrCodesController.GetLibraryItems(System.Int32,System.Nullable{MyApi.Models.RecordStatus},System.Threading.CancellationToken)">
+            <summary>
+            Returns QR records for one library for admin dashboard usage.
+            </summary>
+        </member>
+        <member name="M:MyApi.Controllers.AdminQrCodesController.GetByReference(System.String,System.Threading.CancellationToken)">
+            <summary>
+            Returns full QR export details by reference code for admin usage.
+            </summary>
+        </member>
+        <member name="M:MyApi.Controllers.QrCodesController.GetAll(System.Threading.CancellationToken)">
+            <summary>
+            Returns QR exports created for the current library.
+            </summary>
+        </member>
+        <member name="M:MyApi.Controllers.QrCodesController.GetById(System.Int32,System.Threading.CancellationToken)">
+            <summary>
+            Returns one QR export by id for the current library.
+            </summary>
+        </member>
+        <member name="M:MyApi.Controllers.QrCodesController.Export(MyApi.Dtos.CreateQrCodeDto,System.Threading.CancellationToken)">
+            <summary>
+            Exports a new QR code, creates a linked financial charge, and returns the reference code as plain text.
+            </summary>
+        </member>
+        <member name="M:MyApi.Controllers.QrCodesController.Update(System.Int32,MyApi.Dtos.UpdateQrCodeDto,System.Threading.CancellationToken)">
+            <summary>
+            Updates the student data and status of a QR export for the current library.
+            </summary>
+        </member>
+        <member name="M:MyApi.Controllers.QrCodesController.Delete(System.Int32,System.Threading.CancellationToken)">
+            <summary>
+            Deletes a QR export for the current library when its linked financial charge has not been settled or paid.
+            </summary>
+        </member>
+        <member name="P:MyApi.Dtos.AdminUserResponseDto.Id">
+            <summary>The unique admin user identifier.</summary>
+        </member>
+        <member name="P:MyApi.Dtos.AdminUserResponseDto.FullName">
+            <summary>The full display name of the admin user.</summary>
+        </member>
+        <member name="P:MyApi.Dtos.AdminUserResponseDto.Username">
+            <summary>The unique username used for login.</summary>
+        </member>
+        <member name="P:MyApi.Dtos.AdminUserResponseDto.Email">
+            <summary>The admin email address if available.</summary>
+        </member>
+        <member name="P:MyApi.Dtos.AdminUserResponseDto.PhoneNumber">
+            <summary>The admin phone number if available.</summary>
+        </member>
+        <member name="P:MyApi.Dtos.AdminUserResponseDto.RoleId">
+            <summary>The assigned role identifier.</summary>
+        </member>
+        <member name="P:MyApi.Dtos.AdminUserResponseDto.RoleName">
+            <summary>The assigned role name.</summary>
+        </member>
+        <member name="P:MyApi.Dtos.AdminUserResponseDto.RoleCode">
+            <summary>The assigned role code.</summary>
+        </member>
+        <member name="P:MyApi.Dtos.AdminUserResponseDto.Status">
+            <summary>The account status.</summary>
+        </member>
+        <member name="P:MyApi.Dtos.AdminUserResponseDto.LastLoginAt">
+            <summary>The last successful login time if available.</summary>
+        </member>
+        <member name="P:MyApi.Dtos.AdminUserResponseDto.CreatedAt">
+            <summary>The creation timestamp.</summary>
+        </member>
+        <member name="P:MyApi.Dtos.AdminUserResponseDto.UpdatedAt">
+            <summary>The last update timestamp.</summary>
+        </member>
+        <member name="P:MyApi.Dtos.CreateAdminUserDto.FullName">
+            <summary>The admin user's full name.</summary>
+        </member>
+        <member name="P:MyApi.Dtos.CreateAdminUserDto.Username">
+            <summary>The unique username for login.</summary>
+        </member>
+        <member name="P:MyApi.Dtos.CreateAdminUserDto.Email">
+            <summary>The unique email for the admin user.</summary>
+        </member>
+        <member name="P:MyApi.Dtos.CreateAdminUserDto.PhoneNumber">
+            <summary>The admin phone number.</summary>
+        </member>
+        <member name="P:MyApi.Dtos.CreateAdminUserDto.PasswordHash">
+            <summary>The stored password hash or password value used by the current auth flow.</summary>
+        </member>
+        <member name="P:MyApi.Dtos.CreateAdminUserDto.RoleId">
+            <summary>The role identifier. It must reference a role with guard name Admin.</summary>
+        </member>
+        <member name="P:MyApi.Dtos.CreateAdminUserDto.Status">
+            <summary>The account status.</summary>
+        </member>
+        <member name="P:MyApi.Dtos.CreateAdminUserDto.LastLoginAt">
+            <summary>The last login time if you want to seed it.</summary>
+        </member>
+        <member name="P:MyApi.Dtos.AdminUserQueryDto.Id">
+            <summary>Filter by exact admin user id.</summary>
+        </member>
+        <member name="P:MyApi.Dtos.AdminUserQueryDto.Phone">
+            <summary>Filter by phone number using partial match.</summary>
+        </member>
+        <member name="P:MyApi.Dtos.AdminUserQueryDto.Username">
+            <summary>Filter by username using partial match.</summary>
+        </member>
+        <member name="P:MyApi.Dtos.AdminUserQueryDto.Email">
+            <summary>Filter by email using partial match.</summary>
+        </member>
+        <member name="P:MyApi.Dtos.AdminUserQueryDto.Status">
+            <summary>Filter by exact account status.</summary>
+        </member>
+        <member name="P:MyApi.Dtos.AdminUserQueryDto.RoleId">
+            <summary>Filter by exact role id.</summary>
+        </member>
+        <member name="P:MyApi.Dtos.AdminUserQueryDto.RoleCode">
+            <summary>Filter by role code using partial match.</summary>
+        </member>
+        <member name="P:MyApi.Dtos.AdminUserQueryDto.CreatedFrom">
+            <summary>Filter by created date from this UTC datetime.</summary>
+        </member>
+        <member name="P:MyApi.Dtos.AdminUserQueryDto.CreatedTo">
+            <summary>Filter by created date until this UTC datetime.</summary>
+        </member>
+        <member name="P:MyApi.Dtos.AdminUserQueryDto.UpdatedFrom">
+            <summary>Filter by updated date from this UTC datetime.</summary>
+        </member>
+        <member name="P:MyApi.Dtos.AdminUserQueryDto.UpdatedTo">
+            <summary>Filter by updated date until this UTC datetime.</summary>
+        </member>
+        <member name="P:MyApi.Dtos.AdminUserQueryDto.Limit">
+            <summary>Maximum number of records to return. Default is 50 and maximum is 200.</summary>
+        </member>
+        <member name="P:MyApi.Dtos.PackageResponseDto.Id">
+            <summary>The unique package identifier.</summary>
+        </member>
+        <member name="P:MyApi.Dtos.PackageResponseDto.PackageCode">
+            <summary>The unique package code.</summary>
+        </member>
+        <member name="P:MyApi.Dtos.PackageResponseDto.Name">
+            <summary>The package name shown to admins and clients.</summary>
+        </member>
+        <member name="P:MyApi.Dtos.PackageResponseDto.PriceIqd">
+            <summary>The package price in Iraqi dinars.</summary>
+        </member>
+        <member name="P:MyApi.Dtos.PackageResponseDto.Status">
+            <summary>The current package status.</summary>
+        </member>
+        <member name="P:MyApi.Dtos.PackageResponseDto.AddedByAdminUserId">
+            <summary>The admin user id who created this package.</summary>
+        </member>
+        <member name="P:MyApi.Dtos.PackageResponseDto.AddedByUsername">
+            <summary>The username of the admin who created this package.</summary>
+        </member>
+        <member name="P:MyApi.Dtos.PackageResponseDto.CreatedAt">
+            <summary>The package creation timestamp.</summary>
+        </member>
+        <member name="P:MyApi.Dtos.PackageResponseDto.UpdatedAt">
+            <summary>The package last update timestamp.</summary>
+        </member>
+        <member name="P:MyApi.Dtos.CreatePackageDto.PackageCode">
+            <summary>The unique package code.</summary>
+        </member>
+        <member name="P:MyApi.Dtos.CreatePackageDto.Name">
+            <summary>The package name.</summary>
+        </member>
+        <member name="P:MyApi.Dtos.CreatePackageDto.PriceIqd">
+            <summary>The package price in Iraqi dinars.</summary>
+        </member>
+        <member name="P:MyApi.Dtos.CreatePackageDto.Status">
+            <summary>The package status.</summary>
+        </member>
+        <member name="P:MyApi.Dtos.QrCodeResponseDto.Id">
+            <summary>The unique QR record identifier.</summary>
+        </member>
+        <member name="P:MyApi.Dtos.QrCodeResponseDto.QrReference">
+            <summary>The unique QR reference code.</summary>
+        </member>
+        <member name="P:MyApi.Dtos.QrCodeResponseDto.LibraryId">
+            <summary>The library identifier.</summary>
+        </member>
+        <member name="P:MyApi.Dtos.QrCodeResponseDto.LibraryCode">
+            <summary>The library code used to export the QR.</summary>
+        </member>
+        <member name="P:MyApi.Dtos.QrCodeResponseDto.LibraryName">
+            <summary>The library name.</summary>
+        </member>
+        <member name="P:MyApi.Dtos.QrCodeResponseDto.PackageId">
+            <summary>The package identifier.</summary>
+        </member>
+        <member name="P:MyApi.Dtos.QrCodeResponseDto.PackageCode">
+            <summary>The selected package code.</summary>
+        </member>
+        <member name="P:MyApi.Dtos.QrCodeResponseDto.PackageName">
+            <summary>The selected package name.</summary>
+        </member>
+        <member name="P:MyApi.Dtos.QrCodeResponseDto.PosDeviceId">
+            <summary>The POS device identifier.</summary>
+        </member>
+        <member name="P:MyApi.Dtos.QrCodeResponseDto.PosCode">
+            <summary>The POS code used to export the QR.</summary>
+        </member>
+        <member name="P:MyApi.Dtos.QrCodeResponseDto.StudentName">
+            <summary>The student name included in the QR.</summary>
+        </member>
+        <member name="P:MyApi.Dtos.QrCodeResponseDto.StudentPhoneNumber">
+            <summary>The student phone number included in the QR.</summary>
+        </member>
+        <member name="P:MyApi.Dtos.QrCodeResponseDto.QrPayload">
+            <summary>The generated QR payload text.</summary>
+        </member>
+        <member name="P:MyApi.Dtos.QrCodeResponseDto.FinancialTransactionId">
+            <summary>The linked financial transaction identifier created for this export.</summary>
+        </member>
+        <member name="P:MyApi.Dtos.QrCodeResponseDto.ChargeAmountIqd">
+            <summary>The package charge amount in Iraqi dinars linked to this export.</summary>
+        </member>
+        <member name="P:MyApi.Dtos.QrCodeResponseDto.FinancialStatus">
+            <summary>The current financial status for the linked package charge.</summary>
+        </member>
+        <member name="P:MyApi.Dtos.QrCodeResponseDto.RemainingAmountIqd">
+            <summary>The remaining amount on the linked financial charge.</summary>
+        </member>
+        <member name="P:MyApi.Dtos.QrCodeResponseDto.Status">
+            <summary>The QR status.</summary>
+        </member>
+        <member name="P:MyApi.Dtos.QrCodeResponseDto.CreatedByLibraryAccountId">
+            <summary>The library account id that created the QR.</summary>
+        </member>
+        <member name="P:MyApi.Dtos.QrCodeResponseDto.CreatedByUsername">
+            <summary>The username of the creator library account.</summary>
+        </member>
+        <member name="P:MyApi.Dtos.QrCodeResponseDto.CreatedAt">
+            <summary>The creation timestamp.</summary>
+        </member>
+        <member name="P:MyApi.Dtos.QrCodeResponseDto.UpdatedAt">
+            <summary>The last update timestamp.</summary>
+        </member>
+        <member name="P:MyApi.Dtos.AdminQrCodeDetailsDto.Id">
+            <summary>The QR record identifier.</summary>
+        </member>
+        <member name="P:MyApi.Dtos.AdminQrCodeDetailsDto.QrReference">
+            <summary>The exported QR reference code.</summary>
+        </member>
+        <member name="P:MyApi.Dtos.AdminQrCodeDetailsDto.LibraryId">
+            <summary>The library identifier.</summary>
+        </member>
+        <member name="P:MyApi.Dtos.AdminQrCodeDetailsDto.LibraryCode">
+            <summary>The library code.</summary>
+        </member>
+        <member name="P:MyApi.Dtos.AdminQrCodeDetailsDto.LibraryName">
+            <summary>The library name.</summary>
+        </member>
+        <member name="P:MyApi.Dtos.AdminQrCodeDetailsDto.PosDeviceId">
+            <summary>The POS device identifier.</summary>
+        </member>
+        <member name="P:MyApi.Dtos.AdminQrCodeDetailsDto.PosCode">
+            <summary>The POS code used in the export.</summary>
+        </member>
+        <member name="P:MyApi.Dtos.AdminQrCodeDetailsDto.PackageId">
+            <summary>The package identifier.</summary>
+        </member>
+        <member name="P:MyApi.Dtos.AdminQrCodeDetailsDto.PackageCode">
+            <summary>The package code.</summary>
+        </member>
+        <member name="P:MyApi.Dtos.AdminQrCodeDetailsDto.PackageName">
+            <summary>The package name.</summary>
+        </member>
+        <member name="P:MyApi.Dtos.AdminQrCodeDetailsDto.PackagePriceIqd">
+            <summary>The package price in Iraqi dinars.</summary>
+        </member>
+        <member name="P:MyApi.Dtos.AdminQrCodeDetailsDto.StudentName">
+            <summary>The student name.</summary>
+        </member>
+        <member name="P:MyApi.Dtos.AdminQrCodeDetailsDto.StudentPhoneNumber">
+            <summary>The student phone number.</summary>
+        </member>
+        <member name="P:MyApi.Dtos.AdminQrCodeDetailsDto.QrPayload">
+            <summary>The QR payload text.</summary>
+        </member>
+        <member name="P:MyApi.Dtos.AdminQrCodeDetailsDto.Status">
+            <summary>The QR status.</summary>
+        </member>
+        <member name="P:MyApi.Dtos.AdminQrCodeDetailsDto.CreatedByLibraryAccountId">
+            <summary>The creator library account id.</summary>
+        </member>
+        <member name="P:MyApi.Dtos.AdminQrCodeDetailsDto.CreatedByUsername">
+            <summary>The creator library account username.</summary>
+        </member>
+        <member name="P:MyApi.Dtos.AdminQrCodeDetailsDto.CreatedByFullName">
+            <summary>The creator library account full name.</summary>
+        </member>
+        <member name="P:MyApi.Dtos.AdminQrCodeDetailsDto.FinancialTransactionId">
+            <summary>The linked financial transaction id.</summary>
+        </member>
+        <member name="P:MyApi.Dtos.AdminQrCodeDetailsDto.FinancialTransactionType">
+            <summary>The linked financial transaction type.</summary>
+        </member>
+        <member name="P:MyApi.Dtos.AdminQrCodeDetailsDto.ChargeAmountIqd">
+            <summary>The linked financial amount in Iraqi dinars.</summary>
+        </member>
+        <member name="P:MyApi.Dtos.AdminQrCodeDetailsDto.PaidAmountIqd">
+            <summary>The linked financial paid amount in Iraqi dinars.</summary>
+        </member>
+        <member name="P:MyApi.Dtos.AdminQrCodeDetailsDto.RemainingAmountIqd">
+            <summary>The linked financial remaining amount in Iraqi dinars.</summary>
+        </member>
+        <member name="P:MyApi.Dtos.AdminQrCodeDetailsDto.FinancialStatus">
+            <summary>The linked financial status.</summary>
+        </member>
+        <member name="P:MyApi.Dtos.AdminQrCodeDetailsDto.FinancialDescription">
+            <summary>The linked financial description.</summary>
+        </member>
+        <member name="P:MyApi.Dtos.AdminQrCodeDetailsDto.FinancialTransactionDate">
+            <summary>The linked financial transaction date.</summary>
+        </member>
+        <member name="P:MyApi.Dtos.AdminQrCodeDetailsDto.FinancialDueDate">
+            <summary>The linked financial due date.</summary>
+        </member>
+        <member name="P:MyApi.Dtos.AdminQrCodeDetailsDto.CreatedAt">
+            <summary>The QR creation timestamp.</summary>
+        </member>
+        <member name="P:MyApi.Dtos.AdminQrCodeDetailsDto.UpdatedAt">
+            <summary>The QR last update timestamp.</summary>
+        </member>
+        <member name="P:MyApi.Dtos.CreateQrCodeDto.LibraryCode">
+            <summary>The library code. It must match the current logged-in library.</summary>
+        </member>
+        <member name="P:MyApi.Dtos.CreateQrCodeDto.PosCode">
+            <summary>The POS code belonging to the current library.</summary>
+        </member>
+        <member name="P:MyApi.Dtos.CreateQrCodeDto.PackageCode">
+            <summary>The selected package code.</summary>
+        </member>
+        <member name="P:MyApi.Dtos.CreateQrCodeDto.StudentName">
+            <summary>The student name that will appear in the QR payload.</summary>
+        </member>
+        <member name="P:MyApi.Dtos.CreateQrCodeDto.StudentPhoneNumber">
+            <summary>The student phone number that will appear in the QR payload.</summary>
+        </member>
+        <member name="P:MyApi.Dtos.UpdateQrCodeDto.StudentName">
+            <summary>The student name that will appear in the QR payload.</summary>
+        </member>
+        <member name="P:MyApi.Dtos.UpdateQrCodeDto.StudentPhoneNumber">
+            <summary>The student phone number that will appear in the QR payload.</summary>
+        </member>
+        <member name="P:MyApi.Dtos.UpdateQrCodeDto.Status">
+            <summary>The QR status.</summary>
+        </member>
+        <member name="P:MyApi.Dtos.LibraryQrMetricsDto.LibraryId">
+            <summary>The library identifier.</summary>
+        </member>
+        <member name="P:MyApi.Dtos.LibraryQrMetricsDto.TotalGenerated">
+            <summary>Total generated QR codes for the library.</summary>
+        </member>
+        <member name="P:MyApi.Dtos.LibraryQrMetricsDto.TotalUsed">
+            <summary>Total QR codes considered used/activated for the library.</summary>
+        </member>
+        <member name="T:MyApi.Migrations.InitialCreate">
+            <inheritdoc />
+        </member>
+        <member name="M:MyApi.Migrations.InitialCreate.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:MyApi.Migrations.InitialCreate.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:MyApi.Migrations.InitialCreate.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:MyApi.Migrations.AddPosDevices">
+            <inheritdoc />
+        </member>
+        <member name="M:MyApi.Migrations.AddPosDevices.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:MyApi.Migrations.AddPosDevices.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:MyApi.Migrations.AddPosDevices.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:MyApi.Migrations.AlignCoreSchema">
+            <inheritdoc />
+        </member>
+        <member name="M:MyApi.Migrations.AlignCoreSchema.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:MyApi.Migrations.AlignCoreSchema.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:MyApi.Migrations.AlignCoreSchema.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:MyApi.Migrations.AddAdminUsers">
+            <inheritdoc />
+        </member>
+        <member name="M:MyApi.Migrations.AddAdminUsers.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:MyApi.Migrations.AddAdminUsers.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:MyApi.Migrations.AddAdminUsers.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:MyApi.Migrations.AddRefreshTokens">
+            <inheritdoc />
+        </member>
+        <member name="M:MyApi.Migrations.AddRefreshTokens.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:MyApi.Migrations.AddRefreshTokens.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:MyApi.Migrations.AddRefreshTokens.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:MyApi.Migrations.AddPackagesModule">
+            <inheritdoc />
+        </member>
+        <member name="M:MyApi.Migrations.AddPackagesModule.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:MyApi.Migrations.AddPackagesModule.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:MyApi.Migrations.AddPackagesModule.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:MyApi.Migrations.AddPackageCodeToPackages">
+            <inheritdoc />
+        </member>
+        <member name="M:MyApi.Migrations.AddPackageCodeToPackages.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:MyApi.Migrations.AddPackageCodeToPackages.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:MyApi.Migrations.AddPackageCodeToPackages.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:MyApi.Migrations.AddFinancialModule">
+            <inheritdoc />
+        </member>
+        <member name="M:MyApi.Migrations.AddFinancialModule.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:MyApi.Migrations.AddFinancialModule.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:MyApi.Migrations.AddFinancialModule.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:MyApi.Migrations.AddQrCodesModule">
+            <inheritdoc />
+        </member>
+        <member name="M:MyApi.Migrations.AddQrCodesModule.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:MyApi.Migrations.AddQrCodesModule.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:MyApi.Migrations.AddQrCodesModule.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:MyApi.Migrations.AddPackageRelationToQrCodes">
+            <inheritdoc />
+        </member>
+        <member name="M:MyApi.Migrations.AddPackageRelationToQrCodes.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:MyApi.Migrations.AddPackageRelationToQrCodes.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:MyApi.Migrations.AddPackageRelationToQrCodes.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:MyApi.Migrations.LinkQrExportsToFinancialTransactions">
+            <inheritdoc />
+        </member>
+        <member name="M:MyApi.Migrations.LinkQrExportsToFinancialTransactions.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:MyApi.Migrations.LinkQrExportsToFinancialTransactions.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:MyApi.Migrations.LinkQrExportsToFinancialTransactions.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:MyApi.Migrations.RefactorFinancialSettlements">
+            <inheritdoc />
+        </member>
+        <member name="M:MyApi.Migrations.RefactorFinancialSettlements.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:MyApi.Migrations.RefactorFinancialSettlements.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:MyApi.Migrations.RefactorFinancialSettlements.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:MyApi.Migrations.NormalizeFinancialData">
+            <inheritdoc />
+        </member>
+        <member name="M:MyApi.Migrations.NormalizeFinancialData.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:MyApi.Migrations.NormalizeFinancialData.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:MyApi.Migrations.NormalizeFinancialData.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:MyApi.Migrations.AddAuditLogsModule">
+            <inheritdoc />
+        </member>
+        <member name="M:MyApi.Migrations.AddAuditLogsModule.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:MyApi.Migrations.AddAuditLogsModule.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:MyApi.Migrations.AddAuditLogsModule.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:MyApi.Migrations.HardenAuditLogIndexesAndPgTrgm">
+            <inheritdoc />
+        </member>
+        <member name="M:MyApi.Migrations.HardenAuditLogIndexesAndPgTrgm.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:MyApi.Migrations.HardenAuditLogIndexesAndPgTrgm.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:MyApi.Migrations.HardenAuditLogIndexesAndPgTrgm.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+    </members>
+</doc>

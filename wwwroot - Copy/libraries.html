@@ -1,0 +1,254 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>صفحة المكتبات | AdminAPI</title>
+  <style>
+    :root{--bg:#fff;--panel:#fff;--sidebar:#fbfcfd;--ink:#16202a;--muted:#6f7a84;--line:#e7ebef;--brand:#0f766e;--brand-deep:#0b5c56;--accent:#c88b33;--danger:#bf4f45;--soft:#f5f8fa;--soft-brand:#eef7f6;--shadow:0 24px 60px rgba(15,23,42,.08)}
+    *{box-sizing:border-box}
+    body{margin:0;min-height:100vh;background:var(--bg);color:var(--ink);font-family:"Cairo","Tajawal","Segoe UI",Tahoma,sans-serif}
+    button,input,select,a{font:inherit}a{text-decoration:none;color:inherit}
+    .app{display:grid;grid-template-columns:290px minmax(0,1fr);min-height:100vh}
+    .sidebar{background:var(--sidebar);border-left:1px solid var(--line);padding:22px 18px;display:flex;flex-direction:column;gap:18px;position:sticky;top:0;height:100vh}
+    .brand{display:flex;align-items:center;gap:12px;padding:10px 6px}.brand-mark{width:42px;height:42px;border-radius:14px;display:grid;place-items:center;color:#fff;font-weight:800;background:linear-gradient(135deg,var(--brand),var(--accent));box-shadow:0 14px 30px rgba(15,118,110,.18)}.brand strong{display:block;font-size:18px}.brand span{color:var(--muted);font-size:13px}
+    .session-card,.topbar,.card{background:#fff;border:1px solid var(--line);border-radius:28px;box-shadow:var(--shadow)}.session-card{padding:16px}.session-card h3{margin:0 0 12px;font-size:16px}.session-line{display:flex;justify-content:space-between;gap:10px;padding:6px 0;color:var(--muted);font-size:13px}
+    .nav{display:grid;gap:8px;overflow:auto;padding-left:4px}.nav-label{color:var(--muted);font-size:12px;font-weight:800;padding:6px 10px 2px}.nav-btn{width:100%;min-height:46px;border:1px solid transparent;background:transparent;color:var(--ink);border-radius:16px;text-align:right;padding:0 14px;display:flex;align-items:center;font-weight:700}.nav-btn:hover{background:#fff;border-color:var(--line)}.nav-btn.active{background:var(--soft-brand);color:var(--brand)}
+    .sidebar-actions{margin-top:auto;display:grid;gap:10px}.side-link,.side-btn{min-height:44px;border-radius:14px;border:1px solid var(--line);background:#fff;display:grid;place-items:center;color:var(--brand);font-weight:800;cursor:pointer}
+    .main{padding:22px}
+    .topbar{display:flex;justify-content:space-between;align-items:center;gap:14px;padding:16px 18px;margin-bottom:18px}.topbar h1{margin:0;font-size:28px}.topbar p{margin:4px 0 0;color:var(--muted);font-size:14px}.topbar-actions{display:flex;gap:10px;flex-wrap:wrap}.top-btn{min-height:42px;padding:0 14px;border-radius:14px;border:1px solid var(--line);background:#fff;color:var(--brand);cursor:pointer;font-weight:800}
+    .summary-shell,.search-shell,.results-shell,.tiles-shell{padding:20px;border-radius:28px;border:1px solid var(--line);box-shadow:var(--shadow)}.summary-shell{background:linear-gradient(135deg,rgba(15,118,110,.05),rgba(200,139,51,.05)),#fff;margin-bottom:18px}.card{padding:18px}
+    .head{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;flex-wrap:wrap;margin-bottom:18px}.head h3{margin:0 0 6px;font-size:24px}.head p{margin:0;color:var(--muted);font-size:14px;line-height:1.8}.chip{display:inline-flex;align-items:center;min-height:40px;padding:0 14px;border-radius:999px;background:var(--soft-brand);border:1px solid rgba(15,118,110,.12);color:var(--brand);font-size:13px;font-weight:800}
+    .summary-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}.mini-card{position:relative;overflow:hidden;padding:20px;border-radius:24px;border:1px solid #edf1f4;background:#fff;min-height:158px;display:flex;flex-direction:column;justify-content:space-between;box-shadow:0 12px 30px rgba(15,23,42,.05)}.mini-card::before{content:"";position:absolute;inset:0 auto auto 0;width:100%;height:5px;background:linear-gradient(90deg,var(--brand),var(--accent))}.mini-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}.mini-icon{width:48px;height:48px;border-radius:16px;display:grid;place-items:center;background:linear-gradient(135deg,rgba(15,118,110,.12),rgba(200,139,51,.14));color:var(--brand-deep);font-size:18px;font-weight:800;border:1px solid rgba(15,118,110,.08)}.mini-card span{display:block;color:var(--muted);font-size:14px;line-height:1.8}.mini-card strong{margin-top:8px;font-size:42px;line-height:1;color:var(--brand)}.mini-foot{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:18px;padding-top:14px;border-top:1px dashed var(--line);color:var(--muted);font-size:12px;font-weight:700}
+    .tiles-shell{background:linear-gradient(180deg,#fff 0%,#fbfcfd 100%);margin-bottom:18px}.tiles-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}.tile{position:relative;overflow:hidden;border:0;border-radius:26px;color:#fff;cursor:pointer;padding:18px;text-align:right;display:flex;flex-direction:column;justify-content:space-between;min-height:190px;box-shadow:0 18px 34px rgba(15,23,42,.12)}.tile::before{content:"";position:absolute;inset:auto -30px -30px auto;width:120px;height:120px;border-radius:28px;background:rgba(255,255,255,.12);transform:rotate(18deg)}.tile::after{content:"";position:absolute;inset:14px 14px auto auto;width:14px;height:14px;border-radius:50%;background:rgba(255,255,255,.3);box-shadow:0 0 0 10px rgba(255,255,255,.06)}.tile.teal{background:linear-gradient(135deg,#0f766e,#0b5c56)}.tile.gold{background:linear-gradient(135deg,#cf8c2c,#b77720)}.tile.blue{background:linear-gradient(135deg,#2b78c5,#1d5f9f)}.tile.dark{background:linear-gradient(135deg,#1e2d3a,#0f1d29)}.tile-top{position:relative;z-index:1;display:flex;align-items:flex-start;justify-content:space-between;gap:12px}.tile-badge{padding:7px 10px;border-radius:999px;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.16);font-size:12px;font-weight:800}.tile-icon{width:50px;height:50px;border-radius:16px;display:grid;place-items:center;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.16);font-size:20px;font-weight:800}.tile-content{position:relative;z-index:1}.tile-content strong{display:block;margin-bottom:8px;font-size:24px;line-height:1.1}.tile-content span{display:block;color:rgba(255,255,255,.88);line-height:1.8;font-size:14px}
+    .search-shell,.results-shell{background:linear-gradient(180deg,#fff 0%,#fbfcfd 100%)}.search-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.field{display:grid;gap:7px}.field.full{grid-column:1/-1}.field label{color:var(--muted);font-size:14px;font-weight:700}.field input,.field select{min-height:48px;border-radius:16px;border:1px solid var(--line);background:#fff;padding:12px 14px;outline:none}
+    .search-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}.btn{min-height:46px;padding:0 16px;border:0;border-radius:15px;cursor:pointer;font-weight:800}.btn.primary{color:#fff;background:linear-gradient(135deg,var(--brand),var(--brand-deep))}.btn.secondary{color:#fff;background:linear-gradient(135deg,var(--accent),#b97a26)}.search-note{margin-top:14px;padding:14px 16px;border-radius:18px;background:rgba(15,118,110,.05);border:1px solid rgba(15,118,110,.1);color:var(--muted);line-height:1.9;font-size:14px}
+    .libraries-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.library-card{padding:18px;border:1px solid var(--line);border-radius:24px;background:#fff;box-shadow:0 12px 30px rgba(15,23,42,.05)}.library-card h4{margin:0 0 8px;font-size:20px}.library-card .meta{color:var(--muted);line-height:1.9;font-size:14px}.library-card .accounts{margin-top:14px;padding-top:14px;border-top:1px dashed var(--line);color:var(--ink);line-height:1.8;font-size:13px}.status-pill{display:inline-flex;margin-top:12px;padding:7px 11px;border-radius:999px;background:var(--soft-brand);color:var(--brand);font-size:12px;font-weight:800}.card-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}.mini-btn{min-height:42px;padding:0 14px;border:1px solid var(--line);border-radius:14px;background:#fff;color:var(--brand);cursor:pointer;font-weight:800}
+    .empty-state{display:none;margin-top:18px;padding:22px;border-radius:20px;background:var(--soft);color:var(--muted);text-align:center;line-height:1.9}.empty-state.show{display:block}
+    .error{margin-bottom:18px;padding:12px 14px;border-radius:16px;border:1px solid rgba(191,79,69,.16);background:rgba(191,79,69,.08);color:var(--danger);display:none;line-height:1.8}.error.show{display:block}
+    @media (max-width:1180px){.app{grid-template-columns:1fr}.sidebar{position:static;height:auto}}@media (max-width:900px){.summary-grid,.tiles-grid,.search-grid,.libraries-grid{grid-template-columns:1fr 1fr}}@media (max-width:680px){.topbar,.summary-grid,.tiles-grid,.search-grid,.libraries-grid{display:grid;grid-template-columns:1fr}.topbar-actions{width:100%}}
+  </style>
+<link rel="stylesheet" href="/theme.css">
+</head>
+<body>
+  <main class="app">
+    <aside class="sidebar">
+      <div class="brand"><div class="brand-mark">A</div><div><strong>لوحة المدير</strong><span>AdminAPI Control</span></div></div>
+      <section class="session-card"><h3>الجلسة الحالية</h3><div class="session-line"><span>اسم المستخدم</span><b id="sessionUsername">-</b></div><div class="session-line"><span>الدور</span><b id="sessionRole">-</b></div><div class="session-line"><span>المعرّف</span><b id="sessionUserId">-</b></div></section>
+      <nav class="nav"><div class="nav-label">الأقسام الرئيسية</div><a class="nav-btn" href="/admin.html">نظرة عامة</a><a class="nav-btn active" href="/libraries.html">المكتبات</a><a class="nav-btn" href="/create-library-account.html">حسابات المكتبات</a><a class="nav-btn" href="/pos-devices.html">أجهزة POS</a><a class="nav-btn" href="/packages.html">الباقات</a><a class="nav-btn" href="/admins.html">المدراء</a><a class="nav-btn" href="/roles.html">الأدوار</a><a class="nav-btn" href="/financial.html">المالية</a><a class="nav-btn" href="/qr-reference.html">البحث المرجعي QR</a></nav>
+      <div class="sidebar-actions"><a class="side-link" href="/">صفحة الدخول</a><a class="side-link" href="/swagger">Swagger</a><button class="side-btn" id="logoutBtn" type="button">تسجيل الخروج</button></div>
+    </aside>
+    <section class="main">
+      <section class="topbar">
+        <div><h1>صفحة المكتبات</h1><p>بحث مكتبات بسيط ومتقدم ضمن نفس الصفحة، مع دمج بيانات الحسابات المرتبطة في النتائج.</p></div>
+        <div class="topbar-actions"><button class="top-btn" id="reloadBtn" type="button">تحديث المكتبات</button></div>
+      </section>
+
+      <section class="summary-shell">
+        <div class="head"><div><h3>مؤشرات المكتبات</h3><p>ملخص سريع وواضح يبيّن حالة المكتبات الحالية داخل النظام.</p></div><div class="chip">Live Overview</div></div>
+        <div class="summary-grid">
+          <article class="mini-card"><div class="mini-top"><div><span>إجمالي المكتبات</span><strong id="librariesTotal">0</strong></div><div class="mini-icon">L</div></div><div class="mini-foot"><small>العدد الكلي</small><small>Libraries</small></div></article>
+          <article class="mini-card"><div class="mini-top"><div><span>المكتبات النشطة</span><strong id="librariesActive">0</strong></div><div class="mini-icon">A</div></div><div class="mini-foot"><small>الحالة الحالية</small><small>Active</small></div></article>
+          <article class="mini-card"><div class="mini-top"><div><span>إجمالي الحسابات</span><strong id="librariesAccounts">0</strong></div><div class="mini-icon">U</div></div><div class="mini-foot"><small>المرتبطة بالمكتبات</small><small>Accounts</small></div></article>
+          <article class="mini-card"><div class="mini-top"><div><span>المدن المسجلة</span><strong id="librariesCities">0</strong></div><div class="mini-icon">C</div></div><div class="mini-foot"><small>التغطية الجغرافية</small><small>Cities</small></div></article>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="tiles-shell">
+          <div class="head"><div><h3>اختصارات سريعة</h3><p>بطاقات عملية مرتبة للوصول السريع إلى أهم إجراءات المكتبات.</p></div><div class="chip">Quick Actions</div></div>
+          <div class="tiles-grid">
+            <button class="tile teal" id="addLibraryTile" type="button"><div class="tile-top"><span class="tile-badge">إجراء رئيسي</span><div class="tile-icon">+</div></div><div class="tile-content"><strong>إضافة مكتبة</strong><span>ابدأ بإنشاء مكتبة جديدة داخل النظام من الصفحة المخصصة لذلك.</span></div></button>
+            <button class="tile gold" id="addAccountTile" type="button"><div class="tile-top"><span class="tile-badge">Accounts</span><div class="tile-icon">U</div></div><div class="tile-content"><strong>إضافة حساب</strong><span>إنشاء حساب جديد تابع لإحدى المكتبات وربطه بها مباشرة.</span></div></button>
+            <button class="tile blue" id="searchLibraryTile" type="button"><div class="tile-top"><span class="tile-badge">Search</span><div class="tile-icon">Q</div></div><div class="tile-content"><strong>البحث عن مكتبة</strong><span>الانتقال السريع إلى قسم البحث داخل الصفحة وتفعيل الاستعلام المتقدم.</span></div></button>
+            <button class="tile dark" id="showAllLibrariesTile" type="button"><div class="tile-top"><span class="tile-badge">View</span><div class="tile-icon">#</div></div><div class="tile-content"><strong>عرض كل المكاتب</strong><span>مسح جميع الفلاتر وإظهار القائمة الكاملة الحالية بدون قيود.</span></div></button>
+          </div>
+        </div>
+      </section>
+
+      <div class="error" id="errorBox"></div>
+
+      <section class="search-shell" id="searchSection">
+        <div class="head"><div><h3>البحث والاستعلام المتقدم</h3><p>ابحث بالاسم، المعرّف، الكود، الهاتف، اسم المستخدم، المدينة، أو نفّذ استعلامًا أدق من الحقول التالية.</p></div><div class="chip">Advanced Query</div></div>
+        <div class="search-grid">
+          <div class="field full"><label for="generalQuery">بحث عام</label><input id="generalQuery" placeholder="اسم المكتبة أو الكود أو رقم المكتبة أو الهاتف أو اسم المستخدم"></div>
+          <div class="field"><label for="libraryIdQuery">معرّف المكتبة</label><input id="libraryIdQuery" type="number" min="1" placeholder="مثال: 8"></div>
+          <div class="field"><label for="libraryNameQuery">اسم المكتبة</label><input id="libraryNameQuery" placeholder="مثال: Core Library"></div>
+          <div class="field"><label for="libraryCodeQuery">كود المكتبة</label><input id="libraryCodeQuery" placeholder="مثال: CORE-01"></div>
+          <div class="field"><label for="cityQuery">المدينة</label><input id="cityQuery" placeholder="مثال: بغداد"></div>
+          <div class="field"><label for="phoneQuery">الهاتف</label><input id="phoneQuery" placeholder="هاتف المالك أو الحساب"></div>
+          <div class="field"><label for="usernameQuery">اسم المستخدم</label><input id="usernameQuery" placeholder="اسم مستخدم حساب المكتبة"></div>
+          <div class="field"><label for="statusQuery">الحالة</label><select id="statusQuery"><option value="">كل الحالات</option><option value="Active">Active</option><option value="Inactive">Inactive</option><option value="Suspended">Suspended</option></select></div>
+        </div>
+        <div class="search-actions"><button class="btn primary" id="applySearchBtn" type="button">تطبيق البحث</button><button class="btn secondary" id="resetSearchBtn" type="button">مسح البحث</button></div>
+        <div class="search-note">البحث بكلمة المرور غير متاح ولن أفعّله هنا لأسباب أمنية. يمكن البحث باسم المستخدم المرتبط بالمكتبة، لكن كلمات المرور يجب أن تبقى غير قابلة للعرض أو البحث.</div>
+      </section>
+
+      <section class="results-shell">
+        <div class="head"><div><h3>نتائج المكتبات</h3><p>نتائج البحث تظهر هنا مع بيانات المكتبة والحسابات المرتبطة بها.</p></div><div class="chip" id="resultsCount">0 نتيجة</div></div>
+        <div class="libraries-grid" id="librariesGrid"></div>
+        <div class="empty-state" id="emptyState">لا توجد مكتبات مطابقة لهذا البحث. جرّب تقليل عدد الحقول أو استخدام البحث العام.</div>
+      </section>
+    </section>
+  </main>
+  <script>
+    const session = readJson("adminSession");
+    let librariesCache = [];
+    let accountsCache = [];
+
+    function byId(id) { return document.getElementById(id); }
+    function readJson(key) { try { return JSON.parse(localStorage.getItem(key) || "null"); } catch { return null; } }
+    function normalizeList(data) { if (Array.isArray(data)) return data; if (Array.isArray(data?.value)) return data.value; return []; }
+    function showError(message) { const box = byId("errorBox"); box.textContent = message; box.classList.add("show"); }
+    function hideError() { const box = byId("errorBox"); box.textContent = ""; box.classList.remove("show"); }
+
+    async function requestJson(url, options = {}) {
+      const response = await fetch(url, {
+        ...options,
+        headers: { "Content-Type": "application/json", "Authorization": `Bearer ${session.accessToken}`, ...(options.headers || {}) }
+      });
+      const text = await response.text();
+      let data = null;
+      try { data = text ? JSON.parse(text) : null; } catch { data = text; }
+      if (!response.ok) throw new Error(typeof data === "string" ? data : (data?.title || data?.message || `HTTP ${response.status}`));
+      return data;
+    }
+
+    function requireSession() {
+      if (!session?.accessToken) {
+        window.location.href = "/";
+        throw new Error("لا توجد جلسة مدير.");
+      }
+    }
+
+    function renderSession() {
+      byId("sessionUsername").textContent = session.username || "-";
+      byId("sessionRole").textContent = session.roleCode || "-";
+      byId("sessionUserId").textContent = session.userId || "-";
+    }
+
+    function getAccountsForLibrary(libraryId) {
+      return accountsCache.filter((account) => Number(account.libraryId) === Number(libraryId));
+    }
+
+    function renderSummary(items) {
+      const activeCount = items.filter((item) => String(item.status).toLowerCase() === "active").length;
+      const accountsCount = items.reduce((sum, item) => sum + Number(item.accountsCount || 0), 0);
+      const cities = new Set(items.map((item) => item.city).filter(Boolean));
+      byId("librariesTotal").textContent = items.length;
+      byId("librariesActive").textContent = activeCount;
+      byId("librariesAccounts").textContent = accountsCount;
+      byId("librariesCities").textContent = cities.size;
+    }
+
+    function renderLibraries(items) {
+      byId("resultsCount").textContent = `${items.length} نتيجة`;
+      byId("emptyState").classList.toggle("show", items.length === 0);
+      byId("librariesGrid").innerHTML = items.map((item) => {
+        const accounts = getAccountsForLibrary(item.id);
+        const usernames = accounts.map((account) => account.username).filter(Boolean);
+        return `
+          <article class="library-card">
+            <h4>${item.libraryName || "-"}</h4>
+            <div class="meta">
+              المعرّف: ${item.id}<br>
+              الكود: ${item.libraryCode || "-"}<br>
+              المالك: ${item.ownerName || "-"}<br>
+              الهاتف: ${item.ownerPhone || item.ownerPhone2 || "-"}<br>
+              المدينة: ${item.city || "-"}<br>
+              المحافظة: ${item.province || "-"}<br>
+              عدد الحسابات: ${item.accountsCount || 0}
+            </div>
+            <span class="status-pill">${item.status || "-"}</span>
+            <div class="accounts">
+              <strong>الحسابات المرتبطة:</strong><br>
+              ${usernames.length ? usernames.join(" ، ") : "لا توجد حسابات مرتبطة"}
+            </div>
+            <div class="card-actions">
+              <button class="mini-btn" type="button" onclick="openLibraryDetails(${item.id})">عرض التفاصيل</button>
+            </div>
+          </article>
+        `;
+      }).join("");
+    }
+
+    function applyFilters() {
+      const generalQuery = byId("generalQuery").value.trim().toLowerCase();
+      const libraryIdQuery = byId("libraryIdQuery").value.trim();
+      const libraryNameQuery = byId("libraryNameQuery").value.trim().toLowerCase();
+      const libraryCodeQuery = byId("libraryCodeQuery").value.trim().toLowerCase();
+      const cityQuery = byId("cityQuery").value.trim().toLowerCase();
+      const phoneQuery = byId("phoneQuery").value.trim().toLowerCase();
+      const usernameQuery = byId("usernameQuery").value.trim().toLowerCase();
+      const statusQuery = byId("statusQuery").value.trim().toLowerCase();
+
+      const filtered = librariesCache.filter((item) => {
+        const accounts = getAccountsForLibrary(item.id);
+        const accountPhones = accounts.map((account) => String(account.phoneNumber || "").toLowerCase());
+        const usernames = accounts.map((account) => String(account.username || "").toLowerCase());
+        const haystack = [item.id, item.libraryCode, item.libraryName, item.ownerName, item.ownerPhone, item.ownerPhone2, item.city, item.province, ...usernames, ...accountPhones].map((value) => String(value || "").toLowerCase());
+
+        const matchesGeneral = !generalQuery || haystack.some((value) => value.includes(generalQuery));
+        const matchesId = !libraryIdQuery || String(item.id) === libraryIdQuery;
+        const matchesName = !libraryNameQuery || String(item.libraryName || "").toLowerCase().includes(libraryNameQuery);
+        const matchesCode = !libraryCodeQuery || String(item.libraryCode || "").toLowerCase().includes(libraryCodeQuery);
+        const matchesCity = !cityQuery || String(item.city || "").toLowerCase().includes(cityQuery) || String(item.province || "").toLowerCase().includes(cityQuery);
+        const matchesPhone = !phoneQuery || [item.ownerPhone, item.ownerPhone2, ...accountPhones].some((value) => String(value || "").toLowerCase().includes(phoneQuery));
+        const matchesUsername = !usernameQuery || usernames.some((value) => value.includes(usernameQuery));
+        const matchesStatus = !statusQuery || String(item.status || "").toLowerCase() === statusQuery;
+
+        return matchesGeneral && matchesId && matchesName && matchesCode && matchesCity && matchesPhone && matchesUsername && matchesStatus;
+      });
+
+      renderSummary(filtered);
+      renderLibraries(filtered);
+    }
+
+    async function loadLibraries() {
+      hideError();
+      try {
+        const [librariesData, accountsData] = await Promise.all([
+          requestJson("/api/Libraries?limit=200"),
+          requestJson("/api/LibraryAccounts?limit=200")
+        ]);
+        librariesCache = normalizeList(librariesData);
+        accountsCache = normalizeList(accountsData);
+        applyFilters();
+      } catch (error) {
+        showError(error.message || "تعذر تحميل المكتبات.");
+      }
+    }
+
+    function resetSearch() {
+      byId("generalQuery").value = "";
+      byId("libraryIdQuery").value = "";
+      byId("libraryNameQuery").value = "";
+      byId("libraryCodeQuery").value = "";
+      byId("cityQuery").value = "";
+      byId("phoneQuery").value = "";
+      byId("usernameQuery").value = "";
+      byId("statusQuery").value = "";
+      hideError();
+      applyFilters();
+    }
+
+    function openLibraryDetails(libraryId) {
+      window.location.href = `/library-details.html?id=${libraryId}`;
+    }
+
+    byId("logoutBtn").addEventListener("click", () => { localStorage.removeItem("adminSession"); window.location.href = "/"; });
+    byId("reloadBtn").addEventListener("click", loadLibraries);
+    byId("addLibraryTile").addEventListener("click", () => { window.location.href = "/create-library.html"; });
+    byId("addAccountTile").addEventListener("click", () => { window.location.href = "/create-library-account.html"; });
+    byId("searchLibraryTile").addEventListener("click", () => { hideError(); byId("searchSection").scrollIntoView({ behavior: "smooth", block: "start" }); byId("generalQuery").focus(); });
+    byId("showAllLibrariesTile").addEventListener("click", resetSearch);
+    byId("applySearchBtn").addEventListener("click", applyFilters);
+    byId("resetSearchBtn").addEventListener("click", resetSearch);
+
+    requireSession();
+    renderSession();
+    loadLibraries();
+  </script>
+</body>
+</html>
+

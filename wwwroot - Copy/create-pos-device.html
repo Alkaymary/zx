@@ -1,0 +1,514 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>إضافة جهاز POS | AdminAPI</title>
+  <style>
+    :root{
+      --bg:#f3f7fb;--panel:#fff;--sidebar:#0b1627;--sidebar-2:#111f34;--text:#0f172a;--muted:#64748b;--line:#e2e8f0;
+      --brand:#0f766e;--brand-strong:#0b5c56;--blue:#2563eb;--gold:#c78827;--success:#059669;--danger:#dc2626;
+      --shadow-xs:0 2px 8px rgba(15,23,42,.04);--shadow-sm:0 10px 24px rgba(15,23,42,.05);--shadow-md:0 18px 40px rgba(15,23,42,.08);
+      --content:1320px;--sidebar-width:300px
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;min-height:100vh;color:var(--text);font-family:"Cairo","Tajawal","Segoe UI",Tahoma,sans-serif;
+      background:
+        radial-gradient(circle at top right, rgba(37,99,235,.08), transparent 24%),
+        radial-gradient(circle at bottom left, rgba(15,118,110,.08), transparent 22%),
+        linear-gradient(180deg,#f8fbff 0%,var(--bg) 100%)
+    }
+    a,button,input,select{font:inherit}
+    a{text-decoration:none;color:inherit}
+    button{border:0}
+    .app{min-height:100vh;display:grid;grid-template-columns:var(--sidebar-width) minmax(0,1fr)}
+    .sidebar{
+      position:sticky;top:0;height:100vh;padding:20px 16px;color:#fff;display:flex;flex-direction:column;gap:18px;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,0) 28%),
+        linear-gradient(180deg,var(--sidebar) 0%,var(--sidebar-2) 100%);
+      border-left:1px solid rgba(255,255,255,.06)
+    }
+    .brand{display:flex;align-items:center;gap:14px;padding:8px 8px 18px;border-bottom:1px solid rgba(255,255,255,.08)}
+    .brand-logo{
+      width:50px;height:50px;border-radius:18px;display:grid;place-items:center;font-weight:900;font-size:18px;color:#fff;
+      background:linear-gradient(135deg,#14b8a6 0%,#2563eb 100%);box-shadow:0 18px 34px rgba(20,184,166,.28)
+    }
+    .brand strong{display:block;font-size:18px}
+    .brand span{display:block;margin-top:4px;font-size:12px;color:rgba(255,255,255,.64)}
+    .session-card,.quick-nav,.sidebar-actions{
+      border-radius:24px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.04);backdrop-filter:blur(14px)
+    }
+    .session-card{padding:16px;display:grid;gap:8px}
+    .card-title{margin:0;font-size:13px;font-weight:800;color:#fff}
+    .session-row{display:flex;justify-content:space-between;gap:12px;padding:8px 0;border-bottom:1px dashed rgba(255,255,255,.08);font-size:13px}
+    .session-row:last-child{border-bottom:0;padding-bottom:0}
+    .session-row span{color:rgba(255,255,255,.62)}
+    .quick-nav{padding:12px;display:grid;gap:6px}
+    .nav-title{padding:4px 10px 8px;font-size:11px;font-weight:800;letter-spacing:.08em;color:rgba(255,255,255,.46)}
+    .nav-link{
+      min-height:50px;display:flex;align-items:center;gap:12px;border-radius:16px;padding:0 12px;
+      color:rgba(255,255,255,.82);border:1px solid transparent
+    }
+    .nav-link:hover,.nav-link.active{
+      background:linear-gradient(135deg, rgba(20,184,166,.18), rgba(37,99,235,.16));
+      border-color:rgba(20,184,166,.22);color:#fff
+    }
+    .nav-icon{
+      width:36px;height:36px;border-radius:13px;display:grid;place-items:center;font-size:13px;font-weight:900;
+      background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.06)
+    }
+    .sidebar-actions{padding:12px;display:grid;gap:10px;margin-top:auto}
+    .side-link,.side-btn{
+      min-height:46px;border-radius:15px;display:flex;align-items:center;justify-content:center;padding:0 14px;font-weight:800;
+      color:#fff;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);cursor:pointer
+    }
+    .content-wrap{min-width:0;display:flex;flex-direction:column}
+    .topbar{
+      position:sticky;top:0;z-index:15;min-height:78px;padding:16px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px;
+      background:rgba(248,251,255,.78);backdrop-filter:blur(16px);border-bottom:1px solid rgba(226,232,240,.8)
+    }
+    .topbar h1{margin:0;font-size:28px}
+    .topbar p{margin:6px 0 0;color:var(--muted);font-size:14px;line-height:1.8}
+    .btn{
+      min-height:46px;border-radius:15px;border:1px solid var(--line);background:#fff;padding:0 16px;display:inline-flex;align-items:center;justify-content:center;gap:8px;
+      font-weight:800;color:var(--text);cursor:pointer;box-shadow:var(--shadow-xs)
+    }
+    .btn.primary{color:#fff;border-color:transparent;background:linear-gradient(135deg,var(--brand),var(--brand-strong))}
+    .btn.gold{color:#fff;border-color:transparent;background:linear-gradient(135deg,#d89a35,#b7791f)}
+    .btn.soft{color:var(--brand);background:#f8fbfd;border-color:#dcefeb}
+    .content{width:min(100%,var(--content));margin:0 auto;padding:24px;display:grid;gap:18px}
+    .hero,.panel{
+      border-radius:32px;border:1px solid var(--line);background:linear-gradient(180deg,#fff 0%,#fbfdff 100%);box-shadow:var(--shadow-md)
+    }
+    .hero{padding:26px;display:grid;gap:20px}
+    .eyebrow{
+      display:inline-flex;align-items:center;min-height:36px;padding:0 14px;border-radius:999px;background:#ecfdf5;color:var(--success);
+      border:1px solid #d1fae5;font-size:12px;font-weight:800;margin-bottom:12px
+    }
+    .hero h2{margin:0;font-size:34px}
+    .hero p{margin:10px 0 0;color:var(--muted);line-height:1.95}
+    .pills,.actions,.inline-tools{display:flex;gap:10px;flex-wrap:wrap}
+    .pill{
+      min-height:36px;padding:0 14px;border-radius:999px;background:#fff;border:1px solid #dcefeb;color:var(--brand);font-size:12px;font-weight:800
+    }
+    .panel{padding:22px}
+    .section-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px}
+    .section-head h3{margin:0;font-size:22px}
+    .section-head p{margin:6px 0 0;color:var(--muted);font-size:13px;line-height:1.8}
+    .form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+    .field{display:grid;gap:7px}
+    .field label{color:var(--muted);font-size:14px;font-weight:700}
+    .field small,.setting-hint,.qr-note{color:var(--muted);font-size:12px;line-height:1.8}
+    .field input,.field select{
+      min-height:50px;border-radius:16px;border:1px solid var(--line);background:#fff;padding:12px 14px;outline:none;box-shadow:var(--shadow-xs)
+    }
+    .field.readonly-box input{background:#f8fbff;color:#0b5c56;font-weight:800}
+    .preview-grid{display:grid;grid-template-columns:360px minmax(0,1fr);gap:18px}
+    .qr-card,.connection-card{
+      border-radius:26px;border:1px solid var(--line);background:#fff;padding:20px
+    }
+    .qr-card{display:grid;gap:14px;align-content:start}
+    .qr-box{
+      min-height:280px;border-radius:24px;border:1px dashed #bfdbfe;background:linear-gradient(180deg,#f8fbff 0%,#eef7ff 100%);
+      display:grid;place-items:center;padding:18px
+    }
+    .qr-box img{width:min(100%,240px);height:auto;display:block}
+    .connection-card{display:grid;gap:14px}
+    .detail-list{display:grid;gap:10px}
+    .detail-item{border-radius:18px;border:1px solid var(--line);background:#fbfdff;padding:14px 16px}
+    .detail-item span{display:block;color:var(--muted);font-size:12px;margin-bottom:6px}
+    .detail-item strong{
+      display:block;font-size:18px;line-height:1.8;word-break:break-word;direction:ltr;text-align:left
+    }
+    .payload-box{
+      border-radius:20px;border:1px solid #dcefeb;background:linear-gradient(180deg,#f9fcff 0%,#f1f8ff 100%);padding:16px
+    }
+    .payload-box span{display:block;color:var(--muted);font-size:12px;margin-bottom:8px}
+    .payload-box code{
+      display:block;direction:ltr;text-align:left;font-family:"Consolas","Courier New",monospace;font-size:15px;font-weight:700;
+      color:#0f172a;word-break:break-all;line-height:1.9
+    }
+    .message{
+      display:none;margin-top:16px;padding:13px 14px;border-radius:16px;line-height:1.8;font-size:14px
+    }
+    .message.show{display:block}
+    .message.error{color:var(--danger);background:rgba(191,79,69,.08);border:1px solid rgba(191,79,69,.16)}
+    .message.success{color:var(--success);background:rgba(22,128,91,.08);border:1px solid rgba(22,128,91,.16)}
+    @media (max-width:1180px){
+      .app{grid-template-columns:1fr}
+      .sidebar{position:static;height:auto}
+      .preview-grid{grid-template-columns:1fr}
+    }
+    @media (max-width:900px){
+      .form-grid{grid-template-columns:1fr}
+    }
+    @media (max-width:640px){
+      .content{padding:16px}
+      .topbar{padding:16px}
+      .hero,.panel{padding:18px}
+      .qr-box{min-height:220px}
+    }
+  </style>
+<link rel="stylesheet" href="/theme.css">
+</head>
+<body>
+  <main class="app">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-logo">A</div>
+        <div>
+          <strong>لوحة المدير</strong>
+          <span>AdminAPI Control</span>
+        </div>
+      </div>
+      <section class="session-card">
+        <h3 class="card-title">الجلسة الحالية</h3>
+        <div class="session-row"><span>اسم المستخدم</span><strong id="sessionUsername">-</strong></div>
+        <div class="session-row"><span>الدور</span><strong id="sessionRole">-</strong></div>
+        <div class="session-row"><span>المعرّف</span><strong id="sessionUserId">-</strong></div>
+      </section>
+      <nav class="quick-nav">
+        <div class="nav-title">صفحات POS</div>
+        <a class="nav-link active" href="/create-pos-device.html"><span class="nav-icon">+</span><span>إضافة جهاز</span></a>
+      </nav>
+      <div class="sidebar-actions">
+        <a class="side-link" href="/">صفحة الدخول</a>
+        <a class="side-link" href="/swagger">Swagger</a>
+        <button class="side-btn" id="logoutBtn" type="button">تسجيل الخروج</button>
+      </div>
+    </aside>
+
+    <section class="content-wrap">
+      <header class="topbar">
+        <div>
+          <h1>إضافة جهاز POS</h1>
+          <p>إنشاء جهاز جديد مع توليد الكود والسيريال تلقائيًا، مع معاينة QR وربط الاتصال قبل الحفظ.</p>
+        </div>
+        <a class="btn soft" href="/pos-devices.html">الرجوع إلى POS</a>
+      </header>
+
+      <section class="content">
+        <section class="hero">
+          <div>
+            <span class="eyebrow">إضافة جهاز جديد</span>
+            <h2>أنشئ الجهاز مع رمز اتصال جاهز</h2>
+            <p>محتوى الرمز سيكون بالشكل التالي: <strong dir="ltr">baseurl:POS-SN:POS-devicecode</strong> وسيُعرض لك مباشرة داخل الصفحة.</p>
+          </div>
+          <div class="pills">
+            <span class="pill" id="presetPill">المكتبة المختارة: لا يوجد</span>
+            <span class="pill" id="posCodePreview">كود الجهاز: -</span>
+            <span class="pill" id="serialPreview">السيريال: -</span>
+            <span class="pill" id="baseUrlPreview">Base URL: -</span>
+          </div>
+        </section>
+
+        <section class="panel">
+          <div class="section-head">
+            <div>
+              <h3>إعدادات الرابط</h3>
+              <p>احفظ رابط النظام الأساسي مرة واحدة، وسيُستخدم تلقائيًا عند إنشاء أي جهاز جديد.</p>
+            </div>
+            <div class="inline-tools">
+              <button class="btn soft" type="button" id="saveBaseUrlBtn">حفظ الرابط</button>
+            </div>
+          </div>
+          <div class="form-grid">
+            <div class="field">
+              <label for="baseUrlInput">Base URL</label>
+              <input id="baseUrlInput" type="url" placeholder="https://example.com/connect">
+            </div>
+            <div class="field readonly-box">
+              <label for="payloadPreviewInput">النص المولد للرمز</label>
+              <input id="payloadPreviewInput" readonly>
+            </div>
+          </div>
+          <p class="setting-hint">يتم حفظ هذا الرابط محليًا داخل المتصفح الحالي، لذلك يمكنك تغييره لاحقًا متى ما احتجت.</p>
+        </section>
+
+        <section class="preview-grid">
+          <section class="panel qr-card">
+            <div class="section-head" style="margin-bottom:0">
+              <div>
+                <h3>معاينة QR</h3>
+                <p>هذه الصورة تمثل محتوى الاتصال الحالي للجهاز.</p>
+              </div>
+            </div>
+            <div class="qr-box">
+              <img id="qrImage" alt="QR Preview">
+            </div>
+            <p class="qr-note">إذا لم يتمكن المتصفح من تحميل خدمة المعاينة الخارجية، سيبقى النص الكامل ظاهرًا أسفلها للاستخدام.</p>
+          </section>
+
+          <section class="panel connection-card">
+            <div class="section-head" style="margin-bottom:0">
+              <div>
+                <h3>تفاصيل الاتصال</h3>
+                <p>البيانات التالية هي التي ستدخل مباشرة داخل رمز QR.</p>
+              </div>
+            </div>
+            <div class="detail-list">
+              <div class="detail-item">
+                <span>Base URL</span>
+                <strong id="connectionBaseUrl">-</strong>
+              </div>
+              <div class="detail-item">
+                <span>POS-SN</span>
+                <strong id="connectionSerial">-</strong>
+              </div>
+              <div class="detail-item">
+                <span>POS-devicecode</span>
+                <strong id="connectionPosCode">-</strong>
+              </div>
+            </div>
+            <div class="payload-box">
+              <span>النص الكامل داخل QR</span>
+              <code id="qrPayloadPreview">-</code>
+            </div>
+          </section>
+        </section>
+
+        <section class="panel">
+          <div class="section-head">
+            <div>
+              <h3>بيانات الجهاز</h3>
+              <p>أكمل بيانات الجهاز، وسيتم تحديث كود الاتصال وQR تلقائيًا مع كل تغيير مؤثر.</p>
+            </div>
+          </div>
+          <form id="posForm">
+            <div class="form-grid">
+              <div class="field">
+                <label for="libraryId">المكتبة</label>
+                <select id="libraryId">
+                  <option value="">اختر المكتبة</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="posCode">كود الجهاز</label>
+                <input id="posCode" required maxlength="50" readonly>
+                <small>POS-####-YYMM</small>
+              </div>
+              <div class="field">
+                <label for="serialNumber">الرقم التسلسلي</label>
+                <input id="serialNumber" maxlength="150" readonly>
+                <small>SN-YYMM-LIBCODE</small>
+              </div>
+              <div class="field">
+                <label for="deviceVendor">الشركة المصنعة</label>
+                <input id="deviceVendor" value="SUNMI" readonly>
+              </div>
+              <div class="field">
+                <label for="deviceModel">الموديل</label>
+                <select id="deviceModel">
+                  <option value="V2">V2</option>
+                  <option value="V2SE">V2SE</option>
+                  <option value="V2PRO">V2PRO</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="status">الحالة</label>
+                <select id="status">
+                  <option value="Inactive">Inactive</option>
+                  <option value="Active">Active</option>
+                  <option value="Suspended">Suspended</option>
+                  <option value="Maintenance">Maintenance</option>
+                </select>
+              </div>
+            </div>
+            <div class="actions" style="margin-top:22px">
+              <button class="btn gold" type="button" id="resetBtn">تفريغ الحقول</button>
+              <button class="btn primary" type="submit">حفظ الجهاز</button>
+            </div>
+          </form>
+          <div class="message error" id="errorBox"></div>
+          <div class="message success" id="successBox"></div>
+        </section>
+      </section>
+    </section>
+  </main>
+
+  <script>
+    const session = readJson("adminSession");
+    const presetLibraryId = new URLSearchParams(window.location.search).get("libraryId");
+    const BASE_URL_KEY = "posBaseUrlSetting";
+
+    function byId(id){ return document.getElementById(id); }
+    function readJson(key){ try { return JSON.parse(localStorage.getItem(key) || "null"); } catch { return null; } }
+    function readText(key){ return localStorage.getItem(key) || ""; }
+    function requireSession(){
+      if(!session?.accessToken){
+        window.location.href="/";
+        throw new Error("لا توجد جلسة مدير.");
+      }
+    }
+    function renderSession(){
+      byId("sessionUsername").textContent = session.username || "-";
+      byId("sessionRole").textContent = session.roleCode || "-";
+      byId("sessionUserId").textContent = session.userId || "-";
+    }
+    function showMessage(id,message){
+      const target = byId(id);
+      target.textContent = message;
+      target.classList.add("show");
+    }
+    function hideMessages(){
+      ["errorBox","successBox"].forEach((id)=>{
+        byId(id).textContent = "";
+        byId(id).classList.remove("show");
+      });
+    }
+    async function requestJson(url,options={}){
+      const response = await fetch(url,{
+        ...options,
+        headers:{
+          "Content-Type":"application/json",
+          "Authorization":`Bearer ${session.accessToken}`,
+          ...(options.headers||{})
+        }
+      });
+      const text = await response.text();
+      let data = null;
+      try { data = text ? JSON.parse(text) : null; } catch { data = text; }
+      if(!response.ok){
+        throw new Error(typeof data === "string" ? data : (data?.title || data?.message || `HTTP ${response.status}`));
+      }
+      return data;
+    }
+    function getCurrentYYMM(){
+      const now = new Date();
+      return `${String(now.getFullYear()).slice(-2)}${String(now.getMonth()+1).padStart(2,"0")}`;
+    }
+    function generateRandom4(){
+      return Math.floor(1000 + Math.random() * 9000);
+    }
+    function normalizeBaseUrl(value){
+      return String(value || "").trim().replace(/\/+$/,"");
+    }
+    function getSavedBaseUrl(){
+      return normalizeBaseUrl(readText(BASE_URL_KEY));
+    }
+    function getSelectedLibraryCode(){
+      return byId("libraryId").selectedOptions[0]?.dataset?.libraryCode || "LIB";
+    }
+    function buildQrPayload(){
+      const baseUrl = normalizeBaseUrl(byId("baseUrlInput").value || getSavedBaseUrl());
+      const serialNumber = byId("serialNumber").value.trim() || "-";
+      const posCode = byId("posCode").value.trim() || "-";
+      return `${baseUrl || "-"}:${serialNumber}:${posCode}`;
+    }
+    function renderQrPreview(){
+      const baseUrl = normalizeBaseUrl(byId("baseUrlInput").value || getSavedBaseUrl());
+      const serialNumber = byId("serialNumber").value || "-";
+      const posCode = byId("posCode").value || "-";
+      const payload = buildQrPayload();
+      const encodedPayload = encodeURIComponent(payload);
+
+      byId("connectionBaseUrl").textContent = baseUrl || "-";
+      byId("connectionSerial").textContent = serialNumber;
+      byId("connectionPosCode").textContent = posCode;
+      byId("qrPayloadPreview").textContent = payload;
+      byId("payloadPreviewInput").value = payload;
+      byId("qrImage").src = `https://api.qrserver.com/v1/create-qr-code/?size=280x280&data=${encodedPayload}`;
+      byId("qrImage").alt = payload;
+    }
+    function updatePreview(){
+      byId("posCodePreview").textContent = `كود الجهاز: ${byId("posCode").value || "-"}`;
+      byId("serialPreview").textContent = `السيريال: ${byId("serialNumber").value || "-"}`;
+      byId("baseUrlPreview").textContent = `Base URL: ${normalizeBaseUrl(byId("baseUrlInput").value || getSavedBaseUrl()) || "-"}`;
+      renderQrPreview();
+    }
+    function generateDeviceCodes(){
+      const yymm = getCurrentYYMM();
+      const libraryCode = getSelectedLibraryCode();
+      byId("posCode").value = `POS-${generateRandom4()}-${yymm}`;
+      byId("serialNumber").value = `SN-${yymm}-${libraryCode}`;
+      updatePreview();
+    }
+    function saveBaseUrl(){
+      const normalized = normalizeBaseUrl(byId("baseUrlInput").value);
+      localStorage.setItem(BASE_URL_KEY, normalized);
+      updatePreview();
+      showMessage("successBox","تم حفظ Base URL بنجاح.");
+    }
+    async function loadLibraries(){
+      const items = await requestJson("/api/Libraries?limit=200");
+      const list = Array.isArray(items) ? items : (items?.value || []);
+      const activeLibraries = list.filter((x)=>String(x.status).toLowerCase() === "active");
+
+      byId("libraryId").innerHTML = `<option value="">اختر المكتبة</option>${activeLibraries.map((x)=>`<option value="${x.id}" data-library-code="${x.libraryCode || ""}">${x.libraryName} - ${x.libraryCode}</option>`).join("")}`;
+
+      if(presetLibraryId){
+        byId("libraryId").value = String(presetLibraryId);
+        const selected = activeLibraries.find((x)=>String(x.id) === String(presetLibraryId));
+        byId("presetPill").textContent = selected
+          ? `المكتبة المختارة: ${selected.libraryName} - ${selected.libraryCode}`
+          : "المكتبة المختارة: تم تمريرها من الصفحة السابقة";
+      }
+
+      generateDeviceCodes();
+    }
+    function resetForm(){
+      byId("posForm").reset();
+      byId("status").value = "Inactive";
+      byId("deviceVendor").value = "SUNMI";
+      byId("deviceModel").value = "V2";
+      byId("baseUrlInput").value = getSavedBaseUrl();
+      if(presetLibraryId){
+        byId("libraryId").value = String(presetLibraryId);
+      }
+      hideMessages();
+      generateDeviceCodes();
+    }
+    async function submitForm(event){
+      event.preventDefault();
+      hideMessages();
+      if(!byId("posCode").value.trim()){
+        return showMessage("errorBox","كود الجهاز حقل مطلوب.");
+      }
+      try{
+        const data = await requestJson("/api/PosDevices",{
+          method:"POST",
+          body:JSON.stringify({
+            libraryId: byId("libraryId").value ? Number(byId("libraryId").value) : null,
+            posCode: byId("posCode").value.trim(),
+            serialNumber: byId("serialNumber").value.trim() || null,
+            deviceModel: byId("deviceModel").value.trim() || null,
+            deviceVendor: byId("deviceVendor").value.trim() || null,
+            status: byId("status").value,
+            isActivated:false,
+            activatedByAccountId:null,
+            activationToken:null,
+            activatedAt:null,
+            lastAuthenticatedAt:null
+          })
+        });
+        showMessage("successBox",`تم إنشاء الجهاز بنجاح: ${data.posCode}`);
+        setTimeout(()=>window.location.href="/all-pos-devices.html",800);
+      }catch(error){
+        showMessage("errorBox",error.message || "تعذر إنشاء الجهاز.");
+      }
+    }
+
+    byId("posForm").addEventListener("submit",submitForm);
+    byId("resetBtn").addEventListener("click",resetForm);
+    byId("libraryId").addEventListener("change",generateDeviceCodes);
+    byId("baseUrlInput").addEventListener("input",updatePreview);
+    byId("saveBaseUrlBtn").addEventListener("click",()=>{
+      hideMessages();
+      saveBaseUrl();
+    });
+    byId("logoutBtn").addEventListener("click",()=>{
+      localStorage.removeItem("adminSession");
+      window.location.href="/";
+    });
+
+    requireSession();
+    renderSession();
+    byId("baseUrlInput").value = getSavedBaseUrl();
+    updatePreview();
+    loadLibraries().catch((error)=>showMessage("errorBox",error.message || "تعذر تحميل المكتبات."));
+  </script>
+</body>
+</html>
+

@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تفاصيل العملية - نظام الإدارة</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Cairo', sans-serif; }
+        .metric-value { font-variant-numeric: tabular-nums; }
+    </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#1e3a8a',
+                        secondary: '#3b82f6',
+                        dark: '#0f172a'
+                    }
+                }
+            }
+        };
+    </script>
+</head>
+<body class="bg-slate-50 text-slate-800">
+    <div class="flex min-h-screen">
+        <app-sidebar></app-sidebar>
+        <div class="flex min-w-0 flex-1 flex-col">
+            <nav class="sticky top-0 z-30 border-b border-slate-200 bg-white">
+                <div class="px-4 sm:px-6 lg:px-8">
+                    <div class="flex h-16 items-center justify-between">
+                        <div class="flex items-center space-x-2 space-x-reverse">
+                            <button id="toggle-sidebar" class="ml-2 text-slate-500 transition-colors hover:text-primary focus:outline-none md:hidden">
+                                <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                                </svg>
+                            </button>
+                            <div class="hidden items-center text-sm font-medium text-slate-500 md:flex">
+                                <a href="dashboard.html" class="transition-colors hover:text-primary">الرئيسية</a>
+                                <svg class="mx-2 h-4 w-4 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                                </svg>
+                                <a href="search.html" class="transition-colors hover:text-primary">البحث العام</a>
+                                <svg class="mx-2 h-4 w-4 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                                </svg>
+                                <span class="text-slate-800">تفاصيل العملية</span>
+                            </div>
+                            <span class="text-lg font-bold text-primary md:hidden">تفاصيل العملية</span>
+                        </div>
+                        <div class="flex items-center space-x-4 space-x-reverse">
+                            <div class="hidden flex-col items-end md:flex">
+                                <span id="header-fullname" class="text-sm font-bold text-slate-700">مدير النظام</span>
+                                <span id="header-username" class="text-xs text-slate-500">admin</span>
+                            </div>
+                            <div class="flex h-9 w-9 items-center justify-center rounded-full border border-primary/20 bg-primary/10 font-bold text-primary">A</div>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+
+            <main class="flex-1 p-4 sm:p-6 lg:p-8">
+                <div id="loading-state" class="flex min-h-[60vh] items-center justify-center rounded-xl border border-slate-100 bg-white shadow-sm">
+                    <div class="text-center">
+                        <div class="mx-auto mb-4 h-12 w-12 animate-spin rounded-full border-4 border-primary/15 border-t-primary"></div>
+                        <p class="font-bold text-slate-700">جاري تحميل تفاصيل العملية...</p>
+                        <p class="mt-1 text-sm text-slate-400">يتم جلب بيانات العملية وسجل التسويات المرتبط بها</p>
+                    </div>
+                </div>
+
+                <div id="error-state" class="hidden min-h-[60vh] items-center justify-center">
+                    <div class="mx-auto max-w-md rounded-xl border border-red-100 bg-white p-8 text-center shadow-sm">
+                        <div class="mx-auto mb-5 flex h-20 w-20 items-center justify-center rounded-full bg-red-50 text-red-500">
+                            <svg class="h-10 w-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-7.938 4h15.876c1.54 0 2.503-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L2.33 16c-.77 1.333.192 3 1.732 3z"></path>
+                            </svg>
+                        </div>
+                        <h2 class="text-3xl font-extrabold text-slate-800">تعذر تحميل الصفحة</h2>
+                        <p id="error-message" class="mt-3 text-sm text-slate-500">تعذر تحميل تفاصيل العملية.</p>
+                        <a href="search.html" class="mt-6 inline-flex items-center justify-center rounded-lg bg-primary px-6 py-3 text-sm font-semibold text-white transition hover:bg-primary/90">
+                            العودة إلى البحث
+                        </a>
+                    </div>
+                </div>
+
+                <div id="content-container" class="hidden space-y-6">
+                    <div class="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
+                        <div>
+                            <div class="mt-1 flex flex-wrap items-center gap-3">
+                                <h1 id="transaction-title" class="text-2xl font-bold text-slate-800 sm:text-3xl">تفاصيل العملية</h1>
+                                <div id="transaction-status-badge"></div>
+                                <span id="transaction-id-chip" class="inline-flex items-center rounded-lg bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-600">—</span>
+                            </div>
+                            <p id="transaction-subtitle" class="mt-2 text-sm text-slate-500">عرض كامل لبيانات العملية المالية وسجل التسديد الخاص بها.</p>
+                        </div>
+                        <div class="flex flex-wrap gap-3">
+                            <a href="search.html" class="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-primary hover:text-primary">
+                                <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                                </svg>
+                                العودة إلى البحث
+                            </a>
+                            <a id="office-link" href="#" class="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-primary hover:text-primary">
+                                <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5"></path>
+                                </svg>
+                                فتح المكتب
+                            </a>
+                            <button id="settle-full-btn" type="button" class="inline-flex items-center gap-2 rounded-lg bg-emerald-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-700">
+                                <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                </svg>
+                                تسديد كامل
+                            </button>
+                            <button id="settle-partial-btn" type="button" class="inline-flex items-center gap-2 rounded-lg border border-amber-200 bg-amber-50 px-4 py-2.5 text-sm font-semibold text-amber-700 shadow-sm transition hover:bg-amber-100">
+                                <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v8m4-4H8"></path>
+                                </svg>
+                                تسديد جزئي
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+                        <div class="rounded-xl bg-gradient-to-br from-blue-500 to-blue-700 p-5 text-white shadow-sm">
+                            <p id="metric-amount" class="metric-value text-2xl font-extrabold">0.00</p>
+                            <p class="mt-1 text-sm text-blue-100">المبلغ الكلي</p>
+                        </div>
+                        <div class="rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-700 p-5 text-white shadow-sm">
+                            <p id="metric-paid" class="metric-value text-2xl font-extrabold">0.00</p>
+                            <p class="mt-1 text-sm text-emerald-100">المدفوع</p>
+                        </div>
+                        <div class="rounded-xl bg-gradient-to-br from-amber-500 to-amber-700 p-5 text-white shadow-sm">
+                            <p id="metric-remaining" class="metric-value text-2xl font-extrabold">0.00</p>
+                            <p class="mt-1 text-sm text-amber-100">المتبقي</p>
+                        </div>
+                        <div class="rounded-xl bg-gradient-to-br from-slate-700 to-slate-900 p-5 text-white shadow-sm">
+                            <p id="metric-settlements-count" class="text-2xl font-extrabold">0</p>
+                            <p class="mt-1 text-sm text-slate-200">عدد التسويات</p>
+                        </div>
+                    </div>
+
+                    <section class="overflow-hidden rounded-xl border border-slate-100 bg-white shadow-sm">
+                        <div class="border-b border-slate-100 bg-slate-50/50 px-6 py-4">
+                            <h2 class="text-lg font-bold text-slate-800">بيانات العملية</h2>
+                            <p class="mt-1 text-sm text-slate-500">المعلومات الأساسية وربط العملية بالمكتب والمنشئ والوصف.</p>
+                        </div>
+                        <div id="transaction-info-grid" class="grid gap-4 p-6 md:grid-cols-2 xl:grid-cols-4"></div>
+                    </section>
+
+                    <section class="overflow-hidden rounded-xl border border-slate-100 bg-white shadow-sm">
+                        <div class="flex items-center justify-between border-b border-slate-100 bg-slate-50/50 px-6 py-4">
+                            <div>
+                                <h2 class="text-lg font-bold text-slate-800">سجل التسويات</h2>
+                                <p class="mt-1 text-sm text-slate-500">جميع عمليات التسديد المسجلة على هذه العملية فقط.</p>
+                            </div>
+                            <span id="settlements-count-chip" class="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-600">0</span>
+                        </div>
+                        <div class="p-5">
+                            <div id="settlements-list" class="space-y-3"></div>
+                            <div id="settlements-empty" class="hidden rounded-xl border border-dashed border-slate-200 bg-slate-50 p-8 text-center text-sm text-slate-400">
+                                لا توجد تسويات مسجلة لهذه العملية حتى الآن.
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script src="js/components.js"></script>
+    <script src="js/auth.js"></script>
+    <script>
+        (() => {
+            if (!window.Auth || !Auth.requireAuth()) {
+                return;
+            }
+
+            const params = new URLSearchParams(window.location.search);
+            const transactionId = params.get('id');
+
+            const loadingState = document.getElementById('loading-state');
+            const errorState = document.getElementById('error-state');
+            const errorMessage = document.getElementById('error-message');
+            const contentContainer = document.getElementById('content-container');
+            const officeLink = document.getElementById('office-link');
+            const settleFullBtn = document.getElementById('settle-full-btn');
+            const settlePartialBtn = document.getElementById('settle-partial-btn');
+            const settlementsList = document.getElementById('settlements-list');
+            const settlementsEmpty = document.getElementById('settlements-empty');
+            const transactionInfoGrid = document.getElementById('transaction-info-grid');
+            const canManageFinance = Auth.canManageArea('finance');
+
+            let currentTransaction = null;
+            let currentSettlements = [];
+
+            document.getElementById('header-username').textContent = Auth.getUsername();
+            document.getElementById('header-fullname').textContent = Auth.getDisplayName();
+
+            if (!canManageFinance) {
+                settleFullBtn.classList.add('hidden');
+                settlePartialBtn.classList.add('hidden');
+            }
+
+            const financialStatusMap = {
+                Open: { label: 'مفتوحة', bg: 'bg-blue-50', text: 'text-blue-700', border: 'border-blue-100', dot: 'bg-blue-500' },
+                PartiallyPaid: { label: 'مدفوعة جزئياً', bg: 'bg-amber-50', text: 'text-amber-700', border: 'border-amber-100', dot: 'bg-amber-500' },
+                Paid: { label: 'مدفوعة', bg: 'bg-emerald-50', text: 'text-emerald-700', border: 'border-emerald-100', dot: 'bg-emerald-500' },
+                Cancelled: { label: 'ملغية', bg: 'bg-red-50', text: 'text-red-700', border: 'border-red-100', dot: 'bg-red-500' }
+            };
+
+            function escapeHtml(value) {
+                return String(value ?? '')
+                    .replace(/&/g, '&amp;')
+                    .replace(/</g, '&lt;')
+                    .replace(/>/g, '&gt;')
+                    .replace(/"/g, '&quot;')
+                    .replace(/'/g, '&#39;');
+            }
+
+            function displayText(value) {
+                return value === undefined || value === null || String(value).trim() === '' ? '—' : String(value);
+            }
+
+            function formatDate(value) {
+                if (!value) {
+                    return '—';
+                }
+
+                const date = new Date(value);
+                if (Number.isNaN(date.getTime())) {
+                    return '—';
+                }
+
+                return date.toLocaleString('en-GB', {
+                    year: 'numeric',
+                    month: '2-digit',
+                    day: '2-digit',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+            }
+
+            function formatMoney(value) {
+                return Number(value || 0).toLocaleString('en-US', {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                });
+            }
+
+            function getStatusBadgeMarkup(status) {
+                const meta = financialStatusMap[status] || { label: displayText(status), bg: 'bg-slate-100', text: 'text-slate-700', border: 'border-slate-200', dot: 'bg-slate-400' };
+                return `
+                    <span class="inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-bold ${meta.bg} ${meta.text} ${meta.border}">
+                        <span class="h-2 w-2 rounded-full ${meta.dot}"></span>
+                        ${escapeHtml(meta.label)}
+                    </span>
+                `;
+            }
+
+            function getTransactionTypeLabel(type) {
+                if (type === 'OpenInvoice') {
+                    return 'فاتورة مفتوحة';
+                }
+
+                return displayText(type);
+            }
+
+            function getSettlementModeLabel(mode) {
+                if (mode === 'Full') {
+                    return 'تسديد كامل';
+                }
+
+                if (mode === 'PartialAmount') {
+                    return 'مبلغ جزئي';
+                }
+
+                if (mode === 'ByQuantity') {
+                    return 'حسب الكمية';
+                }
+
+                return displayText(mode);
+            }
+
+            async function fetchJson(url, fallbackMessage, options) {
+                const response = await Auth.apiFetch(url, options);
+                if (!response) {
+                    throw new Error('انتهت الجلسة الحالية. سجل الدخول مرة أخرى.');
+                }
+
+                if (!response.ok) {
+                    let message = fallbackMessage;
+                    try {
+                        const text = await response.text();
+                        if (text) {
+                            message = text;
+                        }
+                    } catch {
+                        message = fallbackMessage;
+                    }
+
+                    throw new Error(message);
+                }
+
+                return response.json();
+            }
+
+            function setText(id, value) {
+                const element = document.getElementById(id);
+                if (element) {
+                    element.textContent = value;
+                }
+            }
+
+            function infoCard(label, value) {
+                return `
+                    <div class="rounded-xl border border-slate-100 bg-slate-50/80 p-4">
+                        <p class="text-xs font-semibold text-slate-400">${escapeHtml(label)}</p>
+                        <p class="mt-2 break-words text-sm font-bold text-slate-800">${escapeHtml(value)}</p>
+                    </div>
+                `;
+            }
+
+            function canSettleTransaction(transaction) {
+                return !!transaction
+                    && Number(transaction.remainingAmount || 0) > 0
+                    && transaction.status !== 'Cancelled'
+                    && transaction.status !== 'Paid';
+            }
+
+            function showError(message) {
+                loadingState.classList.add('hidden');
+                contentContainer.classList.add('hidden');
+                errorState.classList.remove('hidden');
+                errorState.classList.add('flex');
+                errorMessage.textContent = message || 'تعذر تحميل تفاصيل العملية.';
+            }
+
+            function showContent() {
+                loadingState.classList.add('hidden');
+                errorState.classList.add('hidden');
+                errorState.classList.remove('flex');
+                contentContainer.classList.remove('hidden');
+            }
+
+            function renderSettlements(items) {
+                const count = items.length;
+                setText('metric-settlements-count', String(count));
+                setText('settlements-count-chip', String(count));
+
+                if (!count) {
+                    settlementsList.innerHTML = '';
+                    settlementsEmpty.classList.remove('hidden');
+                    return;
+                }
+
+                settlementsEmpty.classList.add('hidden');
+                settlementsList.innerHTML = items.map((item) => `
+                    <article class="rounded-xl border border-slate-100 bg-white p-4 shadow-sm">
+                        <div class="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+                            <div class="min-w-0 flex-1">
+                                <div class="flex flex-wrap items-center gap-2">
+                                    <h3 class="text-sm font-bold text-slate-800">${escapeHtml(getSettlementModeLabel(item.settlementMode))}</h3>
+                                    <span class="rounded-full border border-slate-200 bg-slate-50 px-2.5 py-1 text-[11px] font-semibold text-slate-600">${escapeHtml(formatDate(item.settlementDate))}</span>
+                                </div>
+                                <p class="mt-2 text-sm text-slate-500">${escapeHtml(displayText(item.notes))}</p>
+                                <p class="mt-1 text-xs text-slate-400">بواسطة: ${escapeHtml(displayText(item.createdByAdminUsername))}</p>
+                            </div>
+                            <div class="grid gap-3 text-left sm:grid-cols-3 lg:min-w-[320px]">
+                                <div class="rounded-lg border border-blue-100 bg-blue-50 px-3 py-2">
+                                    <div class="text-[11px] font-semibold text-blue-700">المبلغ</div>
+                                    <div class="mt-1 text-sm font-extrabold text-blue-900">${escapeHtml(formatMoney(item.amount))}</div>
+                                </div>
+                                <div class="rounded-lg border border-slate-100 bg-slate-50 px-3 py-2">
+                                    <div class="text-[11px] font-semibold text-slate-400">الكمية</div>
+                                    <div class="mt-1 text-sm font-extrabold text-slate-900">${escapeHtml(displayText(item.quantity))}</div>
+                                </div>
+                                <div class="rounded-lg border border-slate-100 bg-slate-50 px-3 py-2">
+                                    <div class="text-[11px] font-semibold text-slate-400">سعر الوحدة</div>
+                                    <div class="mt-1 text-sm font-extrabold text-slate-900">${escapeHtml(displayText(item.unitAmount ? formatMoney(item.unitAmount) : '—'))}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+                `).join('');
+            }
+
+            function populateTransaction(transaction) {
+                currentTransaction = transaction;
+                document.title = `العملية #${transaction.id} - تفاصيل العملية`;
+                setText('transaction-title', displayText(transaction.libraryName));
+                setText('transaction-id-chip', `#${displayText(transaction.id)}`);
+                setText('transaction-subtitle', displayText(transaction.description));
+                document.getElementById('transaction-status-badge').innerHTML = getStatusBadgeMarkup(transaction.status);
+                setText('metric-amount', formatMoney(transaction.amount));
+                setText('metric-paid', formatMoney(transaction.paidAmount));
+                setText('metric-remaining', formatMoney(transaction.remainingAmount));
+
+                officeLink.href = 'office-details.html?id=' + encodeURIComponent(transaction.libraryId);
+                transactionInfoGrid.innerHTML = [
+                    infoCard('رقم العملية', `#${displayText(transaction.id)}`),
+                    infoCard('المكتب', displayText(transaction.libraryName)),
+                    infoCard('نوع العملية', getTransactionTypeLabel(transaction.transactionType)),
+                    infoCard('الحالة', financialStatusMap[transaction.status] ? financialStatusMap[transaction.status].label : displayText(transaction.status)),
+                    infoCard('المبلغ', formatMoney(transaction.amount)),
+                    infoCard('المدفوع', formatMoney(transaction.paidAmount)),
+                    infoCard('المتبقي', formatMoney(transaction.remainingAmount)),
+                    infoCard('تاريخ العملية', formatDate(transaction.transactionDate)),
+                    infoCard('تاريخ الاستحقاق', formatDate(transaction.dueDate)),
+                    infoCard('أنشئت بواسطة الأدمن', displayText(transaction.createdByAdminUsername)),
+                    infoCard('أنشئت بواسطة حساب مكتب', displayText(transaction.createdByLibraryUsername)),
+                    infoCard('آخر تحديث', formatDate(transaction.updatedAt))
+                ].join('');
+
+                const disabled = !canSettleTransaction(transaction);
+                settleFullBtn.disabled = disabled;
+                settlePartialBtn.disabled = disabled;
+                settleFullBtn.classList.toggle('opacity-50', disabled);
+                settlePartialBtn.classList.toggle('opacity-50', disabled);
+                settleFullBtn.classList.toggle('cursor-not-allowed', disabled);
+                settlePartialBtn.classList.toggle('cursor-not-allowed', disabled);
+            }
+
+            async function loadTransactionDetails() {
+                if (!transactionId) {
+                    showError('لم يتم تحديد العملية المطلوبة.');
+                    return;
+                }
+
+                try {
+                    const transaction = await fetchJson('/api/financialtransactions/' + encodeURIComponent(transactionId), 'تعذر تحميل بيانات العملية.');
+                    populateTransaction(transaction);
+
+                    try {
+                        const statement = await fetchJson('/api/financialtransactions/library/' + encodeURIComponent(transaction.libraryId) + '/statement', 'تعذر تحميل سجل التسويات.');
+                        currentSettlements = Array.isArray(statement && statement.settlements)
+                            ? statement.settlements.filter((item) => String(item.financialTransactionId) === String(transaction.id))
+                            : [];
+                    } catch (error) {
+                        console.error('Failed to load settlements', error);
+                        currentSettlements = [];
+                    }
+
+                    renderSettlements(currentSettlements);
+                    showContent();
+                } catch (error) {
+                    console.error('Failed to load transaction details', error);
+                    showError(error instanceof Error ? error.message : 'تعذر تحميل تفاصيل العملية.');
+                }
+            }
+
+            async function settleTransaction(mode) {
+                if (!canManageFinance) {
+                    window.alert('هذه الواجهة للعرض فقط بالنسبة لحسابك.');
+                    return;
+                }
+
+                if (!canSettleTransaction(currentTransaction)) {
+                    window.alert('هذه العملية لا تقبل التسديد حالياً.');
+                    return;
+                }
+
+                const payload = {
+                    settlementMode: mode === 'partial' ? 'PartialAmount' : 'Full',
+                    notes: mode === 'partial' ? 'تسديد جزئي من صفحة تفاصيل العملية' : 'تسديد كامل من صفحة تفاصيل العملية'
+                };
+
+                if (mode === 'partial') {
+                    const input = window.prompt('أدخل مبلغ التسديد الجزئي', String(currentTransaction.remainingAmount));
+                    if (input === null) {
+                        return;
+                    }
+
+                    const amount = Number(input);
+                    if (!Number.isFinite(amount) || amount <= 0) {
+                        window.alert('مبلغ التسديد الجزئي غير صالح.');
+                        return;
+                    }
+
+                    if (amount > Number(currentTransaction.remainingAmount || 0)) {
+                        window.alert('المبلغ المدخل أكبر من المتبقي على العملية.');
+                        return;
+                    }
+
+                    payload.amount = amount;
+                } else {
+                    const confirmed = window.confirm(`تأكيد تسديد كامل المبلغ المتبقي ${formatMoney(currentTransaction.remainingAmount)} ؟`);
+                    if (!confirmed) {
+                        return;
+                    }
+                }
+
+                try {
+                    settleFullBtn.disabled = true;
+                    settlePartialBtn.disabled = true;
+
+                    await fetchJson('/api/financialtransactions/' + encodeURIComponent(currentTransaction.id) + '/settlements', 'تعذر تنفيذ التسديد.', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+
+                    window.alert(mode === 'partial' ? 'تم تنفيذ التسديد الجزئي بنجاح.' : 'تم تنفيذ التسديد الكامل بنجاح.');
+                    await loadTransactionDetails();
+                } catch (error) {
+                    window.alert(error instanceof Error ? error.message : 'تعذر تنفيذ التسديد.');
+                    if (currentTransaction) {
+                        const disabled = !canSettleTransaction(currentTransaction);
+                        settleFullBtn.disabled = disabled;
+                        settlePartialBtn.disabled = disabled;
+                    }
+                }
+            }
+
+            settleFullBtn.addEventListener('click', () => settleTransaction('full'));
+            settlePartialBtn.addEventListener('click', () => settleTransaction('partial'));
+
+            loadTransactionDetails();
+        })();
+    </script>
+</body>
+</html>

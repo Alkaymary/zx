@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة التحكم - نظام الإدارة</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style> body { font-family: 'Cairo', sans-serif; } </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: { colors: { primary: '#1e3a8a', secondary: '#3b82f6', dark: '#0f172a' } }
+            }
+        }
+    </script>
+</head>
+<body class="bg-slate-50 text-slate-800">
+    <div class="flex min-h-screen">
+        <!-- Sidebar Custom Component -->
+        <app-sidebar></app-sidebar>
+
+        <!-- Main Wrapper -->
+        <div class="flex-1 flex flex-col min-w-0">
+            <!-- Navbar -->
+            <nav class="bg-white border-b border-slate-200 sticky top-0 z-30">
+                <div class="px-4 sm:px-6 lg:px-8">
+                    <div class="flex justify-between h-16">
+                        <div class="flex items-center space-x-2 space-x-reverse">
+                            <button id="toggle-sidebar" class="md:hidden text-slate-500 hover:text-primary transition-colors focus:outline-none ml-2">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                            </button>
+                            <span class="font-bold text-lg text-primary md:hidden">لوحة التحكم</span>
+                            <!-- For desktop, breadcrumb -->
+                            <div class="hidden md:flex items-center text-sm text-slate-500 font-medium">
+                                <span>الرئيسية</span>
+                                <svg class="w-4 h-4 mx-2 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                                <span class="text-slate-800">لوحة التحكم</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center space-x-4 space-x-reverse">
+                            <div class="hidden md:flex flex-col items-end mr-3">
+                                <span id="header-fullname" class="text-sm font-bold text-slate-700">مدير النظام</span>
+                                <span id="header-username" class="text-xs text-slate-500">Admin</span>
+                            </div>
+                            <div class="w-9 h-9 rounded-full bg-primary/10 text-primary flex items-center justify-center font-bold border border-primary/20">
+                                A
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+
+            <!-- Main Content -->
+            <main class="flex-1 p-4 sm:p-6 lg:p-8">
+                <div class="mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-200 pb-6">
+                    <div>
+                        <h1 class="text-2xl sm:text-3xl font-bold text-slate-800">مرحباً بك، <span id="welcome-name">مدير النظام</span> 👋</h1>
+                        <p class="text-slate-500 mt-2">إليك نظرة عامة سريعة على حالة النظام ومعدلات الاستخدام</p>
+                    </div>
+                    <div class="flex gap-3">
+                        <button class="bg-primary hover:bg-primary/90 text-white font-semibold py-2 px-4 rounded-lg shadow-sm transition-all text-sm flex items-center gap-2">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                            إضافة مستخدم
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Stats Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                    <div class="bg-white rounded-xl shadow-sm border border-slate-100 p-6 flex flex-col gap-2 hover:shadow-md transition-shadow relative overflow-hidden group">
+                        <div class="absolute inset-x-0 bottom-0 h-1 bg-gradient-to-r from-primary to-secondary transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300"></div>
+                        <div class="flex justify-between items-start">
+                            <p class="text-sm font-medium text-slate-500">إجمالي طلبات الـ API</p>
+                            <div class="p-2 bg-primary/10 text-primary rounded-lg">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
+                            </div>
+                        </div>
+                        <p class="text-3xl font-bold text-slate-800 mt-1">12,482</p>
+                        <p class="text-xs text-emerald-600 font-medium bg-emerald-50/50 border border-emerald-100 w-fit px-2 py-1 rounded-md flex items-center gap-1 mt-1">
+                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"></path></svg>
+                            +14% منذ الأمس
+                        </p>
+                    </div>
+                    
+                    <div class="bg-white rounded-xl shadow-sm border border-slate-100 p-6 flex flex-col gap-2 hover:shadow-md transition-shadow relative overflow-hidden group">
+                        <div class="absolute inset-x-0 bottom-0 h-1 bg-gradient-to-r from-emerald-400 to-emerald-600 transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300"></div>
+                        <div class="flex justify-between items-start">
+                            <p class="text-sm font-medium text-slate-500">العمليات الناجحة (Success Rate)</p>
+                            <div class="p-2 bg-emerald-50 text-emerald-600 rounded-lg">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            </div>
+                        </div>
+                        <p class="text-3xl font-bold text-slate-800 mt-1">98.5%</p>
+                        <p class="text-xs text-slate-400 font-medium mt-1 flex items-center gap-1">
+                            مستقر وفي المعدل الطبيعي
+                        </p>
+                    </div>
+
+                    <div class="bg-white rounded-xl shadow-sm border border-slate-100 p-6 flex flex-col gap-2 hover:shadow-md transition-shadow relative overflow-hidden group">
+                        <div class="absolute inset-x-0 bottom-0 h-1 bg-gradient-to-r from-red-400 to-red-600 transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300"></div>
+                        <div class="flex justify-between items-start">
+                            <p class="text-sm font-medium text-slate-500">أخطاء النظام أو الوصول المرفوض</p>
+                            <div class="p-2 bg-red-50 text-red-600 rounded-lg">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                            </div>
+                        </div>
+                        <p class="text-3xl font-bold text-slate-800 mt-1">24</p>
+                        <p class="text-xs text-red-600 font-medium bg-red-50/50 border border-red-100 w-fit px-2 py-1 rounded-md flex items-center gap-1 mt-1">
+                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            يحتاج للمتابعة
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Recent Activity Table -->
+                <div class="bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden">
+                    <div class="px-6 py-5 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
+                        <h3 class="text-lg font-bold text-slate-800">أحدث الأنشطة (API Access Logs)</h3>
+                        <button class="text-sm font-medium text-primary hover:text-primary/80 transition-colors">عرض الكل</button>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-right text-sm">
+                            <thead class="bg-slate-50 text-slate-500 border-b border-slate-100">
+                                <tr>
+                                    <th class="px-6 py-4 font-semibold">رقم العملية (ID)</th>
+                                    <th class="px-6 py-4 font-semibold">المسار (Endpoint)</th>
+                                    <th class="px-6 py-4 font-semibold">التاريخ والوقت</th>
+                                    <th class="px-6 py-4 font-semibold">الحالة</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-100">
+                                <tr class="hover:bg-slate-50/80 transition-colors group">
+                                    <td class="px-6 py-4 font-medium text-slate-900">#REQ-8021</td>
+                                    <td class="px-6 py-4 text-slate-600 text-left" dir="ltr"><span class="bg-slate-100 px-2 py-1 rounded text-xs font-mono group-hover:bg-white transition-colors">/api/admin/users</span></td>
+                                    <td class="px-6 py-4 text-slate-500">اليوم، 10:45 ص</td>
+                                    <td class="px-6 py-4">
+                                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium bg-emerald-50 text-emerald-700 border border-emerald-100">
+                                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                                            200 OK
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr class="hover:bg-slate-50/80 transition-colors group">
+                                    <td class="px-6 py-4 font-medium text-slate-900">#REQ-8020</td>
+                                    <td class="px-6 py-4 text-slate-600 text-left" dir="ltr"><span class="bg-slate-100 px-2 py-1 rounded text-xs font-mono group-hover:bg-white transition-colors">/api/admin/roles</span></td>
+                                    <td class="px-6 py-4 text-slate-500">اليوم، 10:30 ص</td>
+                                    <td class="px-6 py-4">
+                                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium bg-emerald-50 text-emerald-700 border border-emerald-100">
+                                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                                            200 OK
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr class="hover:bg-slate-50/80 transition-colors group">
+                                    <td class="px-6 py-4 font-medium text-slate-900">#REQ-8019</td>
+                                    <td class="px-6 py-4 text-slate-600 text-left" dir="ltr"><span class="bg-slate-100 px-2 py-1 rounded text-xs font-mono group-hover:bg-white transition-colors">/api/admin/settings</span></td>
+                                    <td class="px-6 py-4 text-slate-500">اليوم، 10:15 ص</td>
+                                    <td class="px-6 py-4">
+                                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium bg-red-50 text-red-700 border border-red-100">
+                                            <span class="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse"></span>
+                                            403 Forbidden
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr class="hover:bg-slate-50/80 transition-colors group">
+                                    <td class="px-6 py-4 font-medium text-slate-900">#REQ-8018</td>
+                                    <td class="px-6 py-4 text-slate-600 text-left" dir="ltr"><span class="bg-slate-100 px-2 py-1 rounded text-xs font-mono group-hover:bg-white transition-colors">/api/auth/login</span></td>
+                                    <td class="px-6 py-4 text-slate-500">اليوم، 09:45 ص</td>
+                                    <td class="px-6 py-4">
+                                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium bg-emerald-50 text-emerald-700 border border-emerald-100">
+                                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                                            200 OK
+                                        </span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+    
+    <!-- Load Components -->
+    <script src="js/components.js"></script>
+    <script src="js/auth.js"></script>
+    <script>
+        (() => {
+            if (!Auth.requireAuth()) {
+                return;
+            }
+
+            const username = Auth.getUsername();
+            const fullname = Auth.getDisplayName();
+
+            document.getElementById('header-username').textContent = username;
+            document.getElementById('header-fullname').textContent = fullname;
+            document.getElementById('welcome-name').textContent = fullname;
+        })();
+    </script>
+</body>
+</html>

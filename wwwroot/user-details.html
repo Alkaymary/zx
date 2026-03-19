@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تفاصيل المستخدم - نظام الإدارة</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>body{font-family:'Cairo',sans-serif}.metric-value{font-variant-numeric:tabular-nums}</style>
+    <script>
+        tailwind.config={theme:{extend:{colors:{primary:'#1e3a8a',secondary:'#3b82f6',dark:'#0f172a'}}}};
+    </script>
+</head>
+<body class="bg-slate-50 text-slate-800">
+    <div class="flex min-h-screen">
+        <app-sidebar></app-sidebar>
+        <div class="flex min-w-0 flex-1 flex-col">
+            <nav class="sticky top-0 z-30 border-b border-slate-200 bg-white">
+                <div class="px-4 sm:px-6 lg:px-8">
+                    <div class="flex h-16 items-center justify-between">
+                        <div class="flex items-center space-x-2 space-x-reverse">
+                            <button id="toggle-sidebar" class="ml-2 text-slate-500 transition-colors hover:text-primary focus:outline-none md:hidden">
+                                <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                            </button>
+                            <div class="hidden items-center text-sm font-medium text-slate-500 md:flex">
+                                <a href="dashboard.html" class="transition-colors hover:text-primary">الرئيسية</a>
+                                <svg class="mx-2 h-4 w-4 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                                <a id="breadcrumb-users" href="users.html" class="transition-colors hover:text-primary">إدارة المستخدمين</a>
+                                <svg class="mx-2 h-4 w-4 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                                <span class="text-slate-800">تفاصيل المستخدم</span>
+                            </div>
+                            <span class="text-lg font-bold text-primary md:hidden">تفاصيل المستخدم</span>
+                        </div>
+                        <div class="flex items-center space-x-4 space-x-reverse">
+                            <div class="hidden flex-col items-end md:flex">
+                                <span id="header-fullname" class="text-sm font-bold text-slate-700">مدير النظام</span>
+                                <span id="header-username" class="text-xs text-slate-500">admin</span>
+                            </div>
+                            <div class="flex h-9 w-9 items-center justify-center rounded-full border border-primary/20 bg-primary/10 font-bold text-primary">A</div>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+
+            <main class="flex-1 p-4 sm:p-6 lg:p-8">
+                <div id="loading-state" class="flex min-h-[60vh] items-center justify-center rounded-xl border border-slate-100 bg-white shadow-sm">
+                    <div class="text-center">
+                        <div class="mx-auto mb-4 h-12 w-12 animate-spin rounded-full border-4 border-primary/15 border-t-primary"></div>
+                        <p class="font-bold text-slate-700">جاري تحميل تفاصيل المستخدم...</p>
+                        <p class="mt-1 text-sm text-slate-400">يتم جلب البيانات الأساسية والمعلومات المرتبطة</p>
+                    </div>
+                </div>
+
+                <div id="error-state" class="hidden min-h-[60vh] items-center justify-center">
+                    <div class="mx-auto max-w-md rounded-xl border border-red-100 bg-white p-8 text-center shadow-sm">
+                        <div class="mx-auto mb-5 flex h-20 w-20 items-center justify-center rounded-full bg-red-50 text-red-500">
+                            <svg class="h-10 w-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-7.938 4h15.876c1.54 0 2.503-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L2.33 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                        </div>
+                        <h2 class="text-3xl font-extrabold text-slate-800">تعذر تحميل الصفحة</h2>
+                        <p id="error-message" class="mt-3 text-sm text-slate-500">تعذر تحميل تفاصيل المستخدم.</p>
+                        <a id="error-back-link" href="users.html" class="mt-6 inline-flex items-center justify-center rounded-lg bg-primary px-6 py-3 text-sm font-semibold text-white transition hover:bg-primary/90">العودة إلى المستخدمين</a>
+                    </div>
+                </div>
+
+                <div id="content-container" class="hidden space-y-6">
+                    <div class="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
+                        <div>
+                            <div class="mt-1 flex flex-wrap items-center gap-3">
+                                <h1 id="user-name" class="text-2xl font-bold text-slate-800 sm:text-3xl">تفاصيل المستخدم</h1>
+                                <div id="user-type-badge"></div>
+                                <div id="user-status-badge"></div>
+                                <span id="user-username-chip" class="inline-flex items-center rounded-lg bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-600">—</span>
+                            </div>
+                            <p id="user-description" class="mt-2 text-sm text-slate-500">عرض البيانات الأساسية والمعلومات المرجعية للمستخدم.</p>
+                        </div>
+                        <div class="flex flex-wrap gap-3">
+                            <a id="back-link" href="users.html" class="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-primary hover:text-primary">
+                                <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                                العودة للمستخدمين
+                            </a>
+                            <a id="office-link" href="#" class="hidden inline-flex items-center gap-2 rounded-lg bg-primary px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-primary/90">
+                                <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5"></path></svg>
+                                فتح المكتب المرتبط
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+                        <div class="rounded-xl bg-gradient-to-br from-blue-500 to-blue-700 p-5 text-white shadow-sm"><p id="summary-1-value" class="text-xl font-extrabold">—</p><p id="summary-1-label" class="mt-1 text-sm text-blue-100">—</p></div>
+                        <div class="rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-700 p-5 text-white shadow-sm"><p id="summary-2-value" class="text-xl font-extrabold">—</p><p id="summary-2-label" class="mt-1 text-sm text-emerald-100">—</p></div>
+                        <div class="rounded-xl bg-gradient-to-br from-amber-500 to-amber-700 p-5 text-white shadow-sm"><p id="summary-3-value" class="text-xl font-extrabold">—</p><p id="summary-3-label" class="mt-1 text-sm text-amber-100">—</p></div>
+                        <div class="rounded-xl bg-gradient-to-br from-slate-700 to-slate-900 p-5 text-white shadow-sm"><p id="summary-4-value" class="text-xl font-extrabold">—</p><p id="summary-4-label" class="mt-1 text-sm text-slate-200">—</p></div>
+                    </div>
+
+                    <section class="overflow-hidden rounded-xl border border-slate-100 bg-white shadow-sm">
+                        <div class="border-b border-slate-100 bg-slate-50/50 px-6 py-4">
+                            <h2 class="text-lg font-bold text-slate-800">البيانات الأساسية</h2>
+                            <p class="mt-1 text-sm text-slate-500">معلومات التعريف والدور والحالة وبيانات التواصل.</p>
+                        </div>
+                        <div id="basic-grid" class="grid gap-4 p-6 md:grid-cols-2 xl:grid-cols-4"></div>
+                    </section>
+
+                    <section class="overflow-hidden rounded-xl border border-slate-100 bg-white shadow-sm">
+                        <div class="border-b border-slate-100 bg-slate-50/50 px-6 py-4">
+                            <h2 id="related-title" class="text-lg font-bold text-slate-800">معلومات إضافية</h2>
+                            <p id="related-note" class="mt-1 text-sm text-slate-500">محتوى إضافي مرتبط بالمستخدم الحالي.</p>
+                        </div>
+                        <div id="related-content" class="p-6"></div>
+                    </section>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script src="js/components.js"></script>
+    <script src="js/auth.js"></script>
+    <script>
+        (() => {
+            if (!window.Auth || !Auth.requireAuth()) return;
+
+            const statusMap = {
+                Active: { label: 'مفعل', bg: 'bg-emerald-50', text: 'text-emerald-700', border: 'border-emerald-100', dot: 'bg-emerald-500' },
+                Used: { label: 'مستخدم', bg: 'bg-blue-50', text: 'text-blue-700', border: 'border-blue-100', dot: 'bg-blue-500' },
+                Inactive: { label: 'متوقف', bg: 'bg-red-50', text: 'text-red-700', border: 'border-red-100', dot: 'bg-red-500' },
+                Suspended: { label: 'معلق', bg: 'bg-amber-50', text: 'text-amber-700', border: 'border-amber-100', dot: 'bg-amber-500' }
+            };
+            const posStatusMap = {
+                Active: { label: 'نشط', bg: 'bg-emerald-50', text: 'text-emerald-700', border: 'border-emerald-100', dot: 'bg-emerald-500' },
+                Inactive: { label: 'غير نشط', bg: 'bg-slate-100', text: 'text-slate-700', border: 'border-slate-200', dot: 'bg-slate-500' },
+                Suspended: { label: 'معلق', bg: 'bg-amber-50', text: 'text-amber-700', border: 'border-amber-100', dot: 'bg-amber-500' },
+                Maintenance: { label: 'صيانة', bg: 'bg-orange-50', text: 'text-orange-700', border: 'border-orange-100', dot: 'bg-orange-500' }
+            };
+
+            const params = new URLSearchParams(window.location.search);
+            const type = params.get('type');
+            const id = params.get('id');
+            const tab = params.get('tab') === 'account' ? 'account' : 'admin';
+
+            const loadingState = document.getElementById('loading-state');
+            const errorState = document.getElementById('error-state');
+            const contentContainer = document.getElementById('content-container');
+            const errorMessage = document.getElementById('error-message');
+            const backLink = document.getElementById('back-link');
+            const errorBackLink = document.getElementById('error-back-link');
+            const officeLink = document.getElementById('office-link');
+            const basicGrid = document.getElementById('basic-grid');
+            const relatedTitle = document.getElementById('related-title');
+            const relatedNote = document.getElementById('related-note');
+            const relatedContent = document.getElementById('related-content');
+
+            document.getElementById('header-username').textContent = Auth.getUsername();
+            document.getElementById('header-fullname').textContent = Auth.getDisplayName();
+            backLink.href = `users.html?tab=${encodeURIComponent(tab)}`;
+            errorBackLink.href = backLink.href;
+            document.getElementById('breadcrumb-users').href = backLink.href;
+
+            function escapeHtml(value) {
+                return String(value ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+            }
+            function displayText(value) {
+                return value === undefined || value === null || String(value).trim() === '' ? '—' : String(value);
+            }
+            function formatDate(value) {
+                if (!value) return '—';
+                const date = new Date(value);
+                if (Number.isNaN(date.getTime())) return '—';
+                return date.toLocaleString('en-GB', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' });
+            }
+            function setSummary(index, label, value) {
+                document.getElementById(`summary-${index}-label`).textContent = label;
+                document.getElementById(`summary-${index}-value`).textContent = value;
+            }
+            function fetchJson(url, fallbackMessage) {
+                return Auth.apiFetch(url).then(async (response) => {
+                    if (!response) throw new Error('انتهت الجلسة الحالية. سجل الدخول مرة أخرى.');
+                    if (!response.ok) {
+                        let message = fallbackMessage;
+                        try {
+                            const text = await response.text();
+                            if (text) message = text;
+                        } catch {}
+                        throw new Error(message);
+                    }
+                    return response.json();
+                });
+            }
+            function getBadgeMarkup(status, map) {
+                const meta = map[status] || { label: displayText(status), bg: 'bg-slate-100', text: 'text-slate-700', border: 'border-slate-200', dot: 'bg-slate-400' };
+                return `<span class="inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-bold ${meta.bg} ${meta.text} ${meta.border}"><span class="h-2 w-2 rounded-full ${meta.dot}"></span>${escapeHtml(meta.label)}</span>`;
+            }
+            function infoCard(label, value) {
+                return `<div class="rounded-xl border border-slate-100 bg-slate-50/80 p-4"><p class="text-xs font-semibold text-slate-400">${escapeHtml(label)}</p><p class="mt-2 break-words text-sm font-bold text-slate-800">${escapeHtml(value)}</p></div>`;
+            }
+            function showError(message) {
+                loadingState.classList.add('hidden');
+                contentContainer.classList.add('hidden');
+                errorState.classList.remove('hidden');
+                errorState.classList.add('flex');
+                errorMessage.textContent = message || 'تعذر تحميل تفاصيل المستخدم.';
+            }
+            function showContent() {
+                loadingState.classList.add('hidden');
+                errorState.classList.add('hidden');
+                errorState.classList.remove('flex');
+                contentContainer.classList.remove('hidden');
+            }
+            function populateCommon(user, userType) {
+                const typeLabel = userType === 'admin' ? 'أدمن' : 'حساب مكتب';
+                document.title = `${displayText(user.fullName)} - تفاصيل المستخدم`;
+                document.getElementById('user-name').textContent = displayText(user.fullName);
+                document.getElementById('user-username-chip').textContent = displayText(user.username);
+                document.getElementById('user-type-badge').innerHTML = `<span class="inline-flex items-center rounded-full border px-3 py-1 text-xs font-bold ${userType === 'admin' ? 'border-slate-200 bg-slate-100 text-slate-700' : 'border-blue-100 bg-blue-50 text-blue-700'}">${typeLabel}</span>`;
+                document.getElementById('user-status-badge').innerHTML = getBadgeMarkup(user.status, statusMap);
+                document.getElementById('user-description').textContent = userType === 'admin'
+                    ? 'عرض معلومات الأدمن والدور والحالة وبيانات الوصول الأساسية.'
+                    : 'عرض معلومات حساب المكتب والمكتب المرتبط والأجهزة المفعلة بهذا الحساب.';
+
+                basicGrid.innerHTML = [
+                    infoCard('الاسم الكامل', displayText(user.fullName)),
+                    infoCard('اسم المستخدم', displayText(user.username)),
+                    infoCard('رقم الهاتف', displayText(user.phoneNumber)),
+                    infoCard('الحالة', statusMap[user.status] ? statusMap[user.status].label : displayText(user.status)),
+                    infoCard('الدور', displayText(user.roleName)),
+                    infoCard('آخر تسجيل دخول', formatDate(user.lastLoginAt)),
+                    infoCard('تاريخ الإنشاء', formatDate(user.createdAt)),
+                    infoCard('آخر تحديث', formatDate(user.updatedAt))
+                ].join('');
+            }
+            function populateAdmin(user, role) {
+                populateCommon(user, 'admin');
+                setSummary(1, 'الدور', displayText(user.roleName));
+                setSummary(2, 'البريد الإلكتروني', displayText(user.email));
+                setSummary(3, 'آخر دخول', formatDate(user.lastLoginAt));
+                setSummary(4, 'كود الدور', displayText(user.roleCode));
+
+                basicGrid.innerHTML += infoCard('البريد الإلكتروني', displayText(user.email));
+                basicGrid.innerHTML += infoCard('كود الدور', displayText(user.roleCode));
+
+                relatedTitle.textContent = 'مرجع الدور';
+                relatedNote.textContent = 'بيانات إضافية عن الدور المرتبط بحساب الأدمن.';
+                relatedContent.innerHTML = `
+                    <div class="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+                        ${infoCard('اسم الدور', displayText(user.roleName))}
+                        ${infoCard('كود الدور', displayText(user.roleCode))}
+                        ${infoCard('نوع الحراسة', displayText(role && role.guardName))}
+                        ${infoCard('تاريخ إنشاء الدور', formatDate(role && role.createdAt))}
+                    </div>
+                `;
+            }
+            function deviceCard(device) {
+                return `
+                    <article class="rounded-xl border border-slate-100 bg-slate-50/70 p-4">
+                        <div class="flex flex-wrap items-center justify-between gap-3">
+                            <div>
+                                <h4 class="text-sm font-bold text-slate-800">${escapeHtml(displayText(device.posCode))}</h4>
+                                <p class="mt-1 text-xs text-slate-400">${escapeHtml(displayText(device.serialNumber))}</p>
+                            </div>
+                            ${getBadgeMarkup(device.status, posStatusMap)}
+                        </div>
+                        <div class="mt-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+                            ${infoCard('الموديل', displayText(device.deviceModel))}
+                            ${infoCard('الشركة', displayText(device.deviceVendor))}
+                            ${infoCard('التفعيل', device.isActivated ? 'مفعل' : 'غير مفعل')}
+                            ${infoCard('آخر مصادقة', formatDate(device.lastAuthenticatedAt || device.activatedAt))}
+                        </div>
+                    </article>
+                `;
+            }
+            function populateAccount(user, role, devices) {
+                populateCommon(user, 'account');
+                setSummary(1, 'المكتب', displayText(user.libraryName));
+                setSummary(2, 'الأجهزة المفعلة', String(devices.length || user.activatedDevicesCount || 0));
+                setSummary(3, 'الدور', displayText(user.roleName));
+                setSummary(4, 'آخر دخول', formatDate(user.lastLoginAt));
+
+                basicGrid.innerHTML += infoCard('المكتب المرتبط', displayText(user.libraryName));
+                basicGrid.innerHTML += infoCard('الأجهزة المفعلة', String(user.activatedDevicesCount ?? 0));
+
+                if (user.libraryId) {
+                    officeLink.href = `office-details.html?id=${encodeURIComponent(user.libraryId)}`;
+                    officeLink.classList.remove('hidden');
+                }
+
+                relatedTitle.textContent = 'الأجهزة المفعلة بهذا الحساب';
+                relatedNote.textContent = 'جميع أجهزة الـ POS المرتبطة بالحساب الحالي كمستخدم مفعّل.';
+                if (devices.length) {
+                    relatedContent.innerHTML = `<div class="space-y-4">${devices.map(deviceCard).join('')}</div>`;
+                } else {
+                    relatedContent.innerHTML = `<div class="rounded-xl border border-dashed border-slate-200 bg-slate-50 p-10 text-center text-sm text-slate-500">لا توجد أجهزة مفعلة بهذا الحساب حالياً.</div>`;
+                }
+                if (role) {
+                    relatedContent.innerHTML += `
+                        <div class="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+                            ${infoCard('كود الدور', displayText(role.code || user.roleCode))}
+                            ${infoCard('نوع الحراسة', displayText(role.guardName))}
+                            ${infoCard('اسم الدور', displayText(role.name || user.roleName))}
+                            ${infoCard('تاريخ إنشاء الدور', formatDate(role.createdAt))}
+                        </div>
+                    `;
+                }
+            }
+            async function loadUserDetails() {
+                if (!id || (type !== 'admin' && type !== 'account')) {
+                    showError('معلمات الصفحة غير صحيحة.');
+                    return;
+                }
+
+                try {
+                    if (type === 'admin') {
+                        const user = await fetchJson(`/api/adminusers/${encodeURIComponent(id)}`, 'تعذر تحميل بيانات الأدمن.');
+                        const roleResult = user.roleId ? await Promise.allSettled([fetchJson(`/api/roles/${encodeURIComponent(user.roleId)}`, 'تعذر تحميل الدور.')]) : [{ status: 'rejected' }];
+                        populateAdmin(user, roleResult[0].status === 'fulfilled' ? roleResult[0].value : null);
+                    } else {
+                        const user = await fetchJson(`/api/libraryaccounts/${encodeURIComponent(id)}`, 'تعذر تحميل بيانات الحساب.');
+                        const results = await Promise.allSettled([
+                            user.roleId ? fetchJson(`/api/roles/${encodeURIComponent(user.roleId)}`, 'تعذر تحميل الدور.') : Promise.resolve(null),
+                            fetchJson(`/api/posdevices?activatedByAccountId=${encodeURIComponent(id)}&limit=200`, 'تعذر تحميل الأجهزة المفعلة.')
+                        ]);
+                        populateAccount(
+                            user,
+                            results[0].status === 'fulfilled' ? results[0].value : null,
+                            results[1].status === 'fulfilled' && Array.isArray(results[1].value) ? results[1].value : []
+                        );
+                    }
+
+                    showContent();
+                } catch (error) {
+                    console.error('Failed to load user details', error);
+                    showError(error instanceof Error ? error.message : 'تعذر تحميل تفاصيل المستخدم.');
+                }
+            }
+
+            loadUserDetails();
+        })();
+    </script>
+</body>
+</html>

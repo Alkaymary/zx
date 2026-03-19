@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تسجيل الدخول - نظام الإدارة</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Cairo', sans-serif; }
+    </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#1e3a8a', 
+                        secondary: '#3b82f6', 
+                        dark: '#0f172a',
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-slate-50 min-h-screen flex items-center justify-center relative overflow-hidden">
+    <!-- Background Decoration -->
+    <div class="absolute top-0 left-0 w-full h-full overflow-hidden -z-10">
+        <div class="absolute -top-40 -right-40 w-96 h-96 bg-primary rounded-full mix-blend-multiply filter blur-3xl opacity-20 transform scale-150"></div>
+        <div class="absolute -bottom-40 -left-40 w-96 h-96 bg-secondary rounded-full mix-blend-multiply filter blur-3xl opacity-20 transform scale-150"></div>
+    </div>
+
+    <div class="bg-white p-8 sm:p-10 rounded-2xl shadow-xl w-full max-w-md border border-slate-100 z-10 transition-all duration-300 hover:shadow-2xl">
+        <div class="text-center mb-8">
+            <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary/10 text-primary mb-4 shadow-inner">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
+                </svg>
+            </div>
+            <h2 class="text-2xl font-bold text-slate-800">بوابة الإدارة (Admin API)</h2>
+            <p class="text-sm text-slate-500 mt-2">يرجى إدخال بيانات الاعتماد للوصول الآمن</p>
+        </div>
+
+        <form id="loginForm" class="space-y-5">
+            <div>
+                <label for="username" class="block text-sm font-semibold text-slate-700 mb-1">اسم المستخدم</label>
+                <div class="relative">
+                    <input type="text" id="username" required class="w-full px-4 py-3 rounded-lg border border-slate-200 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all text-slate-800 bg-slate-50 focus:bg-white" placeholder="أدخل اسم المستخدم">
+                </div>
+            </div>
+
+            <div>
+                <label for="password" class="block text-sm font-semibold text-slate-700 mb-1">كلمة المرور</label>
+                <div class="relative">
+                    <input type="password" id="password" required class="w-full px-4 py-3 rounded-lg border border-slate-200 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all text-slate-800 bg-slate-50 focus:bg-white" placeholder="أدخل كلمة المرور">
+                </div>
+            </div>
+
+            <button type="submit" class="w-full bg-primary hover:bg-dark text-white font-bold py-3 px-4 rounded-lg transition-colors shadow-lg mt-6" id="submitBtn">
+                دخول آمن
+            </button>
+            
+            <div id="error-message" class="hidden mt-4 text-sm text-red-600 bg-red-50 p-3 rounded-lg border border-red-100 text-center">
+                بيانات تسجيل الدخول غير صحيحة.
+            </div>
+        </form>
+    </div>
+
+    <!-- Load Auth module before the inline script -->
+    <script src="js/auth.js"></script>
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const btn = document.getElementById('submitBtn');
+            const errorMsg = document.getElementById('error-message');
+            const originalText = btn.innerText;
+            
+            btn.innerText = 'جاري التحقق...';
+            btn.disabled = true;
+            btn.classList.add('opacity-80', 'cursor-not-allowed');
+            errorMsg.classList.add('hidden');
+
+            const Username = document.getElementById('username').value;
+            const Password = document.getElementById('password').value;
+                
+            try {
+                const res = await fetch('/api/auth/admin-login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ Username, Password })
+                });
+
+                if (res.ok) {
+                    const data = await res.json();
+                    Auth.saveTokens(data);
+                    window.location.href = 'dashboard.html';
+                } else {
+                    const err = await res.text();
+                    errorMsg.textContent = res.status === 401 ? 'بيانات تسجيل الدخول غير صحيحة.' : 'حدث خطأ أثناء تسجيل الدخول.';
+                    errorMsg.classList.remove('hidden');
+                    btn.innerText = originalText;
+                    btn.disabled = false;
+                    btn.classList.remove('opacity-80', 'cursor-not-allowed');
+                }
+            } catch (error) {
+                console.error('Login error:', error);
+                errorMsg.textContent = 'تعذر الاتصال بالخادم. يرجى المحاولة لاحقاً.';
+                errorMsg.classList.remove('hidden');
+                btn.innerText = originalText;
+                btn.disabled = false;
+                btn.classList.remove('opacity-80', 'cursor-not-allowed');
+            }
+        });
+    </script>
+</body>
+</html>

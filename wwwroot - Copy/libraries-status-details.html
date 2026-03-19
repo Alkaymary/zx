@@ -1,0 +1,542 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>استعراض المكتبات حسب الحالة</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+  <style>
+    :root {
+      --bg: #07111f;
+      --bg-2: #0b1628;
+      --surface: #101c31;
+      --surface-2: #12223b;
+      --line: rgba(255,255,255,.08);
+      --line-strong: rgba(255,255,255,.14);
+      --text: #edf4ff;
+      --muted: #93a7c5;
+      --brand: #6d5efc;
+      --info: #38bdf8;
+      --success: #22c55e;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --shadow: 0 18px 45px rgba(0,0,0,.28);
+      --radius-xl: 24px;
+      --radius-lg: 18px;
+      --radius-md: 14px;
+    }
+
+    html[data-theme="light"] {
+      --bg: #eef4ff;
+      --bg-2: #dbe8ff;
+      --surface: #ffffff;
+      --surface-2: #f8fbff;
+      --line: rgba(59,130,246,.12);
+      --line-strong: rgba(37,99,235,.22);
+      --text: #0f172a;
+      --muted: #52627a;
+      --shadow: 0 18px 45px rgba(15,23,42,.10);
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Cairo","Tajawal","Segoe UI",Tahoma,sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top right, color-mix(in srgb, var(--brand) 18%, transparent), transparent 18%),
+        radial-gradient(circle at top left, color-mix(in srgb, var(--info) 12%, transparent), transparent 16%),
+        linear-gradient(180deg, var(--bg-2), var(--bg));
+    }
+
+    .page {
+      width: min(1400px, calc(100% - 32px));
+      margin: 24px auto;
+      display: grid;
+      gap: 20px;
+    }
+
+    .panel {
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, color-mix(in srgb, var(--surface-2) 94%, transparent), color-mix(in srgb, var(--surface) 96%, transparent));
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow);
+      padding: 22px;
+    }
+
+    .hero {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .title-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      color: var(--brand);
+      background: color-mix(in srgb, var(--brand) 10%, transparent);
+      font-size: 13px;
+      font-weight: 800;
+      margin-bottom: 12px;
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      font-size: clamp(30px, 4vw, 42px);
+      line-height: 1.1;
+    }
+
+    p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      border: 1px solid var(--line);
+      background: color-mix(in srgb, var(--surface) 90%, transparent);
+      color: var(--text);
+      border-radius: 14px;
+      padding: 12px 16px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 800;
+      text-decoration: none;
+      transition: .18s ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      border-color: var(--line-strong);
+    }
+
+    .toolbar {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 16px;
+      align-items: center;
+    }
+
+    .search {
+      width: 100%;
+      min-height: 50px;
+      border-radius: 14px;
+      border: 1px solid var(--line);
+      background: color-mix(in srgb, var(--surface) 82%, transparent);
+      color: var(--text);
+      padding: 12px 14px;
+      outline: none;
+    }
+
+    .summary {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    .summary strong {
+      color: var(--text);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+      gap: 18px;
+    }
+
+    .library-card {
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      background: linear-gradient(180deg, color-mix(in srgb, var(--surface-2) 92%, transparent), color-mix(in srgb, var(--surface) 98%, transparent));
+      padding: 18px;
+    }
+
+    .library-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: flex-start;
+      margin-bottom: 14px;
+    }
+
+    .library-id {
+      color: var(--muted);
+      font-size: 13px;
+      margin-bottom: 6px;
+    }
+
+    .library-head h3 {
+      margin: 0;
+      font-size: 22px;
+    }
+
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: 1px solid transparent;
+      font-size: 12px;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .status-pill.active {
+      background: rgba(34,197,94,.10);
+      color: #b7f7c8;
+      border-color: rgba(34,197,94,.20);
+    }
+
+    .status-pill.inactive {
+      background: rgba(245,158,11,.10);
+      color: #ffd99a;
+      border-color: rgba(245,158,11,.20);
+    }
+
+    .status-pill.suspended {
+      background: rgba(239,68,68,.10);
+      color: #ffc2c2;
+      border-color: rgba(239,68,68,.20);
+    }
+
+    html[data-theme="light"] .status-pill.active { color: #166534; }
+    html[data-theme="light"] .status-pill.inactive { color: #9a6700; }
+    html[data-theme="light"] .status-pill.suspended { color: #b42318; }
+
+    .meta {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .meta-item {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 10px 12px;
+      background: color-mix(in srgb, var(--surface) 88%, transparent);
+    }
+
+    .meta-item small {
+      display: block;
+      color: var(--muted);
+      margin-bottom: 6px;
+      font-size: 12px;
+    }
+
+    .meta-item strong {
+      display: block;
+      font-size: 15px;
+    }
+
+    .accounts-box {
+      border: 1px dashed var(--line-strong);
+      border-radius: 14px;
+      padding: 12px;
+      background: color-mix(in srgb, var(--brand) 7%, transparent);
+    }
+
+    .accounts-box strong {
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    .accounts-box p {
+      line-height: 1.8;
+    }
+
+    .empty {
+      display: none;
+      text-align: center;
+      padding: 28px;
+      border: 1px dashed var(--line-strong);
+      border-radius: var(--radius-lg);
+      color: var(--muted);
+    }
+
+    .empty.show { display: block; }
+
+    .error-box {
+      display: none;
+      border: 1px solid rgba(239,68,68,.25);
+      background: rgba(239,68,68,.10);
+      color: #fecaca;
+      border-radius: 16px;
+      padding: 14px 16px;
+      font-weight: 700;
+    }
+
+    .error-box.show { display: block; }
+
+    @media (max-width: 760px) {
+      .toolbar { grid-template-columns: 1fr; }
+      .meta { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section class="panel hero">
+      <div>
+        <div class="title-tag"><i class="fa-solid fa-layer-group"></i> استعراض حسب الحالة</div>
+        <h1 id="pageTitle">جميع المكتبات</h1>
+        <p id="pageDescription">عرض البيانات المرتبطة بالكرت المحدد.</p>
+      </div>
+
+      <div class="actions">
+        <a class="btn" href="libraries_dashboard_updated.html"><i class="fa-solid fa-arrow-right"></i> الرجوع للصفحة الرئيسية</a>
+        <button class="btn" id="themeToggleBtn" type="button"><i class="fa-solid fa-moon" id="themeToggleIcon"></i><span id="themeToggleText">الوضع الليلي</span></button>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="toolbar">
+        <input id="searchInput" class="search" type="search" placeholder="ابحث داخل البيانات المعروضة بالاسم أو الكود أو الهاتف أو المدينة أو الحسابات..." />
+        <div class="summary">
+          <span>عدد النتائج: <strong id="resultsCount">0</strong></span>
+          <span>الحالة: <strong id="statusLabel">-</strong></span>
+        </div>
+      </div>
+    </section>
+
+    <div id="errorBox" class="error-box"></div>
+    <div id="emptyState" class="empty">لا توجد بيانات مطابقة لهذا الكرت أو لعبارة البحث.</div>
+    <section id="grid" class="grid"></section>
+  </main>
+
+  <script>
+    const session = readJson("adminSession");
+    const themeStorageKey = "adminTheme";
+    const params = new URLSearchParams(window.location.search);
+    const currentFilter = params.get("filter") || "all";
+    let librariesCache = [];
+    let accountsCache = [];
+
+    function byId(id) { return document.getElementById(id); }
+
+    function readJson(key) {
+      try { return JSON.parse(localStorage.getItem(key) || "null"); }
+      catch { return null; }
+    }
+
+    function getSavedTheme() {
+      const saved = localStorage.getItem(themeStorageKey);
+      return saved === "light" || saved === "dark" ? saved : "dark";
+    }
+
+    function updateThemeToggleUI(theme) {
+      byId("themeToggleIcon").className = theme === "light" ? "fa-solid fa-moon" : "fa-solid fa-sun";
+      byId("themeToggleText").textContent = theme === "light" ? "الوضع الليلي" : "الوضع النهاري";
+    }
+
+    function applyTheme(theme) {
+      document.documentElement.setAttribute("data-theme", theme);
+      localStorage.setItem(themeStorageKey, theme);
+      updateThemeToggleUI(theme);
+    }
+
+    function toggleTheme() {
+      const current = document.documentElement.getAttribute("data-theme") || "dark";
+      applyTheme(current === "dark" ? "light" : "dark");
+    }
+
+    function normalizeList(data) {
+      if (Array.isArray(data)) return data;
+      if (Array.isArray(data?.value)) return data.value;
+      return [];
+    }
+
+    function normalizeStatus(status) {
+      const value = String(status || "").trim().toLowerCase();
+      if (["active", "enabled", "running"].includes(value)) return "active";
+      if (["inactive", "disabled", "stopped", "off"].includes(value)) return "inactive";
+      if (["suspended", "hold", "onhold", "paused", "pending", "blocked"].includes(value)) return "suspended";
+      return value || "unknown";
+    }
+
+    function getStatusClass(status) {
+      const value = normalizeStatus(status);
+      if (value === "active") return "active";
+      if (value === "inactive") return "inactive";
+      return "suspended";
+    }
+
+    function getStatusLabel(status) {
+      const value = normalizeStatus(status);
+      if (value === "all") return "إجمالي المكتبات";
+      if (value === "active") return "المكاتب النشطة";
+      if (value === "inactive") return "المكاتب الغير نشطة";
+      if (value === "suspended") return "المكاتب المعلقة";
+      return status || "-";
+    }
+
+    function getStatusDescription(status) {
+      const value = normalizeStatus(status);
+      if (value === "all") return "عرض جميع المكتبات المسجلة في النظام مع بياناتها المرتبطة.";
+      if (value === "active") return "يعرض المكتبات التي حالتها نشطة حالياً.";
+      if (value === "inactive") return "يعرض المكتبات غير النشطة أو المتوقفة.";
+      if (value === "suspended") return "يعرض المكتبات المعلقة أو الموقوفة مؤقتاً.";
+      return "عرض البيانات المرتبطة بالكرت المحدد.";
+    }
+
+    function requireSession() {
+      if (!session?.accessToken) {
+        window.location.href = "/";
+        throw new Error("لا توجد جلسة مدير.");
+      }
+    }
+
+    async function requestJson(url, options = {}) {
+      const response = await fetch(url, {
+        ...options,
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${session.accessToken}`,
+          ...(options.headers || {})
+        }
+      });
+
+      const text = await response.text();
+      let data = null;
+
+      try { data = text ? JSON.parse(text) : null; }
+      catch { data = text; }
+
+      if (!response.ok) {
+        throw new Error(typeof data === "string" ? data : (data?.title || data?.message || `HTTP ${response.status}`));
+      }
+
+      return data;
+    }
+
+    function showError(message) {
+      const box = byId("errorBox");
+      box.textContent = message;
+      box.classList.add("show");
+    }
+
+    function hideError() {
+      byId("errorBox").textContent = "";
+      byId("errorBox").classList.remove("show");
+    }
+
+    function getAccountsForLibrary(libraryId) {
+      return accountsCache.filter((account) => Number(account.libraryId) === Number(libraryId));
+    }
+
+    function getFilteredItems() {
+      const q = byId("searchInput").value.trim().toLowerCase();
+
+      return librariesCache
+        .filter((item) => currentFilter === "all" || normalizeStatus(item.status) === currentFilter)
+        .filter((item) => {
+          const accounts = getAccountsForLibrary(item.id);
+          const haystack = [
+            item.id,
+            item.libraryCode,
+            item.libraryName,
+            item.ownerName,
+            item.ownerPhone,
+            item.ownerPhone2,
+            item.city,
+            item.province,
+            item.status,
+            item.accountsCount,
+            ...accounts.map((account) => account.username),
+            ...accounts.map((account) => account.phoneNumber)
+          ].map((value) => String(value || "").toLowerCase());
+
+          return !q || haystack.some((value) => value.includes(q));
+        });
+    }
+
+    function renderPageInfo() {
+      byId("pageTitle").textContent = getStatusLabel(currentFilter);
+      byId("pageDescription").textContent = getStatusDescription(currentFilter);
+      byId("statusLabel").textContent = getStatusLabel(currentFilter);
+    }
+
+    function renderGrid(items) {
+      byId("resultsCount").textContent = items.length;
+      byId("emptyState").classList.toggle("show", items.length === 0);
+
+      byId("grid").innerHTML = items.map((item) => {
+        const accounts = getAccountsForLibrary(item.id);
+        const usernames = accounts.map((account) => account.username).filter(Boolean);
+
+        return `
+          <article class="library-card">
+            <div class="library-head">
+              <div>
+                <div class="library-id">#${item.id}</div>
+                <h3>${item.libraryName || "-"}</h3>
+              </div>
+              <span class="status-pill ${getStatusClass(item.status)}">${getStatusLabel(item.status)}</span>
+            </div>
+
+            <div class="meta">
+              <div class="meta-item"><small>كود المكتبة</small><strong>${item.libraryCode || "-"}</strong></div>
+              <div class="meta-item"><small>اسم المالك</small><strong>${item.ownerName || "-"}</strong></div>
+              <div class="meta-item"><small>الهاتف</small><strong>${item.ownerPhone || item.ownerPhone2 || "-"}</strong></div>
+              <div class="meta-item"><small>المدينة / المحافظة</small><strong>${item.city || "-"} / ${item.province || "-"}</strong></div>
+              <div class="meta-item"><small>عدد الحسابات</small><strong>${item.accountsCount || 0}</strong></div>
+              <div class="meta-item"><small>الحالة</small><strong>${getStatusLabel(item.status)}</strong></div>
+            </div>
+
+            <div class="accounts-box">
+              <strong>الحسابات المرتبطة</strong>
+              <p>${usernames.length ? usernames.join(" ، ") : "لا توجد حسابات مرتبطة"}</p>
+            </div>
+          </article>
+        `;
+      }).join("");
+    }
+
+    function applyFilters() {
+      renderGrid(getFilteredItems());
+    }
+
+    async function loadData() {
+      hideError();
+
+      try {
+        const [librariesData, accountsData] = await Promise.all([
+          requestJson("/api/Libraries?limit=200"),
+          requestJson("/api/LibraryAccounts?limit=200")
+        ]);
+
+        librariesCache = normalizeList(librariesData);
+        accountsCache = normalizeList(accountsData);
+        applyFilters();
+      } catch (error) {
+        showError(error.message || "تعذر تحميل البيانات.");
+      }
+    }
+
+    byId("themeToggleBtn").addEventListener("click", toggleTheme);
+    byId("searchInput").addEventListener("input", applyFilters);
+
+    applyTheme(getSavedTheme());
+    renderPageInfo();
+    requireSession();
+    loadData();
+  </script>
+</body>
+</html>

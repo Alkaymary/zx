@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تحليل الأداء المالي - نظام الإدارة</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Cairo', sans-serif; }
+        .metric-value { font-variant-numeric: tabular-nums; }
+    </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#1e3a8a',
+                        secondary: '#3b82f6',
+                        dark: '#0f172a'
+                    }
+                }
+            }
+        };
+    </script>
+</head>
+<body class="bg-slate-50 text-slate-800">
+    <div class="flex min-h-screen">
+        <app-sidebar></app-sidebar>
+        <div class="flex min-w-0 flex-1 flex-col">
+            <nav class="sticky top-0 z-30 border-b border-slate-200 bg-white">
+                <div class="px-4 sm:px-6 lg:px-8">
+                    <div class="flex h-16 items-center justify-between">
+                        <div class="flex items-center space-x-2 space-x-reverse">
+                            <button id="toggle-sidebar" class="ml-2 text-slate-500 transition-colors hover:text-primary focus:outline-none md:hidden">
+                                <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                                </svg>
+                            </button>
+                            <div class="hidden items-center text-sm font-medium text-slate-500 md:flex">
+                                <a href="dashboard.html" class="transition-colors hover:text-primary">الرئيسية</a>
+                                <svg class="mx-2 h-4 w-4 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                                </svg>
+                                <span class="text-slate-800">تحليل الأداء المالي</span>
+                            </div>
+                            <span class="text-lg font-bold text-primary md:hidden">تحليل الأداء</span>
+                        </div>
+                        <div class="flex items-center space-x-4 space-x-reverse">
+                            <div class="hidden flex-col items-end md:flex">
+                                <span id="header-fullname" class="text-sm font-bold text-slate-700">مدير النظام</span>
+                                <span id="header-username" class="text-xs text-slate-500">admin</span>
+                            </div>
+                            <div class="flex h-9 w-9 items-center justify-center rounded-full border border-primary/20 bg-primary/10 font-bold text-primary">A</div>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+
+            <main class="flex-1 p-4 sm:p-6 lg:p-8">
+                <div class="mb-6 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+                    <div>
+                        <h1 class="text-2xl font-bold text-slate-800 sm:text-3xl">تحليل الأداء المالي</h1>
+                        <p class="mt-1 text-slate-500">قراءة موحدة للتحصيل والمديونية والحركة الشهرية وترتيب الأداء المالي للمكاتب.</p>
+                    </div>
+                    <button id="refresh-button" type="button" class="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-primary hover:text-primary">
+                        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                        </svg>
+                        تحديث التحليل
+                    </button>
+                </div>
+
+                <div id="page-notice" class="mb-6 hidden rounded-xl border px-4 py-3 text-sm font-medium"></div>
+
+                <div id="loading-state" class="mb-6 flex min-h-[220px] items-center justify-center rounded-xl border border-slate-100 bg-white shadow-sm">
+                    <div class="text-center">
+                        <div class="mx-auto mb-4 h-12 w-12 animate-spin rounded-full border-4 border-primary/15 border-t-primary"></div>
+                        <p id="loading-title" class="font-bold text-slate-700">جاري تحليل الأداء المالي...</p>
+                        <p id="loading-subtitle" class="mt-1 text-sm text-slate-400">يتم تحميل المكاتب والبيانات المالية وتجميع المؤشرات</p>
+                    </div>
+                </div>
+
+                <div id="content-container" class="hidden space-y-6">
+                    <div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+                        <div class="rounded-xl bg-gradient-to-br from-blue-500 to-blue-700 p-5 text-white shadow-sm"><p id="metric-total-charges" class="metric-value text-3xl font-extrabold">0.00</p><p class="mt-1 text-sm text-blue-100">إجمالي المشتريات</p></div>
+                        <div class="rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-700 p-5 text-white shadow-sm"><p id="metric-total-settled" class="metric-value text-3xl font-extrabold">0.00</p><p class="mt-1 text-sm text-emerald-100">إجمالي المدفوع</p></div>
+                        <div class="rounded-xl bg-gradient-to-br from-amber-500 to-amber-700 p-5 text-white shadow-sm"><p id="metric-total-due" class="metric-value text-3xl font-extrabold">0.00</p><p class="mt-1 text-sm text-amber-100">إجمالي المتبقي</p></div>
+                        <div class="rounded-xl bg-gradient-to-br from-slate-700 to-slate-900 p-5 text-white shadow-sm"><p id="metric-collection-rate" class="metric-value text-3xl font-extrabold">0%</p><p class="mt-1 text-sm text-slate-200">نسبة التحصيل</p></div>
+                    </div>
+
+                    <div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+                        <div class="rounded-xl border border-slate-100 bg-white p-5 shadow-sm"><p class="text-xs font-semibold text-slate-400">المكاتب المحللة</p><p id="metric-offices" class="metric-value mt-2 text-2xl font-extrabold text-slate-800">0</p></div>
+                        <div class="rounded-xl border border-slate-100 bg-white p-5 shadow-sm"><p class="text-xs font-semibold text-slate-400">عدد الحركات المالية</p><p id="metric-transactions" class="metric-value mt-2 text-2xl font-extrabold text-slate-800">0</p></div>
+                        <div class="rounded-xl border border-slate-100 bg-white p-5 shadow-sm"><p class="text-xs font-semibold text-slate-400">عدد التسويات</p><p id="metric-settlements" class="metric-value mt-2 text-2xl font-extrabold text-slate-800">0</p></div>
+                        <div class="rounded-xl border border-slate-100 bg-white p-5 shadow-sm"><p class="text-xs font-semibold text-slate-400">متوسط المتبقي لكل مكتب</p><p id="metric-average-due" class="metric-value mt-2 text-2xl font-extrabold text-slate-800">0.00</p></div>
+                    </div>
+
+                    <div class="grid gap-6 xl:grid-cols-[1.4fr,1fr]">
+                        <section class="overflow-hidden rounded-xl border border-slate-100 bg-white shadow-sm">
+                            <div class="border-b border-slate-100 bg-slate-50/50 px-6 py-4">
+                                <h2 class="text-lg font-bold text-slate-800">الحركة الشهرية</h2>
+                                <p class="mt-1 text-sm text-slate-500">مقارنة المشتريات مع التسويات خلال آخر الأشهر المتاحة.</p>
+                            </div>
+                            <div id="monthly-list" class="space-y-4 p-5"></div>
+                            <div id="monthly-empty" class="hidden px-5 pb-5"><div class="rounded-xl border border-dashed border-slate-200 bg-slate-50 p-8 text-center text-sm text-slate-400">لا توجد بيانات شهرية كافية لعرضها.</div></div>
+                        </section>
+
+                        <section class="overflow-hidden rounded-xl border border-slate-100 bg-white shadow-sm">
+                            <div class="border-b border-slate-100 bg-slate-50/50 px-6 py-4">
+                                <h2 class="text-lg font-bold text-slate-800">توزيع حالة الحركات</h2>
+                                <p class="mt-1 text-sm text-slate-500">حجم الحركات المفتوحة والمدفوعة والملغية عبر كل المكاتب المحللة.</p>
+                            </div>
+                            <div class="grid gap-4 p-6 sm:grid-cols-2">
+                                <div class="rounded-xl border border-blue-100 bg-blue-50 p-4"><p class="text-xs font-semibold text-blue-700">مفتوحة</p><p id="metric-open" class="metric-value mt-2 text-2xl font-extrabold text-slate-900">0</p></div>
+                                <div class="rounded-xl border border-amber-100 bg-amber-50 p-4"><p class="text-xs font-semibold text-amber-700">مدفوعة جزئياً</p><p id="metric-partially-paid" class="metric-value mt-2 text-2xl font-extrabold text-slate-900">0</p></div>
+                                <div class="rounded-xl border border-emerald-100 bg-emerald-50 p-4"><p class="text-xs font-semibold text-emerald-700">مدفوعة</p><p id="metric-paid" class="metric-value mt-2 text-2xl font-extrabold text-slate-900">0</p></div>
+                                <div class="rounded-xl border border-rose-100 bg-rose-50 p-4"><p class="text-xs font-semibold text-rose-700">ملغية</p><p id="metric-cancelled" class="metric-value mt-2 text-2xl font-extrabold text-slate-900">0</p></div>
+                            </div>
+                        </section>
+                    </div>
+
+                    <div class="grid gap-6 xl:grid-cols-2">
+                        <section class="overflow-hidden rounded-xl border border-slate-100 bg-white shadow-sm">
+                            <div class="border-b border-slate-100 bg-slate-50/50 px-6 py-4">
+                                <h2 class="text-lg font-bold text-slate-800">أعلى المكاتب مديونية</h2>
+                                <p class="mt-1 text-sm text-slate-500">المكاتب ذات الرصيد المتبقي الأعلى حالياً.</p>
+                            </div>
+                            <div id="top-debtors-list" class="space-y-3 p-5"></div>
+                        </section>
+
+                        <section class="overflow-hidden rounded-xl border border-slate-100 bg-white shadow-sm">
+                            <div class="border-b border-slate-100 bg-slate-50/50 px-6 py-4">
+                                <h2 class="text-lg font-bold text-slate-800">أفضل المكاتب تحصيلاً</h2>
+                                <p class="mt-1 text-sm text-slate-500">ترتيب بحسب نسبة التحصيل مع أفضلية للأحجام المالية الأعلى.</p>
+                            </div>
+                            <div id="top-collectors-list" class="space-y-3 p-5"></div>
+                        </section>
+                    </div>
+
+                    <section class="overflow-hidden rounded-xl border border-slate-100 bg-white shadow-sm">
+                        <div class="flex flex-col gap-4 border-b border-slate-100 bg-slate-50/50 px-6 py-4 lg:flex-row lg:items-center lg:justify-between">
+                            <div>
+                                <h2 class="text-lg font-bold text-slate-800">الأداء المالي للمكاتب</h2>
+                                <p class="mt-1 text-sm text-slate-500">استعراض تفصيلي مع البحث المباشر حسب الاسم أو الكود أو صاحب المكتب.</p>
+                            </div>
+                            <div class="w-full max-w-md">
+                                <input id="search-input" type="text" class="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm transition placeholder:text-slate-400 focus:border-primary focus:outline-none focus:ring-4 focus:ring-primary/10" placeholder="ابحث باسم المكتب أو الكود أو صاحب المكتب...">
+                                <div id="search-count" class="mt-2 hidden text-xs text-slate-400"></div>
+                            </div>
+                        </div>
+                        <div class="border-b border-slate-100 px-6 py-3 text-sm text-slate-500"><span id="offices-count">0 مكتب</span></div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full min-w-[1080px] text-right text-sm">
+                                <thead class="border-b border-slate-100 bg-slate-50 text-slate-500">
+                                    <tr><th class="px-5 py-3.5 font-semibold">الكود</th><th class="px-5 py-3.5 font-semibold">اسم المكتب</th><th class="px-5 py-3.5 font-semibold">صاحب المكتب</th><th class="px-5 py-3.5 font-semibold">المشتريات</th><th class="px-5 py-3.5 font-semibold">المدفوع</th><th class="px-5 py-3.5 font-semibold">المتبقي</th><th class="px-5 py-3.5 font-semibold">التحصيل</th><th class="px-5 py-3.5 font-semibold">الحركات</th><th class="px-5 py-3.5 font-semibold">آخر دفعة</th><th class="px-5 py-3.5 text-center font-semibold">إجراءات</th></tr>
+                                </thead>
+                                <tbody id="offices-tbody" class="divide-y divide-slate-100"></tbody>
+                            </table>
+                        </div>
+                        <div id="offices-empty" class="hidden p-6"><div class="rounded-xl border border-dashed border-slate-200 bg-slate-50 p-8 text-center"><p class="font-semibold text-slate-600">لا توجد مكاتب مطابقة</p><p class="mt-1 text-sm text-slate-400">جرّب تغيير كلمات البحث أو تحديث البيانات.</p></div></div>
+                    </section>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script src="js/components.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/performance.js"></script>
+</body>
+</html>

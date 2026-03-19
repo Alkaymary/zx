@@ -1,0 +1,1273 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>أجهزة POS | AdminAPI</title>
+  <style>
+    :root{
+      --bg:#ffffff;
+      --panel:#ffffff;
+      --sidebar:#fbfcfd;
+      --ink:#16202a;
+      --muted:#6f7a84;
+      --line:#e7ebef;
+      --brand:#0f766e;
+      --brand-deep:#0b5c56;
+      --accent:#c88b33;
+      --danger:#bf4f45;
+      --success:#16805b;
+      --soft:#f5f8fa;
+      --soft-brand:#eef7f6;
+      --shadow:0 24px 60px rgba(15,23,42,.08);
+    }
+
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      min-height:100vh;
+      background:var(--bg);
+      color:var(--ink);
+      font-family:"Cairo","Tajawal","Segoe UI",Tahoma,sans-serif;
+    }
+
+    button,input,select,a{font:inherit}
+    a{text-decoration:none;color:inherit}
+
+    .app{
+      display:grid;
+      grid-template-columns:290px minmax(0,1fr);
+      min-height:100vh;
+    }
+
+    .sidebar{
+      background:var(--sidebar);
+      border-left:1px solid var(--line);
+      padding:22px 18px;
+      display:flex;
+      flex-direction:column;
+      gap:18px;
+      position:sticky;
+      top:0;
+      height:100vh;
+    }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      padding:10px 6px;
+    }
+
+    .brand-mark{
+      width:42px;
+      height:42px;
+      border-radius:14px;
+      display:grid;
+      place-items:center;
+      color:#fff;
+      font-weight:800;
+      background:linear-gradient(135deg,var(--brand),var(--accent));
+      box-shadow:0 14px 30px rgba(15,118,110,.18);
+    }
+
+    .brand strong{
+      display:block;
+      font-size:18px;
+    }
+
+    .brand span{
+      color:var(--muted);
+      font-size:13px;
+    }
+
+    .session-card{
+      padding:16px;
+      border-radius:22px;
+      background:#fff;
+      border:1px solid var(--line);
+      box-shadow:var(--shadow);
+    }
+
+    .session-card h3{
+      margin:0 0 12px;
+      font-size:16px;
+    }
+
+    .session-line{
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      padding:6px 0;
+      color:var(--muted);
+      font-size:13px;
+    }
+
+    .nav{
+      display:grid;
+      gap:8px;
+      overflow:auto;
+      padding-left:4px;
+    }
+
+    .nav-label{
+      color:var(--muted);
+      font-size:12px;
+      font-weight:800;
+      padding:6px 10px 2px;
+    }
+
+    .nav-btn{
+      width:100%;
+      min-height:46px;
+      border:1px solid transparent;
+      background:transparent;
+      color:var(--ink);
+      border-radius:16px;
+      text-align:right;
+      padding:0 14px;
+      cursor:pointer;
+      font-weight:700;
+    }
+
+    .nav-btn:hover{
+      background:#fff;
+      border-color:var(--line);
+    }
+
+    .nav-btn.active{
+      background:var(--soft-brand);
+      color:var(--brand);
+      border-color:rgba(15,118,110,.12);
+    }
+
+    .sidebar-actions{
+      margin-top:auto;
+      display:grid;
+      gap:10px;
+    }
+
+    .side-link,
+    .side-btn{
+      min-height:44px;
+      border-radius:14px;
+      border:1px solid var(--line);
+      background:#fff;
+      display:grid;
+      place-items:center;
+      color:var(--brand);
+      font-weight:800;
+      cursor:pointer;
+    }
+
+    .main{
+      padding:22px;
+    }
+
+    .topbar,
+    .card,
+    .section-card{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:28px;
+      box-shadow:var(--shadow);
+    }
+
+    .topbar{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:14px;
+      padding:16px 18px;
+    }
+
+    .topbar h1{
+      margin:0;
+      font-size:28px;
+    }
+
+    .topbar p{
+      margin:4px 0 0;
+      color:var(--muted);
+      font-size:14px;
+    }
+
+    .topbar-actions{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+
+    .top-btn{
+      min-height:42px;
+      padding:0 14px;
+      border-radius:14px;
+      border:1px solid var(--line);
+      background:#fff;
+      color:var(--brand);
+      cursor:pointer;
+      font-weight:800;
+    }
+
+    .card{
+      padding:18px;
+    }
+
+    .summary-section{
+      margin:18px 0;
+    }
+
+    .summary-shell{
+      padding:20px;
+      border-radius:28px;
+      border:1px solid var(--line);
+      background:
+        linear-gradient(135deg, rgba(15,118,110,.05), rgba(200,139,51,.05)),
+        #ffffff;
+      box-shadow:var(--shadow);
+    }
+
+    .summary-head{
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-end;
+      gap:12px;
+      flex-wrap:wrap;
+      margin-bottom:18px;
+    }
+
+    .summary-head h3{
+      margin:0 0 6px;
+      font-size:24px;
+    }
+
+    .summary-head p{
+      margin:0;
+      color:var(--muted);
+      font-size:14px;
+      line-height:1.8;
+    }
+
+    .summary-chip{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:9px 12px;
+      border-radius:999px;
+      background:#fff;
+      border:1px solid var(--line);
+      color:var(--brand);
+      font-size:13px;
+      font-weight:800;
+    }
+
+    .pos-layout{
+      display:grid;
+      gap:18px;
+    }
+
+    .tiles-section{
+      display:grid;
+      gap:16px;
+    }
+
+    .tiles-shell{
+      padding:20px;
+      border-radius:28px;
+      border:1px solid var(--line);
+      background:linear-gradient(180deg, #ffffff 0%, #fbfcfd 100%);
+      box-shadow:var(--shadow);
+    }
+
+    .tiles-topbar{
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-end;
+      gap:12px;
+      flex-wrap:wrap;
+      margin-bottom:18px;
+    }
+
+    .tiles-head h3{
+      margin:0 0 6px;
+      font-size:24px;
+    }
+
+    .tiles-head p{
+      margin:0;
+      color:var(--muted);
+      font-size:14px;
+      line-height:1.8;
+    }
+
+    .tiles-chip{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:9px 12px;
+      border-radius:999px;
+      background:var(--soft-brand);
+      border:1px solid rgba(15,118,110,.08);
+      color:var(--brand);
+      font-size:13px;
+      font-weight:800;
+    }
+
+    .tiles-grid{
+      display:grid;
+      grid-template-columns:repeat(4, minmax(0, 1fr));
+      gap:14px;
+    }
+
+    .tile{
+      position:relative;
+      overflow:hidden;
+      border:0;
+      border-radius:26px;
+      color:#fff;
+      cursor:pointer;
+      padding:18px;
+      text-align:right;
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+      min-height:190px;
+      box-shadow:0 18px 34px rgba(15,23,42,.12);
+      transition:transform .18s ease, box-shadow .18s ease;
+    }
+
+    .tile:hover{
+      transform:translateY(-2px);
+      box-shadow:0 24px 40px rgba(15,23,42,.16);
+    }
+
+    .tile::before{
+      content:"";
+      position:absolute;
+      inset:auto -30px -30px auto;
+      width:120px;
+      height:120px;
+      border-radius:28px;
+      background:rgba(255,255,255,.12);
+      transform:rotate(18deg);
+    }
+
+    .tile::after{
+      content:"";
+      position:absolute;
+      inset:14px 14px auto auto;
+      width:14px;
+      height:14px;
+      border-radius:50%;
+      background:rgba(255,255,255,.3);
+      box-shadow:0 0 0 10px rgba(255,255,255,.06);
+    }
+
+    .tile.teal{
+      background:linear-gradient(135deg,#0f766e,#0b5c56);
+    }
+
+    .tile.gold{
+      background:linear-gradient(135deg,#cf8c2c,#b77720);
+    }
+
+    .tile.blue{
+      background:linear-gradient(135deg,#2b78c5,#1d5f9f);
+    }
+
+    .tile.dark{
+      background:linear-gradient(135deg,#1e2d3a,#0f1d29);
+    }
+
+    .tile-top{
+      position:relative;
+      z-index:1;
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:12px;
+    }
+
+    .tile-badge{
+      padding:7px 10px;
+      border-radius:999px;
+      background:rgba(255,255,255,.14);
+      border:1px solid rgba(255,255,255,.16);
+      font-size:12px;
+      font-weight:800;
+    }
+
+    .tile-icon{
+      width:50px;
+      height:50px;
+      border-radius:16px;
+      display:grid;
+      place-items:center;
+      background:rgba(255,255,255,.12);
+      border:1px solid rgba(255,255,255,.16);
+      font-size:20px;
+      font-weight:800;
+    }
+
+    .tile-content{
+      position:relative;
+      z-index:1;
+    }
+
+    .tile-content strong{
+      display:block;
+      margin-bottom:8px;
+      font-size:24px;
+      line-height:1.1;
+    }
+
+    .tile-content span{
+      display:block;
+      color:rgba(255,255,255,.88);
+      line-height:1.8;
+      font-size:14px;
+      max-width:320px;
+    }
+
+    .summary-grid{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:16px;
+    }
+
+    .mini-card{
+      position:relative;
+      overflow:hidden;
+      padding:20px;
+      border-radius:24px;
+      border:1px solid #edf1f4;
+      background:#fff;
+      min-height:150px;
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+      box-shadow:0 12px 30px rgba(15,23,42,.05);
+    }
+
+    .mini-card::before{
+      content:"";
+      position:absolute;
+      inset:0 auto auto 0;
+      width:100%;
+      height:5px;
+      background:linear-gradient(90deg,var(--brand),var(--accent));
+    }
+
+    .mini-top{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:12px;
+    }
+
+    .mini-icon{
+      width:48px;
+      height:48px;
+      border-radius:16px;
+      display:grid;
+      place-items:center;
+      background:linear-gradient(135deg, rgba(15,118,110,.12), rgba(200,139,51,.14));
+      color:var(--brand-deep);
+      font-size:18px;
+      font-weight:800;
+      border:1px solid rgba(15,118,110,.08);
+    }
+
+    .mini-card span{
+      display:block;
+      color:var(--muted);
+      font-size:14px;
+      line-height:1.8;
+    }
+
+    .mini-card strong{
+      margin-top:8px;
+      font-size:40px;
+      line-height:1;
+      color:var(--brand);
+    }
+
+    .mini-foot{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      margin-top:18px;
+      padding-top:14px;
+      border-top:1px dashed var(--line);
+      color:var(--muted);
+      font-size:12px;
+      font-weight:700;
+    }
+
+    .workspace{
+      display:grid;
+      grid-template-columns:1.08fr .92fr;
+      gap:18px;
+    }
+
+    .section-card{
+      padding:22px;
+    }
+
+    .section-head{
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      flex-wrap:wrap;
+      align-items:flex-end;
+      margin-bottom:18px;
+    }
+
+    .section-head h3{
+      margin:0 0 6px;
+      font-size:24px;
+    }
+
+    .section-head p{
+      margin:0;
+      color:var(--muted);
+      line-height:1.8;
+      font-size:14px;
+    }
+
+    .chip{
+      display:inline-flex;
+      align-items:center;
+      min-height:40px;
+      padding:0 14px;
+      border-radius:999px;
+      background:var(--soft-brand);
+      color:var(--brand);
+      border:1px solid rgba(15,118,110,.12);
+      font-weight:800;
+      font-size:13px;
+    }
+
+    .form-grid{
+      display:grid;
+      grid-template-columns:repeat(2,1fr);
+      gap:16px;
+    }
+
+    .field{
+      display:grid;
+      gap:7px;
+    }
+
+    .field.full{
+      grid-column:1 / -1;
+    }
+
+    .field label{
+      color:var(--muted);
+      font-size:14px;
+      font-weight:700;
+    }
+
+    .field input,
+    .field select{
+      min-height:50px;
+      border-radius:16px;
+      border:1px solid var(--line);
+      background:#fff;
+      padding:12px 14px;
+      outline:none;
+    }
+
+    .field input:focus,
+    .field select:focus{
+      border-color:rgba(15,118,110,.28);
+      box-shadow:0 0 0 4px rgba(15,118,110,.08);
+    }
+
+    .field small{
+      color:var(--muted);
+      font-size:12px;
+      line-height:1.7;
+    }
+
+    .actions{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top:22px;
+    }
+
+    .btn{
+      min-height:48px;
+      padding:0 18px;
+      border:0;
+      border-radius:16px;
+      cursor:pointer;
+      font-weight:800;
+    }
+
+    .btn.primary{
+      color:#fff;
+      background:linear-gradient(135deg,var(--brand),var(--brand-deep));
+    }
+
+    .btn.secondary{
+      color:#fff;
+      background:linear-gradient(135deg,var(--accent),#b97a26);
+    }
+
+    .helper-list{
+      display:grid;
+      gap:12px;
+    }
+
+    .helper-box{
+      padding:16px;
+      border-radius:20px;
+      border:1px solid var(--line);
+      background:linear-gradient(180deg, #ffffff 0%, #fbfcfd 100%);
+    }
+
+    .helper-box strong{
+      display:block;
+      margin-bottom:8px;
+      color:var(--brand-deep);
+      font-size:17px;
+    }
+
+    .helper-box p{
+      margin:0;
+      color:var(--muted);
+      line-height:1.9;
+      font-size:14px;
+    }
+
+    .helper-meta{
+      display:grid;
+      gap:10px;
+    }
+
+    .helper-item{
+      padding:14px;
+      border-radius:16px;
+      background:#fff;
+      border:1px solid var(--line);
+    }
+
+    .helper-item span{
+      display:block;
+      color:var(--muted);
+      font-size:12px;
+      margin-bottom:6px;
+    }
+
+    .helper-item strong{
+      display:block;
+      font-size:16px;
+      color:var(--brand-deep);
+      word-break:break-word;
+    }
+
+    .message{
+      display:none;
+      margin-top:16px;
+      padding:13px 14px;
+      border-radius:16px;
+      line-height:1.8;
+      font-size:14px;
+    }
+
+    .message.show{
+      display:block;
+    }
+
+    .message.error{
+      color:var(--danger);
+      background:rgba(191,79,69,.08);
+      border:1px solid rgba(191,79,69,.16);
+    }
+
+    .message.success{
+      color:var(--success);
+      background:rgba(22,128,91,.08);
+      border:1px solid rgba(22,128,91,.16);
+    }
+
+    .workspace-section{
+      margin-top:18px;
+    }
+
+    @media (max-width:1180px){
+      .app{
+        grid-template-columns:1fr;
+      }
+
+      .sidebar{
+        position:static;
+        height:auto;
+      }
+
+      .workspace{
+        grid-template-columns:1fr;
+      }
+    }
+
+    @media (max-width:900px){
+      .tiles-grid,
+      .summary-grid,
+      .form-grid{
+        grid-template-columns:1fr 1fr;
+      }
+    }
+
+    @media (max-width:680px){
+      .topbar,
+      .tiles-grid,
+      .summary-grid,
+      .form-grid{
+        display:grid;
+        grid-template-columns:1fr;
+      }
+
+      .topbar-actions{
+        width:100%;
+      }
+    }
+  </style>
+<link rel="stylesheet" href="/theme.css">
+</head>
+<body>
+  <main class="app">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-mark">A</div>
+        <div>
+          <strong>لوحة المدير</strong>
+          <span>AdminAPI Control</span>
+        </div>
+      </div>
+
+      <section class="session-card">
+        <h3>الجلسة الحالية</h3>
+        <div class="session-line"><span>اسم المستخدم</span><b id="sessionUsername">-</b></div>
+        <div class="session-line"><span>الدور</span><b id="sessionRole">-</b></div>
+        <div class="session-line"><span>المعرّف</span><b id="sessionUserId">-</b></div>
+      </section>
+
+      <nav class="nav">
+        <div class="nav-label">الأقسام الرئيسية</div>
+        <a class="nav-btn" href="/admin.html">نظرة عامة</a>
+        <a class="nav-btn" href="/libraries.html">المكتبات</a>
+        <a class="nav-btn" href="/create-library-account.html">حسابات المكتبات</a>
+        <a class="nav-btn active" href="/pos-devices.html">أجهزة POS</a>
+      </nav>
+
+      <div class="sidebar-actions">
+        <a class="side-link" href="/">صفحة الدخول</a>
+        <a class="side-link" href="/swagger">Swagger</a>
+        <button class="side-btn" id="logoutBtn" type="button">تسجيل الخروج</button>
+      </div>
+    </aside>
+
+    <section class="main">
+      <section class="topbar">
+        <div>
+          <h1>صفحة أجهزة POS</h1>
+          <p>صفحة مستقلة لإدارة أجهزة نقاط البيع وربطها بالمكتبات وحسابات المكتبات بنفس أسلوب صفحة المكتبات.</p>
+        </div>
+        <div class="topbar-actions">
+          <button class="top-btn" id="refreshBtn" type="button">تحديث المؤشرات</button>
+        </div>
+      </section>
+
+      <section class="summary-section">
+        <div class="summary-shell">
+          <div class="summary-head">
+            <div>
+              <h3>مؤشرات أجهزة POS</h3>
+              <p>ملخص سريع يوضح حالة الأجهزة الحالية داخل النظام ونسبة الأجهزة المفعلة والمرتبطة بالمكتبات.</p>
+            </div>
+            <div class="summary-chip">POS Overview</div>
+          </div>
+
+          <div class="summary-grid">
+            <article class="mini-card">
+              <div class="mini-top">
+                <div>
+                  <span>إجمالي الأجهزة</span>
+                  <strong id="posTotal">0</strong>
+                </div>
+                <div class="mini-icon">P</div>
+              </div>
+              <div class="mini-foot">
+                <small>كل الأجهزة</small>
+                <small>POS</small>
+              </div>
+            </article>
+            <article class="mini-card">
+              <div class="mini-top">
+                <div>
+                  <span>الأجهزة النشطة</span>
+                  <strong id="posActive">0</strong>
+                </div>
+                <div class="mini-icon">A</div>
+              </div>
+              <div class="mini-foot">
+                <small>Active</small>
+                <small>Status</small>
+              </div>
+            </article>
+            <article class="mini-card">
+              <div class="mini-top">
+                <div>
+                  <span>الأجهزة المفعلة</span>
+                  <strong id="posActivated">0</strong>
+                </div>
+                <div class="mini-icon">O</div>
+              </div>
+              <div class="mini-foot">
+                <small>Activated</small>
+                <small>Usage</small>
+              </div>
+            </article>
+            <article class="mini-card">
+              <div class="mini-top">
+                <div>
+                  <span>غير مرتبطة بمكتبة</span>
+                  <strong id="posUnassigned">0</strong>
+                </div>
+                <div class="mini-icon">L</div>
+              </div>
+              <div class="mini-foot">
+                <small>Unassigned</small>
+                <small>Library</small>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="pos-layout">
+          <div class="tiles-section">
+            <div class="tiles-shell">
+              <div class="tiles-topbar">
+                <div class="tiles-head">
+                  <h3>اختصارات سريعة</h3>
+                  <p>بطاقات عملية للوصول السريع إلى أهم إجراءات أجهزة POS وربطها بالمكتبات والحسابات.</p>
+                </div>
+                <div class="tiles-chip">Quick Actions</div>
+              </div>
+
+              <div class="tiles-grid">
+                <button class="tile teal" id="createPosTile" type="button">
+                  <div class="tile-top">
+                    <span class="tile-badge">إجراء رئيسي</span>
+                    <div class="tile-icon">+</div>
+                  </div>
+                  <div class="tile-content">
+                    <strong>إضافة جهاز</strong>
+                    <span>افتح صفحة مستقلة لإنشاء جهاز POS جديد وتجهيزه للربط مع المكتبة والحساب المناسب.</span>
+                  </div>
+                </button>
+
+                <button class="tile gold" id="linkAccountTile" type="button">
+                  <div class="tile-top">
+                    <span class="tile-badge">Link</span>
+                    <div class="tile-icon">U</div>
+                  </div>
+                  <div class="tile-content">
+                    <strong>ربط بحساب</strong>
+                    <span>انتقل إلى صفحة مستقلة لاختيار المكتبة ثم ربط الجهاز بحساب المكتبة المناسب.</span>
+                  </div>
+                </button>
+
+                <button class="tile blue" id="activatePosTile" type="button">
+                  <div class="tile-top">
+                    <span class="tile-badge">Activate</span>
+                    <div class="tile-icon">O</div>
+                  </div>
+                  <div class="tile-content">
+                    <strong>تفعيل جهاز</strong>
+                    <span>افتح صفحة مستقلة لتفعيل الجهاز وتحديث رمز التفعيل وحالته بسهولة.</span>
+                  </div>
+                </button>
+
+                <button class="tile dark" id="refreshPosTile" type="button">
+                  <div class="tile-top">
+                    <span class="tile-badge">View</span>
+                    <div class="tile-icon">#</div>
+                  </div>
+                  <div class="tile-content">
+                    <strong>عرض كل الأجهزة</strong>
+                    <span>انتقل إلى صفحة مستقلة تعرض جميع أجهزة POS على شكل بطاقات واضحة ومنظمة.</span>
+                  </div>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="workspace-section">
+            <div class="workspace">
+              <section class="section-card">
+          <div class="section-head">
+            <div>
+              <h3>إنشاء جهاز POS</h3>
+              <p>املأ الحقول الأساسية فقط، وسيتم حفظ الجهاز مباشرة داخل النظام مع إمكانية ربطه بمكتبة أو حساب.</p>
+            </div>
+            <div class="chip">POS Setup</div>
+          </div>
+
+          <form id="posForm">
+            <div class="form-grid">
+              <div class="field">
+                <label for="libraryId">المكتبة</label>
+                <select id="libraryId">
+                  <option value="">اختر المكتبة</option>
+                </select>
+              </div>
+
+              <div class="field">
+                <label for="posCode">كود الجهاز</label>
+                <input id="posCode" required maxlength="50" placeholder="مثال: POS-001">
+              </div>
+
+              <div class="field">
+                <label for="serialNumber">الرقم التسلسلي</label>
+                <input id="serialNumber" maxlength="150" placeholder="مثال: SN-10001">
+              </div>
+
+              <div class="field">
+                <label for="deviceVendor">الشركة المصنّعة</label>
+                <input id="deviceVendor" maxlength="100" placeholder="مثال: PAX">
+              </div>
+
+              <div class="field">
+                <label for="deviceModel">موديل الجهاز</label>
+                <input id="deviceModel" maxlength="100" placeholder="مثال: A920">
+              </div>
+
+              <div class="field">
+                <label for="status">الحالة</label>
+                <select id="status">
+                  <option value="Inactive">Inactive</option>
+                  <option value="Active">Active</option>
+                  <option value="Suspended">Suspended</option>
+                  <option value="Maintenance">Maintenance</option>
+                </select>
+              </div>
+
+              <div class="field">
+                <label for="isActivated">هل الجهاز مفعّل؟</label>
+                <select id="isActivated">
+                  <option value="false">لا</option>
+                  <option value="true">نعم</option>
+                </select>
+              </div>
+
+              <div class="field">
+                <label for="activatedByAccountId">الحساب الذي فعّل الجهاز</label>
+                <select id="activatedByAccountId">
+                  <option value="">بدون حساب</option>
+                </select>
+                <small>يُستخدم فقط إذا كان الجهاز مفعّلًا ويرتبط بحساب مكتبة محدد.</small>
+              </div>
+
+              <div class="field full">
+                <label for="activationToken">رمز التفعيل</label>
+                <input id="activationToken" maxlength="250" placeholder="اختياري">
+              </div>
+            </div>
+
+            <div class="actions">
+              <button class="btn secondary" type="button" id="resetBtn">تفريغ الحقول</button>
+              <button class="btn primary" type="submit">حفظ الجهاز</button>
+            </div>
+          </form>
+
+          <div class="message error" id="errorBox"></div>
+          <div class="message success" id="successBox"></div>
+              </section>
+
+              <aside class="section-card">
+          <div class="section-head">
+            <div>
+              <h3>ملخص الربط الحالي</h3>
+              <p>هذه الخانة تساعدك على التأكد من المكتبة والحساب قبل الحفظ.</p>
+            </div>
+            <div class="chip">Live Preview</div>
+          </div>
+
+          <div class="helper-list">
+            <div class="helper-box">
+              <strong>اختيار الجهاز</strong>
+              <p>يمكنك ترك المكتبة أو الحساب فارغًا إن كان الجهاز يُجهز أولًا ثم يُربط لاحقًا.</p>
+            </div>
+
+            <div class="helper-meta">
+              <div class="helper-item">
+                <span>المكتبة المحددة</span>
+                <strong id="selectedLibraryName">لم يتم الاختيار بعد</strong>
+              </div>
+              <div class="helper-item">
+                <span>الحساب المحدد</span>
+                <strong id="selectedAccountName">بدون حساب</strong>
+              </div>
+              <div class="helper-item">
+                <span>حالة التفعيل</span>
+                <strong id="selectedActivationState">غير مفعّل</strong>
+              </div>
+            </div>
+          </div>
+              </aside>
+            </div>
+          </div>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <script>
+    const session = readJson("adminSession");
+    let librariesCache = [];
+    let accountsCache = [];
+    let devicesCache = [];
+
+    function byId(id) {
+      return document.getElementById(id);
+    }
+
+    function readJson(key) {
+      try {
+        return JSON.parse(localStorage.getItem(key) || "null");
+      } catch {
+        return null;
+      }
+    }
+
+    function normalizeList(data) {
+      if (Array.isArray(data)) {
+        return data;
+      }
+
+      if (Array.isArray(data?.value)) {
+        return data.value;
+      }
+
+      return [];
+    }
+
+    function requireSession() {
+      if (!session?.accessToken) {
+        window.location.href = "/";
+        throw new Error("لا توجد جلسة مدير.");
+      }
+    }
+
+    function renderSession() {
+      byId("sessionUsername").textContent = session.username || "-";
+      byId("sessionRole").textContent = session.roleCode || "-";
+      byId("sessionUserId").textContent = session.userId || "-";
+    }
+
+    function showMessage(id, message) {
+      const target = byId(id);
+      target.textContent = message;
+      target.classList.add("show");
+    }
+
+    function hideMessages() {
+      byId("errorBox").textContent = "";
+      byId("successBox").textContent = "";
+      byId("errorBox").classList.remove("show");
+      byId("successBox").classList.remove("show");
+    }
+
+    async function requestJson(url, options = {}) {
+      const response = await fetch(url, {
+        ...options,
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${session.accessToken}`,
+          ...(options.headers || {})
+        }
+      });
+
+      const text = await response.text();
+      let data = null;
+
+      try {
+        data = text ? JSON.parse(text) : null;
+      } catch {
+        data = text;
+      }
+
+      if (!response.ok) {
+        throw new Error(typeof data === "string" ? data : (data?.title || data?.message || `HTTP ${response.status}`));
+      }
+
+      return data;
+    }
+
+    function fillLibraries() {
+      const select = byId("libraryId");
+      const items = librariesCache.filter((item) => String(item.status).toLowerCase() === "active");
+      select.innerHTML = `
+        <option value="">اختر المكتبة</option>
+        ${items.map((item) => `<option value="${item.id}">${item.libraryName} - ${item.libraryCode}</option>`).join("")}
+      `;
+    }
+
+    function fillAccounts() {
+      const select = byId("activatedByAccountId");
+      const libraryId = byId("libraryId").value;
+      const items = accountsCache.filter((item) => !libraryId || String(item.libraryId) === libraryId);
+
+      select.innerHTML = `
+        <option value="">بدون حساب</option>
+        ${items.map((item) => `<option value="${item.id}">${item.fullName} - ${item.username}</option>`).join("")}
+      `;
+    }
+
+    function renderSummary() {
+      const active = devicesCache.filter((item) => String(item.status).toLowerCase() === "active").length;
+      const activated = devicesCache.filter((item) => Boolean(item.isActivated)).length;
+      const unassigned = devicesCache.filter((item) => !item.libraryId).length;
+
+      byId("posTotal").textContent = devicesCache.length;
+      byId("posActive").textContent = active;
+      byId("posActivated").textContent = activated;
+      byId("posUnassigned").textContent = unassigned;
+    }
+
+    function syncPreview() {
+      const selectedLibrary = librariesCache.find((item) => String(item.id) === byId("libraryId").value);
+      const selectedAccount = accountsCache.find((item) => String(item.id) === byId("activatedByAccountId").value);
+      const isActivated = byId("isActivated").value === "true";
+
+      byId("selectedLibraryName").textContent = selectedLibrary?.libraryName || "لم يتم الاختيار بعد";
+      byId("selectedAccountName").textContent = selectedAccount ? `${selectedAccount.fullName} - ${selectedAccount.username}` : "بدون حساب";
+      byId("selectedActivationState").textContent = isActivated ? "مفعّل" : "غير مفعّل";
+    }
+
+    function buildPayload() {
+      const isActivated = byId("isActivated").value === "true";
+      const activatedByAccountId = byId("activatedByAccountId").value;
+
+      return {
+        libraryId: byId("libraryId").value ? Number(byId("libraryId").value) : null,
+        posCode: byId("posCode").value.trim(),
+        serialNumber: byId("serialNumber").value.trim() || null,
+        deviceModel: byId("deviceModel").value.trim() || null,
+        deviceVendor: byId("deviceVendor").value.trim() || null,
+        status: byId("status").value,
+        isActivated,
+        activatedByAccountId: activatedByAccountId ? Number(activatedByAccountId) : null,
+        activationToken: byId("activationToken").value.trim() || null,
+        activatedAt: isActivated ? new Date().toISOString() : null,
+        lastAuthenticatedAt: null
+      };
+    }
+
+    async function loadPageData() {
+      const [libraries, accounts, devices] = await Promise.all([
+        requestJson("/api/Libraries?limit=200"),
+        requestJson("/api/LibraryAccounts?limit=200"),
+        requestJson("/api/PosDevices?limit=200")
+      ]);
+
+      librariesCache = normalizeList(libraries);
+      accountsCache = normalizeList(accounts);
+      devicesCache = normalizeList(devices);
+
+      fillLibraries();
+      fillAccounts();
+      renderSummary();
+      syncPreview();
+    }
+
+    async function submitForm(event) {
+      event.preventDefault();
+      hideMessages();
+
+      if (!byId("posCode").value.trim()) {
+        showMessage("errorBox", "كود الجهاز حقل مطلوب.");
+        return;
+      }
+
+      if (byId("isActivated").value === "true" && !byId("activatedByAccountId").value) {
+        showMessage("errorBox", "عند اختيار جهاز مفعّل، يجب تحديد الحساب الذي فعّله أو تغيير الحالة إلى غير مفعّل.");
+        return;
+      }
+
+      try {
+        const payload = buildPayload();
+        const data = await requestJson("/api/PosDevices", {
+          method: "POST",
+          body: JSON.stringify(payload)
+        });
+
+        showMessage("successBox", `تم إنشاء جهاز POS بنجاح: ${data.posCode}`);
+        await loadPageData();
+        resetForm(false);
+      } catch (error) {
+        showMessage("errorBox", error.message || "تعذر إنشاء الجهاز.");
+      }
+    }
+
+    function resetForm(clearMessages = true) {
+      byId("posForm").reset();
+      byId("status").value = "Inactive";
+      byId("isActivated").value = "false";
+      fillAccounts();
+      syncPreview();
+
+      if (clearMessages) {
+        hideMessages();
+      }
+    }
+
+    byId("posForm").addEventListener("submit", submitForm);
+    byId("resetBtn").addEventListener("click", () => resetForm(true));
+    byId("refreshBtn").addEventListener("click", async () => {
+      hideMessages();
+      try {
+        await loadPageData();
+      } catch (error) {
+        showMessage("errorBox", error.message || "تعذر تحديث الصفحة.");
+      }
+    });
+    byId("libraryId").addEventListener("change", () => {
+      fillAccounts();
+      syncPreview();
+    });
+    byId("activatedByAccountId").addEventListener("change", syncPreview);
+    byId("isActivated").addEventListener("change", syncPreview);
+    byId("createPosTile").addEventListener("click", () => {
+      window.location.href = "/create-pos-device.html";
+    });
+    byId("linkAccountTile").addEventListener("click", () => {
+      window.location.href = "/link-pos-account.html";
+    });
+    byId("activatePosTile").addEventListener("click", () => {
+      window.location.href = "/activate-pos-device.html";
+    });
+    byId("refreshPosTile").addEventListener("click", () => {
+      window.location.href = "/all-pos-devices.html";
+    });
+    byId("logoutBtn").addEventListener("click", () => {
+      localStorage.removeItem("adminSession");
+      window.location.href = "/";
+    });
+
+    requireSession();
+    renderSession();
+    loadPageData().catch((error) => {
+      showMessage("errorBox", error.message || "تعذر تحميل بيانات الصفحة.");
+    });
+  </script>
+</body>
+</html>
+

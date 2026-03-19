@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>تسوية قيد | AdminAPI</title>
+  <style>
+    :root{--bg:#fff;--panel:#fff;--sidebar:#fbfcfd;--ink:#16202a;--muted:#6f7a84;--line:#e7ebef;--brand:#0f766e;--brand-deep:#0b5c56;--accent:#c88b33;--danger:#bf4f45;--success:#16805b;--soft:#f5f8fa;--soft-brand:#eef7f6;--shadow:0 24px 60px rgba(15,23,42,.08)}
+    *{box-sizing:border-box}body{margin:0;min-height:100vh;background:var(--bg);color:var(--ink);font-family:"Cairo","Tajawal","Segoe UI",Tahoma,sans-serif}
+    button,input,select,textarea,a{font:inherit}a{text-decoration:none;color:inherit}
+    .app{display:grid;grid-template-columns:290px minmax(0,1fr);min-height:100vh}.sidebar{background:var(--sidebar);border-left:1px solid var(--line);padding:22px 18px;display:flex;flex-direction:column;gap:18px;position:sticky;top:0;height:100vh}
+    .brand{display:flex;align-items:center;gap:12px;padding:10px 6px}.brand-mark{width:42px;height:42px;border-radius:14px;display:grid;place-items:center;color:#fff;font-weight:800;background:linear-gradient(135deg,var(--brand),var(--accent));box-shadow:0 14px 30px rgba(15,118,110,.18)}.brand strong{display:block;font-size:18px}.brand span{color:var(--muted);font-size:13px}
+    .session-card,.topbar,.intro,.form-card{background:#fff;border:1px solid var(--line);border-radius:28px;box-shadow:var(--shadow)}.session-card{padding:16px}.session-card h3{margin:0 0 12px;font-size:16px}.session-line{display:flex;justify-content:space-between;gap:10px;padding:6px 0;color:var(--muted);font-size:13px}
+    .nav{display:grid;gap:8px;overflow:auto;padding-left:4px}.nav-label{color:var(--muted);font-size:12px;font-weight:800;padding:6px 10px 2px}.nav-btn{width:100%;min-height:46px;border:1px solid transparent;background:transparent;color:var(--ink);border-radius:16px;text-align:right;padding:0 14px;cursor:pointer;font-weight:700}.nav-btn:hover{background:#fff;border-color:var(--line)}.nav-btn.active{background:var(--soft-brand);color:var(--brand);border-color:rgba(15,118,110,.12)}
+    .sidebar-actions{margin-top:auto;display:grid;gap:10px}.side-link,.side-btn{min-height:44px;border-radius:14px;border:1px solid var(--line);background:#fff;display:grid;place-items:center;color:var(--brand);font-weight:800;cursor:pointer}
+    .main{padding:22px}.topbar{display:flex;justify-content:space-between;align-items:center;gap:14px;padding:16px 18px;margin-bottom:18px}.topbar h1{margin:0;font-size:28px}.topbar p{margin:4px 0 0;color:var(--muted);font-size:14px}.top-btn{min-height:42px;padding:0 14px;border-radius:14px;border:1px solid var(--line);background:#fff;color:var(--brand);cursor:pointer;font-weight:800}
+    .intro{padding:22px;margin-bottom:18px;background:linear-gradient(135deg, rgba(15,118,110,.07), rgba(200,139,51,.05)),var(--soft)}.intro h2{margin:0 0 8px;font-size:30px}.intro p{margin:0;color:var(--muted);line-height:1.9}
+    .form-card{padding:22px}.form-head{display:flex;justify-content:space-between;gap:18px;flex-wrap:wrap;margin-bottom:18px}.form-head h3{margin:0 0 6px;font-size:24px}.form-head p{margin:0;color:var(--muted);line-height:1.8;font-size:14px}.hint-chip{display:inline-flex;align-items:center;min-height:40px;padding:0 14px;border-radius:999px;background:var(--soft-brand);color:var(--brand);border:1px solid rgba(15,118,110,.12);font-weight:800;font-size:13px}
+    .scope-shell,.mode-shell{margin-top:18px;padding:18px;border-radius:24px;border:1px solid var(--line);background:linear-gradient(180deg,#fff 0%,#fbfcfd 100%)}.scope-shell h4,.mode-shell h4{margin:0 0 12px;font-size:18px}
+    .choice-grid,.mode-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:16px}.mode-grid{grid-template-columns:repeat(3,1fr)}
+    .choice-btn,.mode-btn{min-height:48px;border-radius:16px;border:1px solid var(--line);background:#fff;cursor:pointer;font-weight:800;color:var(--ink)}.choice-btn.active,.mode-btn.active{background:var(--soft-brand);border-color:rgba(15,118,110,.15);color:var(--brand)}
+    .form-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}.field,.mode-fields{display:grid;gap:7px}.field.full{grid-column:1/-1}.field label,.mode-fields label{color:var(--muted);font-size:14px;font-weight:700}.field input,.field select,.field textarea,.mode-fields input{min-height:50px;border-radius:16px;border:1px solid var(--line);background:#fff;padding:12px 14px;outline:none}.field textarea{min-height:110px;resize:vertical}
+    .helper{margin-top:16px;padding:16px;border-radius:20px;border:1px solid var(--line);background:#fff}.helper strong{display:block;margin-bottom:8px;color:var(--brand-deep)}.helper p{margin:0;color:var(--muted);line-height:1.9}
+    .actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px}.btn{min-height:48px;padding:0 18px;border:0;border-radius:16px;cursor:pointer;font-weight:800}.btn.primary{color:#fff;background:linear-gradient(135deg,var(--brand),var(--brand-deep))}.btn.secondary{color:#fff;background:linear-gradient(135deg,var(--accent),#b97a26)}
+    .message{display:none;margin-top:16px;padding:13px 14px;border-radius:16px;line-height:1.8;font-size:14px}.message.show{display:block}.message.error{color:var(--danger);background:rgba(191,79,69,.08);border:1px solid rgba(191,79,69,.16)}.message.success{color:var(--success);background:rgba(22,128,91,.08);border:1px solid rgba(22,128,91,.16)}
+    @media (max-width:1180px){.app{grid-template-columns:1fr}.sidebar{position:static;height:auto}}@media (max-width:760px){.topbar,.form-grid,.mode-grid,.choice-grid{grid-template-columns:1fr;display:grid}}
+  </style>
+<link rel="stylesheet" href="/theme.css">
+</head>
+<body>
+  <main class="app">
+    <aside class="sidebar">
+      <div class="brand"><div class="brand-mark">A</div><div><strong>لوحة المدير</strong><span>AdminAPI Control</span></div></div>
+      <section class="session-card"><h3>الجلسة الحالية</h3><div class="session-line"><span>اسم المستخدم</span><b id="sessionUsername">-</b></div><div class="session-line"><span>الدور</span><b id="sessionRole">-</b></div><div class="session-line"><span>المعرّف</span><b id="sessionUserId">-</b></div></section>
+      <nav class="nav"><div class="nav-label">صفحات المالية</div><a class="nav-btn" href="/financial.html">الرئيسية</a><a class="nav-btn" href="/create-financial-transaction.html">إضافة قيد مستحق</a><a class="nav-btn active" href="/create-financial-settlement.html">تسوية قيد</a><a class="nav-btn" href="/library-financial-statement.html">كشف مكتبة</a><a class="nav-btn" href="/all-financial-transactions.html">كل القيود</a></nav>
+      <div class="sidebar-actions"><a class="side-link" href="/">صفحة الدخول</a><a class="side-link" href="/swagger">Swagger</a><button class="side-btn" id="logoutBtn" type="button">تسجيل الخروج</button></div>
+    </aside>
+    <section class="main">
+      <section class="topbar"><div><h1>تسوية قيد</h1><p>يمكنك الآن التسديد على قيد محدد أو على المكتبة كلها، وسيتم توزيع المبلغ تلقائيًا على القيود الأقدم.</p></div><a class="top-btn" href="/financial.html">الرجوع إلى المالية</a></section>
+      <section class="intro"><h2>تسوية مرنة</h2><p>إذا حددت قيدًا، تُسجّل التسوية عليه مباشرة. وإذا لم تحدد قيدًا، يوزع النظام المبلغ على أقدم القيود المفتوحة داخل نفس المكتبة حتى ينتهي المبلغ أو تنتهي الذمة.</p></section>
+      <section class="form-card">
+        <div class="form-head"><div><h3>بيانات التسوية</h3><p>تستطيع الآن اختيار `تسديد على قيد محدد` أو `تسديد عام على المكتبة`.</p></div><div class="hint-chip">Specific or Auto Allocation</div></div>
+        <form id="settlementForm">
+          <section class="scope-shell">
+            <h4>نطاق التسوية</h4>
+            <div class="choice-grid">
+              <button class="choice-btn active" data-scope="specific" type="button">على قيد محدد</button>
+              <button class="choice-btn" data-scope="library" type="button">على المكتبة كلها</button>
+            </div>
+          </section>
+          <div class="form-grid">
+            <div class="field"><label for="libraryId">المكتبة</label><select id="libraryId" required><option value="">اختر المكتبة</option></select></div>
+            <div class="field" id="transactionField"><label for="transactionId">القيد المستحق</label><select id="transactionId"><option value="">اختر القيد</option></select></div>
+            <div class="field full"><label for="notes">ملاحظات</label><textarea id="notes" maxlength="400" placeholder="مثال: تسوية نقدية أو تحويل أو تسديد جزئي"></textarea></div>
+          </div>
+          <section class="mode-shell">
+            <h4>طريقة التسوية</h4>
+            <div class="mode-grid">
+              <button class="mode-btn active" data-mode="Full" type="button">تسوية كاملة</button>
+              <button class="mode-btn" data-mode="PartialAmount" type="button">مبلغ جزئي</button>
+              <button class="mode-btn" data-mode="ByQuantity" type="button">حسب العدد</button>
+            </div>
+            <div class="form-grid">
+              <div class="mode-fields" id="amountField" style="display:none"><label for="amount">مبلغ التسوية</label><input id="amount" type="number" min="0.01" step="0.01" value="0"></div>
+              <div class="mode-fields" id="quantityField" style="display:none"><label for="quantity">العدد</label><input id="quantity" type="number" min="0.01" step="0.01" value="1"></div>
+              <div class="mode-fields" id="unitAmountField" style="display:none"><label for="unitAmount">سعر الوحدة</label><input id="unitAmount" type="number" min="0.01" step="0.01" value="0"></div>
+            </div>
+            <div class="helper"><strong id="helperTitle">لا يوجد تحديد بعد</strong><p id="helperText">اختر المكتبة ثم حدد ما إذا كانت التسوية على قيد واحد أو على المكتبة كلها.</p></div>
+          </section>
+          <div class="actions"><button class="btn secondary" type="button" id="resetBtn">تفريغ الحقول</button><button class="btn primary" type="submit">حفظ التسوية</button></div>
+        </form>
+        <div class="message error" id="errorBox"></div>
+        <div class="message success" id="successBox"></div>
+      </section>
+    </section>
+  </main>
+  <script>
+    const session=readJson("adminSession");let librariesCache=[],transactionsCache=[],currentMode="Full",currentScope="specific";
+    function byId(id){return document.getElementById(id)} function readJson(key){try{return JSON.parse(localStorage.getItem(key)||"null")}catch{return null}}
+    function requireSession(){if(!session?.accessToken){window.location.href="/";throw new Error("لا توجد جلسة مدير.")}} function renderSession(){byId("sessionUsername").textContent=session.username||"-";byId("sessionRole").textContent=session.roleCode||"-";byId("sessionUserId").textContent=session.userId||"-";}
+    function showMessage(id,message){const target=byId(id);target.textContent=message;target.classList.add("show")} function hideMessages(){["errorBox","successBox"].forEach((id)=>{byId(id).textContent="";byId(id).classList.remove("show")})}
+    async function requestJson(url,options={}){const response=await fetch(url,{...options,headers:{"Content-Type":"application/json","Authorization":`Bearer ${session.accessToken}`,...(options.headers||{})}});const text=await response.text();let data=null;try{data=text?JSON.parse(text):null}catch{data=text}if(!response.ok){throw new Error(typeof data==="string"?data:(data?.title||data?.message||`HTTP ${response.status}`))}return data}
+    function normalizeList(data){if(Array.isArray(data))return data;if(Array.isArray(data?.value))return data.value;return []}
+    async function loadLibraries(){const data=await requestJson("/api/Libraries?limit=200");librariesCache=normalizeList(data);byId("libraryId").innerHTML=`<option value="">اختر المكتبة</option>${librariesCache.map((x)=>`<option value="${x.id}">${x.libraryName} - ${x.libraryCode}</option>`).join("")}`}
+    async function loadTransactionsForLibrary(){const libraryId=byId("libraryId").value;if(!libraryId){transactionsCache=[];byId("transactionId").innerHTML='<option value="">اختر القيد</option>';syncHelper();return}const data=await requestJson(`/api/FinancialTransactions?libraryId=${libraryId}`);transactionsCache=normalizeList(data).filter((x)=>String(x.status||"").toLowerCase()!=="cancelled"&&Number(x.remainingAmount||0)>0);byId("transactionId").innerHTML=`<option value="">اختر القيد</option>${transactionsCache.map((x)=>`<option value="${x.id}">#${x.id} - ${x.libraryName} - ${Number(x.remainingAmount||0).toLocaleString("en-US")} د.ع</option>`).join("")}`;syncHelper();}
+    function selectedTransaction(){return transactionsCache.find((x)=>String(x.id)===byId("transactionId").value)}
+    function totalLibraryDue(){return transactionsCache.reduce((sum,x)=>sum+Number(x.remainingAmount||0),0)}
+    function calcSettlementAmount(){if(currentMode==="Full"){return currentScope==="specific"?Number(selectedTransaction()?.remainingAmount||0):Number(totalLibraryDue()||0)}if(currentMode==="PartialAmount"){return Number(byId("amount").value||0)}return Number(byId("quantity").value||0)*Number(byId("unitAmount").value||0)}
+    function setFieldState(inputId, visible){
+      const input = byId(inputId);
+      const wrapper = input.closest(".mode-fields");
+      wrapper.style.display = visible ? "grid" : "none";
+      input.disabled = !visible;
+      if (!visible) {
+        input.removeAttribute("required");
+      }
+    }
+    function setMode(mode){
+      currentMode=mode;
+      document.querySelectorAll(".mode-btn").forEach((btn)=>btn.classList.toggle("active",btn.dataset.mode===mode));
+      setFieldState("amount", mode==="PartialAmount");
+      setFieldState("quantity", mode==="ByQuantity");
+      setFieldState("unitAmount", mode==="ByQuantity");
+      syncHelper();
+    }
+    function setScope(scope){currentScope=scope;document.querySelectorAll(".choice-btn").forEach((btn)=>btn.classList.toggle("active",btn.dataset.scope===scope));byId("transactionField").style.display=scope==="specific"?"grid":"none";syncHelper();}
+    function syncHelper(){const amount=calcSettlementAmount();if(currentScope==="specific"){const tx=selectedTransaction();if(!tx){byId("helperTitle").textContent="لا يوجد تحديد بعد";byId("helperText").textContent="اختر المكتبة ثم القيد المستحق الذي تريد التسوية عليه.";return}byId("helperTitle").textContent=`القيد #${tx.id} | المتبقي ${Number(tx.remainingAmount||0).toLocaleString("en-US")} د.ع`;byId("helperText").textContent=`سيتم تطبيق ${Number(amount||0).toLocaleString("en-US")} د.ع على هذا القيد فقط. المبلغ الأصلي ${Number(tx.amount||0).toLocaleString("en-US")} د.ع، والمسدد حاليًا ${Number(tx.paidAmount||0).toLocaleString("en-US")} د.ع.`;return}const due=totalLibraryDue();byId("helperTitle").textContent=`تسديد عام على المكتبة | الذمة الحالية ${Number(due||0).toLocaleString("en-US")} د.ع`;byId("helperText").textContent=`سيتم توزيع ${Number(amount||0).toLocaleString("en-US")} د.ع تلقائيًا على أقدم القيود المفتوحة داخل المكتبة حتى ينتهي المبلغ أو تنتهي الذمة.`;}
+    function resetForm(){
+      byId("settlementForm").reset();
+      byId("transactionId").innerHTML='<option value="">اختر القيد</option>';
+      transactionsCache=[];
+      byId("amount").value="0.01";
+      byId("quantity").value="1";
+      byId("unitAmount").value="0.01";
+      setScope("specific");
+      setMode("Full");
+      hideMessages();
+    }
+    async function submitForm(event){event.preventDefault();hideMessages();const libraryId=Number(byId("libraryId").value);if(!libraryId){showMessage("errorBox","يرجى اختيار المكتبة.");return}const payload={settlementMode:currentMode,notes:byId("notes").value.trim()||null};if(currentMode==="PartialAmount"){payload.amount=Number(byId("amount").value||0)}if(currentMode==="ByQuantity"){payload.quantity=Number(byId("quantity").value||0);payload.unitAmount=Number(byId("unitAmount").value||0)}try{if(currentScope==="specific"){const transactionId=Number(byId("transactionId").value);if(!transactionId){showMessage("errorBox","يرجى اختيار القيد المستحق.");return}await requestJson(`/api/FinancialTransactions/${transactionId}/settlements`,{method:"POST",body:JSON.stringify(payload)});}else{await requestJson(`/api/FinancialTransactions/library/${libraryId}/settlements`,{method:"POST",body:JSON.stringify(payload)});}showMessage("successBox","تمت التسوية بنجاح.");setTimeout(()=>window.location.href=`/library-financial-statement.html?libraryId=${libraryId}`,900);}catch(error){showMessage("errorBox",error.message||"تعذر حفظ التسوية.");}}
+    document.querySelectorAll(".mode-btn").forEach((btn)=>btn.addEventListener("click",()=>setMode(btn.dataset.mode)));document.querySelectorAll(".choice-btn").forEach((btn)=>btn.addEventListener("click",()=>setScope(btn.dataset.scope)));
+    byId("libraryId").addEventListener("change",()=>loadTransactionsForLibrary().catch((error)=>showMessage("errorBox",error.message||"تعذر تحميل القيود.")));byId("transactionId").addEventListener("change",syncHelper);["amount","quantity","unitAmount"].forEach((id)=>byId(id).addEventListener("input",syncHelper));
+    byId("resetBtn").addEventListener("click",resetForm);byId("settlementForm").addEventListener("submit",submitForm);byId("logoutBtn").addEventListener("click",()=>{localStorage.removeItem("adminSession");window.location.href="/";});
+    requireSession();renderSession();loadLibraries().catch((error)=>showMessage("errorBox",error.message||"تعذر تحميل المكتبات."));resetForm();
+  </script>
+</body>
+</html>
+

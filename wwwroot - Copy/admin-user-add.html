@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إضافة حساب أدمن - نظام الإدارة</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Cairo', sans-serif; }
+    </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#1e3a8a',
+                        secondary: '#3b82f6',
+                        dark: '#0f172a'
+                    }
+                }
+            }
+        };
+    </script>
+</head>
+<body class="bg-slate-50 text-slate-800">
+    <div class="flex min-h-screen">
+        <app-sidebar></app-sidebar>
+        <div class="flex min-w-0 flex-1 flex-col">
+            <nav class="sticky top-0 z-30 border-b border-slate-200 bg-white">
+                <div class="px-4 sm:px-6 lg:px-8">
+                    <div class="flex h-16 items-center justify-between">
+                        <div class="flex items-center space-x-2 space-x-reverse">
+                            <button id="toggle-sidebar" class="ml-2 text-slate-500 transition-colors hover:text-primary focus:outline-none md:hidden">
+                                <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                            </button>
+                            <div class="hidden items-center text-sm font-medium text-slate-500 md:flex">
+                                <a href="dashboard.html" class="transition-colors hover:text-primary">الرئيسية</a>
+                                <svg class="mx-2 h-4 w-4 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                                <a href="users.html?tab=admin" class="transition-colors hover:text-primary">إدارة المستخدمين</a>
+                                <svg class="mx-2 h-4 w-4 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                                <span class="text-slate-800">إضافة حساب أدمن</span>
+                            </div>
+                            <span class="text-lg font-bold text-primary md:hidden">إضافة أدمن</span>
+                        </div>
+                        <div class="flex items-center space-x-4 space-x-reverse">
+                            <div class="hidden flex-col items-end md:flex">
+                                <span id="header-fullname" class="text-sm font-bold text-slate-700">مدير النظام</span>
+                                <span id="header-username" class="text-xs text-slate-500">admin</span>
+                            </div>
+                            <div class="flex h-9 w-9 items-center justify-center rounded-full border border-primary/20 bg-primary/10 font-bold text-primary">A</div>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+
+            <main class="flex-1 p-4 sm:p-6 lg:p-8">
+                <div id="loading-overlay" class="flex min-h-[60vh] items-center justify-center rounded-xl border border-slate-100 bg-white shadow-sm">
+                    <div class="text-center">
+                        <div class="mx-auto mb-4 h-12 w-12 animate-spin rounded-full border-4 border-primary/15 border-t-primary"></div>
+                        <p class="font-bold text-slate-700">جاري تهيئة صفحة الأدمن...</p>
+                        <p class="mt-1 text-sm text-slate-400">يتم تحميل الأدوار المرجعية وبيانات المستخدمين الحالية</p>
+                    </div>
+                </div>
+
+                <div id="error-state" class="hidden min-h-[60vh] items-center justify-center">
+                    <div class="mx-auto max-w-md rounded-xl border border-red-100 bg-white p-8 text-center shadow-sm">
+                        <div class="mx-auto mb-5 flex h-20 w-20 items-center justify-center rounded-full bg-red-50 text-red-500">
+                            <svg class="h-10 w-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-7.938 4h15.876c1.54 0 2.503-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L2.33 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                        </div>
+                        <h2 class="text-3xl font-extrabold text-slate-800">تعذر تحميل الصفحة</h2>
+                        <p id="error-message" class="mt-3 text-sm text-slate-500">تعذر تهيئة صفحة إضافة الأدمن.</p>
+                        <a href="users.html?tab=admin" class="mt-6 inline-flex items-center justify-center rounded-lg bg-primary px-6 py-3 text-sm font-semibold text-white transition hover:bg-primary/90">العودة إلى المستخدمين</a>
+                    </div>
+                </div>
+
+                <div id="content-container" class="hidden space-y-6">
+                    <div class="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+                        <div>
+                            <div class="mt-1 flex flex-wrap items-center gap-3">
+                                <h1 class="text-2xl font-bold text-slate-800 sm:text-3xl">إضافة حساب أدمن</h1>
+                                <span class="inline-flex items-center rounded-lg bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-600">Admin User</span>
+                            </div>
+                            <p class="mt-2 text-sm text-slate-500">إنشاء حساب أدمن جديد مع الدور وبيانات الدخول والحالة التشغيلية.</p>
+                        </div>
+                        <div class="flex flex-wrap gap-3">
+                            <a href="users.html?tab=admin" class="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-primary hover:text-primary">
+                                <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                                العودة للمستخدمين
+                            </a>
+                            <button id="save-button" type="submit" form="admin-create-form" class="inline-flex items-center gap-2 rounded-lg bg-primary px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-70">
+                                <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                                <span id="save-button-label">إنشاء حساب الأدمن</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div id="notice" class="hidden rounded-xl border px-5 py-4 text-sm font-semibold"></div>
+
+                    <div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+                        <div class="rounded-xl border border-blue-100 bg-gradient-to-br from-blue-500 to-blue-700 p-5 text-white shadow-sm">
+                            <p class="text-sm font-semibold text-blue-100">أدوار الأدمن المتاحة</p>
+                            <p id="summary-roles-count" class="mt-3 text-2xl font-extrabold">0</p>
+                        </div>
+                        <div class="rounded-xl border border-slate-100 bg-white p-5 shadow-sm">
+                            <p class="text-sm font-semibold text-slate-400">إجمالي الأدمن الحاليين</p>
+                            <p id="summary-admins-count" class="mt-3 text-2xl font-extrabold text-slate-800">0</p>
+                        </div>
+                        <div class="rounded-xl border border-slate-100 bg-white p-5 shadow-sm">
+                            <p class="text-sm font-semibold text-slate-400">الأدمن النشطون</p>
+                            <p id="summary-active-count" class="mt-3 text-2xl font-extrabold text-slate-800">0</p>
+                        </div>
+                        <div class="rounded-xl border border-slate-100 bg-white p-5 shadow-sm">
+                            <p class="text-sm font-semibold text-slate-400">الوضع الافتراضي</p>
+                            <p class="mt-3 text-2xl font-extrabold text-slate-800">نشط</p>
+                        </div>
+                    </div>
+
+                    <form id="admin-create-form" class="space-y-6">
+                        <section class="overflow-hidden rounded-xl border border-slate-100 bg-white shadow-sm">
+                            <div class="border-b border-slate-100 bg-slate-50/50 px-6 py-4">
+                                <h2 class="text-lg font-bold text-slate-800">بيانات الحساب</h2>
+                                <p class="mt-1 text-sm text-slate-500">المعلومات الأساسية الخاصة بحساب الأدمن الجديد.</p>
+                            </div>
+                            <div class="grid gap-4 p-6 md:grid-cols-2 xl:grid-cols-3">
+                                <label class="block">
+                                    <span class="mb-2 block text-sm font-semibold text-slate-600">الدور</span>
+                                    <select id="admin-role" required class="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-semibold text-slate-800 outline-none transition focus:border-primary focus:bg-white focus:ring-4 focus:ring-primary/10">
+                                        <option value="">جاري تحميل الأدوار...</option>
+                                    </select>
+                                </label>
+                                <label class="block md:col-span-2">
+                                    <span class="mb-2 block text-sm font-semibold text-slate-600">الاسم الكامل</span>
+                                    <input id="admin-full-name" type="text" maxlength="200" required class="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-semibold text-slate-800 outline-none transition focus:border-primary focus:bg-white focus:ring-4 focus:ring-primary/10">
+                                </label>
+                                <label class="block">
+                                    <span class="mb-2 block text-sm font-semibold text-slate-600">اسم المستخدم</span>
+                                    <input id="admin-username" type="text" maxlength="200" required dir="ltr" class="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-semibold text-slate-800 outline-none transition focus:border-primary focus:bg-white focus:ring-4 focus:ring-primary/10">
+                                </label>
+                                <label class="block">
+                                    <span class="mb-2 block text-sm font-semibold text-slate-600">البريد الإلكتروني</span>
+                                    <input id="admin-email" type="email" maxlength="255" dir="ltr" class="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-medium text-slate-700 outline-none transition focus:border-primary focus:bg-white focus:ring-4 focus:ring-primary/10">
+                                </label>
+                                <label class="block">
+                                    <span class="mb-2 block text-sm font-semibold text-slate-600">رقم الهاتف</span>
+                                    <input id="admin-phone" type="text" maxlength="50" dir="ltr" class="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-medium text-slate-700 outline-none transition focus:border-primary focus:bg-white focus:ring-4 focus:ring-primary/10">
+                                </label>
+                                <label class="block">
+                                    <span class="mb-2 block text-sm font-semibold text-slate-600">الحالة</span>
+                                    <select id="admin-status" class="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-semibold text-slate-800 outline-none transition focus:border-primary focus:bg-white focus:ring-4 focus:ring-primary/10">
+                                        <option value="Active">مفعل</option>
+                                        <option value="Suspended">معلق</option>
+                                        <option value="Inactive">معطل</option>
+                                    </select>
+                                </label>
+                            </div>
+                        </section>
+
+                        <section class="overflow-hidden rounded-xl border border-slate-100 bg-white shadow-sm">
+                            <div class="border-b border-slate-100 bg-slate-50/50 px-6 py-4">
+                                <h2 class="text-lg font-bold text-slate-800">الأمان والتأكيد</h2>
+                                <p class="mt-1 text-sm text-slate-500">أدخل كلمة المرور ثم أكدها قبل إنشاء حساب الأدمن.</p>
+                            </div>
+                            <div class="grid gap-4 p-6 md:grid-cols-2 xl:grid-cols-4">
+                                <label class="block">
+                                    <span class="mb-2 block text-sm font-semibold text-slate-600">كلمة المرور</span>
+                                    <input id="admin-password" type="password" maxlength="500" required class="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-semibold text-slate-800 outline-none transition focus:border-primary focus:bg-white focus:ring-4 focus:ring-primary/10">
+                                </label>
+                                <label class="block">
+                                    <span class="mb-2 block text-sm font-semibold text-slate-600">تأكيد كلمة المرور</span>
+                                    <input id="admin-confirm-password" type="password" maxlength="500" required class="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-semibold text-slate-800 outline-none transition focus:border-primary focus:bg-white focus:ring-4 focus:ring-primary/10">
+                                </label>
+                                <div class="rounded-xl border border-slate-100 bg-slate-50/80 p-4">
+                                    <p class="text-xs font-semibold text-slate-400">إنشاء التوجيه بعد الحفظ</p>
+                                    <p class="mt-2 text-sm font-bold text-slate-800">تفاصيل المستخدم الجديد</p>
+                                </div>
+                                <div class="rounded-xl border border-blue-100 bg-blue-50 px-4 py-4 text-sm font-medium text-blue-800">
+                                    يجب أن يكون اسم المستخدم والبريد الإلكتروني فريدين داخل حسابات الأدمن.
+                                </div>
+                            </div>
+                        </section>
+                    </form>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script src="js/components.js"></script>
+    <script src="js/auth.js"></script>
+    <script>
+        (() => {
+            if (!window.Auth || !Auth.requireAuth()) {
+                return;
+            }
+
+            const loadingOverlay = document.getElementById('loading-overlay');
+            const errorState = document.getElementById('error-state');
+            const errorMessage = document.getElementById('error-message');
+            const contentContainer = document.getElementById('content-container');
+            const notice = document.getElementById('notice');
+            const form = document.getElementById('admin-create-form');
+            const saveButton = document.getElementById('save-button');
+            const saveButtonLabel = document.getElementById('save-button-label');
+            let availableRoles = [];
+            let isSaving = false;
+
+            document.getElementById('header-username').textContent = Auth.getUsername();
+            document.getElementById('header-fullname').textContent = Auth.getDisplayName();
+
+            function byId(id) { return document.getElementById(id); }
+
+            function escapeHtml(value) {
+                return String(value ?? '')
+                    .replace(/&/g, '&amp;')
+                    .replace(/</g, '&lt;')
+                    .replace(/>/g, '&gt;')
+                    .replace(/"/g, '&quot;')
+                    .replace(/'/g, '&#39;');
+            }
+
+            function getNullableText(id) {
+                const element = byId(id);
+                const value = element ? element.value.trim() : '';
+                return value === '' ? null : value;
+            }
+
+            function showContent() {
+                loadingOverlay.classList.add('hidden');
+                errorState.classList.add('hidden');
+                errorState.classList.remove('flex');
+                contentContainer.classList.remove('hidden');
+            }
+
+            function showError(message) {
+                loadingOverlay.classList.add('hidden');
+                contentContainer.classList.add('hidden');
+                errorState.classList.remove('hidden');
+                errorState.classList.add('flex');
+                errorMessage.textContent = message || 'تعذر تهيئة صفحة إضافة الأدمن.';
+            }
+
+            function showNotice(message, tone) {
+                const tones = {
+                    success: 'border-emerald-200 bg-emerald-50 text-emerald-800',
+                    error: 'border-red-200 bg-red-50 text-red-800',
+                    info: 'border-blue-200 bg-blue-50 text-blue-800'
+                };
+
+                notice.className = 'rounded-xl border px-5 py-4 text-sm font-semibold ' + (tones[tone] || tones.info);
+                notice.textContent = message;
+                notice.classList.remove('hidden');
+            }
+
+            function hideNotice() {
+                notice.classList.add('hidden');
+                notice.textContent = '';
+            }
+
+            function isAdminRole(role) {
+                const guardName = String(role && role.guardName !== undefined ? role.guardName : '').toLowerCase();
+                return guardName === 'admin' || guardName === '0';
+            }
+
+            function renderRoleOptions(roles) {
+                const roleSelect = byId('admin-role');
+                availableRoles = (Array.isArray(roles) ? roles : []).filter(isAdminRole);
+
+                if (!availableRoles.length) {
+                    throw new Error('لا توجد أدوار مخصصة لحسابات الأدمن.');
+                }
+
+                roleSelect.innerHTML = `
+                    <option value="">اختر الدور</option>
+                    ${availableRoles.map((role) => `<option value="${escapeHtml(String(role.id))}">${escapeHtml(role.name)}${role.code ? ' - ' + escapeHtml(role.code) : ''}</option>`).join('')}
+                `;
+                roleSelect.value = String(availableRoles[0].id);
+                byId('summary-roles-count').textContent = String(availableRoles.length);
+            }
+
+            function updateAdminSummary(admins) {
+                const collection = Array.isArray(admins) ? admins : [];
+                byId('summary-admins-count').textContent = String(collection.length);
+                byId('summary-active-count').textContent = String(collection.filter((item) => item.status === 'Active').length);
+            }
+
+            function buildPayload() {
+                return {
+                    roleId: Number(byId('admin-role').value),
+                    fullName: byId('admin-full-name').value.trim(),
+                    username: byId('admin-username').value.trim(),
+                    email: getNullableText('admin-email'),
+                    phoneNumber: getNullableText('admin-phone'),
+                    passwordHash: byId('admin-password').value,
+                    status: byId('admin-status').value,
+                    lastLoginAt: null
+                };
+            }
+
+            function setSavingState(saving) {
+                isSaving = saving;
+                saveButton.disabled = saving;
+                saveButtonLabel.textContent = saving ? 'جاري إنشاء الحساب...' : 'إنشاء حساب الأدمن';
+            }
+
+            async function parseJsonResponse(response, fallbackMessage) {
+                if (!response) {
+                    throw new Error('انتهت الجلسة الحالية. سجل الدخول مرة أخرى.');
+                }
+
+                if (!response.ok) {
+                    let message = fallbackMessage;
+                    try {
+                        const text = await response.text();
+                        if (text) {
+                            message = text;
+                        }
+                    } catch {
+                        message = fallbackMessage;
+                    }
+                    throw new Error(message);
+                }
+
+                return response.json();
+            }
+
+            async function fetchJsonWithTimeout(url, fallbackMessage, timeoutMs = 12000) {
+                const controller = new AbortController();
+                const timeoutId = window.setTimeout(() => controller.abort(), timeoutMs);
+
+                try {
+                    const response = await Auth.apiFetch(url, { signal: controller.signal });
+                    return await parseJsonResponse(response, fallbackMessage);
+                } catch (error) {
+                    if (error && error.name === 'AbortError') {
+                        throw new Error('انتهت مهلة الاتصال أثناء تحميل البيانات.');
+                    }
+                    throw error;
+                } finally {
+                    window.clearTimeout(timeoutId);
+                }
+            }
+
+            async function saveAdmin(event) {
+                event.preventDefault();
+                if (isSaving) return;
+                if (!form.reportValidity()) return;
+
+                hideNotice();
+
+                const password = byId('admin-password').value;
+                const confirmPassword = byId('admin-confirm-password').value;
+
+                if (password !== confirmPassword) {
+                    showNotice('تأكيد كلمة المرور غير مطابق.', 'error');
+                    byId('admin-confirm-password').focus();
+                    return;
+                }
+
+                setSavingState(true);
+
+                try {
+                    const created = await parseJsonResponse(await Auth.apiFetch('/api/adminusers', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(buildPayload())
+                    }), 'تعذر إنشاء حساب الأدمن.');
+
+                    showNotice('تم إنشاء حساب الأدمن بنجاح. سيتم تحويلك إلى صفحة التفاصيل.', 'success');
+                    window.setTimeout(() => {
+                        window.location.href = 'user-details.html?type=admin&id=' + encodeURIComponent(created.id) + '&tab=admin';
+                    }, 900);
+                } catch (error) {
+                    console.error('Failed to create admin user', error);
+                    showNotice(error instanceof Error ? error.message : 'تعذر إنشاء حساب الأدمن.', 'error');
+                } finally {
+                    setSavingState(false);
+                }
+            }
+
+            async function loadPageData() {
+                try {
+                    const [roles, admins] = await Promise.all([
+                        fetchJsonWithTimeout('/api/roles', 'تعذر تحميل الأدوار.'),
+                        fetchJsonWithTimeout('/api/adminusers?limit=200', 'تعذر تحميل الأدمن الحاليين.')
+                    ]);
+
+                    renderRoleOptions(roles);
+                    updateAdminSummary(admins);
+                    showContent();
+                } catch (error) {
+                    console.error('Failed to initialize admin create page', error);
+                    showError(error instanceof Error ? error.message : 'تعذر تهيئة الصفحة.');
+                }
+            }
+
+            form.addEventListener('submit', saveAdmin);
+            loadPageData();
+        })();
+    </script>
+</body>
+</html>

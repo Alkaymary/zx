@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إضافة جهاز POS - نظام الإدارة</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Cairo', sans-serif; }
+        .metric-value { font-variant-numeric: tabular-nums; }
+        .readonly-field { background-color: #f1f5f9; color: #64748b; cursor: not-allowed; }
+    </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#1e3a8a',
+                        secondary: '#3b82f6',
+                        dark: '#0f172a'
+                    }
+                }
+            }
+        };
+    </script>
+</head>
+<body class="bg-slate-50 text-slate-800">
+    <div class="flex min-h-screen">
+        <app-sidebar></app-sidebar>
+        <div class="flex min-w-0 flex-1 flex-col">
+            <nav class="sticky top-0 z-30 border-b border-slate-200 bg-white">
+                <div class="px-4 sm:px-6 lg:px-8">
+                    <div class="flex h-16 items-center justify-between">
+                        <div class="flex items-center space-x-2 space-x-reverse">
+                            <button id="toggle-sidebar" class="ml-2 text-slate-500 transition-colors hover:text-primary focus:outline-none md:hidden">
+                                <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                            </button>
+                            <div class="hidden items-center text-sm font-medium text-slate-500 md:flex">
+                                <a href="dashboard.html" class="transition-colors hover:text-primary">الرئيسية</a>
+                                <svg class="mx-2 h-4 w-4 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                                <a href="offices.html" class="transition-colors hover:text-primary">إدارة المكاتب</a>
+                                <svg class="mx-2 h-4 w-4 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                                <a id="breadcrumb-details-link" href="offices.html" class="transition-colors hover:text-primary">تفاصيل المكتب</a>
+                                <svg class="mx-2 h-4 w-4 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                                <span class="text-slate-800">إضافة جهاز POS</span>
+                            </div>
+                            <span class="text-lg font-bold text-primary md:hidden">إضافة POS</span>
+                        </div>
+                        <div class="flex items-center space-x-4 space-x-reverse">
+                            <div class="hidden flex-col items-end md:flex">
+                                <span id="header-fullname" class="text-sm font-bold text-slate-700">مدير النظام</span>
+                                <span id="header-username" class="text-xs text-slate-500">admin</span>
+                            </div>
+                            <div class="flex h-9 w-9 items-center justify-center rounded-full border border-primary/20 bg-primary/10 font-bold text-primary">A</div>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+
+            <main class="flex-1 p-4 sm:p-6 lg:p-8">
+                <div id="loading-overlay" class="flex min-h-[60vh] items-center justify-center rounded-xl border border-slate-100 bg-white shadow-sm">
+                    <div class="text-center">
+                        <div class="mx-auto mb-4 h-12 w-12 animate-spin rounded-full border-4 border-primary/15 border-t-primary"></div>
+                        <p class="font-bold text-slate-700">جاري تهيئة صفحة إضافة الجهاز...</p>
+                        <p class="mt-1 text-sm text-slate-400">يتم تحميل بيانات المكتب والحسابات المتاحة للتفعيل</p>
+                    </div>
+                </div>
+
+                <div id="error-state" class="hidden min-h-[60vh] items-center justify-center">
+                    <div class="mx-auto max-w-md rounded-xl border border-red-100 bg-white p-8 text-center shadow-sm">
+                        <div class="mx-auto mb-5 flex h-20 w-20 items-center justify-center rounded-full bg-red-50 text-red-500">
+                            <svg class="h-10 w-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-7.938 4h15.876c1.54 0 2.503-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L2.33 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                        </div>
+                        <h2 class="text-3xl font-extrabold text-slate-800">تعذر تحميل الصفحة</h2>
+                        <p id="error-message" class="mt-3 text-sm text-slate-500">تعذر تهيئة صفحة إضافة الجهاز.</p>
+                        <div class="mt-6 flex flex-wrap justify-center gap-3">
+                            <a href="offices.html" class="inline-flex items-center justify-center rounded-lg bg-primary px-6 py-3 text-sm font-semibold text-white transition hover:bg-primary/90">العودة للمكاتب</a>
+                            <a id="error-details-link" href="offices.html" class="inline-flex items-center justify-center rounded-lg border border-slate-200 bg-white px-6 py-3 text-sm font-semibold text-slate-700 transition hover:border-primary hover:text-primary">العودة للتفاصيل</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="content-container" class="hidden space-y-6">
+                    <div class="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+                        <div>
+                            <div class="hidden items-center text-sm font-medium text-slate-500 md:flex">
+                                <a href="offices.html" class="transition-colors hover:text-primary">إدارة المكاتب</a>
+                                <svg class="mx-2 h-4 w-4 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                                <a id="header-details-link" href="offices.html" class="transition-colors hover:text-primary">تفاصيل المكتب</a>
+                                <svg class="mx-2 h-4 w-4 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                                <span class="text-slate-800">إضافة جهاز POS</span>
+                            </div>
+                            <div class="mt-1 flex flex-wrap items-center gap-3">
+                                <h1 id="page-title" class="text-2xl font-bold text-slate-800 sm:text-3xl">إضافة جهاز POS</h1>
+                                <div id="library-status-badge"></div>
+                                <span id="library-code-chip" class="inline-flex items-center rounded-lg bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-600">—</span>
+                            </div>
+                            <p class="mt-2 text-sm text-slate-500">إضافة جهاز POS جديد وربطه مباشرة بالمكتب الحالي مع توليد الكود والرقم التسلسلي تلقائياً.</p>
+                        </div>
+                        <div class="flex flex-wrap gap-3">
+                            <a id="details-link" href="offices.html" class="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-primary hover:text-primary">
+                                <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                                العودة للتفاصيل
+                            </a>
+                            <a href="offices.html" class="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-primary hover:text-primary">
+                                <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                                العودة للمكاتب
+                            </a>
+                            <button id="save-button" type="submit" form="device-create-form" class="inline-flex items-center gap-2 rounded-lg bg-primary px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-70">
+                                <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                                <span id="save-button-label">إنشاء الجهاز</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div id="notice" class="hidden rounded-xl border px-5 py-4 text-sm font-semibold"></div>
+
+                    <div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+                        <div class="rounded-xl border border-blue-100 bg-gradient-to-br from-blue-500 to-blue-700 p-5 text-white shadow-sm">
+                            <p class="text-sm font-semibold text-blue-100">كود المكتب</p>
+                            <p id="summary-library-code" class="mt-3 text-2xl font-extrabold">—</p>
+                        </div>
+                        <div class="rounded-xl border border-emerald-100 bg-gradient-to-br from-emerald-500 to-emerald-700 p-5 text-white shadow-sm">
+                            <p class="text-sm font-semibold text-emerald-100">حالة المكتب</p>
+                            <p id="summary-library-status" class="mt-3 text-2xl font-extrabold">—</p>
+                        </div>
+                        <div class="rounded-xl border border-slate-100 bg-white p-5 shadow-sm">
+                            <p class="text-sm font-semibold text-slate-400">عدد الأجهزة الحالية</p>
+                            <p id="summary-devices-count" class="mt-3 text-2xl font-extrabold text-slate-800">0</p>
+                        </div>
+                        <div class="rounded-xl border border-slate-100 bg-white p-5 shadow-sm">
+                            <p class="text-sm font-semibold text-slate-400">الحسابات المتاحة</p>
+                            <p id="summary-accounts-count" class="mt-3 text-2xl font-extrabold text-slate-800">0</p>
+                        </div>
+                    </div>
+
+                    <form id="device-create-form" class="space-y-6">
+                        <section class="overflow-hidden rounded-xl border border-slate-100 bg-white shadow-sm">
+                            <div class="border-b border-slate-100 bg-slate-50/50 px-6 py-4">
+                                <h2 class="text-lg font-bold text-slate-800">مرجع المكتب</h2>
+                                <p class="mt-1 text-sm text-slate-500">بيانات المكتب الذي سيتم ربط جهاز الـ POS به.</p>
+                            </div>
+                            <div class="grid gap-4 p-6 md:grid-cols-2 xl:grid-cols-4">
+                                <label class="block"><span class="mb-2 block text-sm font-semibold text-slate-600">كود المكتب</span><input id="library-code" type="text" readonly tabindex="-1" class="readonly-field w-full rounded-xl border border-slate-200 px-4 py-3 text-sm font-semibold outline-none"></label>
+                                <label class="block"><span class="mb-2 block text-sm font-semibold text-slate-600">اسم المكتب</span><input id="library-name" type="text" readonly tabindex="-1" class="readonly-field w-full rounded-xl border border-slate-200 px-4 py-3 text-sm font-semibold outline-none"></label>
+                                <label class="block"><span class="mb-2 block text-sm font-semibold text-slate-600">المحافظة</span><input id="library-province" type="text" readonly tabindex="-1" class="readonly-field w-full rounded-xl border border-slate-200 px-4 py-3 text-sm font-semibold outline-none"></label>
+                                <label class="block"><span class="mb-2 block text-sm font-semibold text-slate-600">المنطقة</span><input id="library-city" type="text" readonly tabindex="-1" class="readonly-field w-full rounded-xl border border-slate-200 px-4 py-3 text-sm font-semibold outline-none"></label>
+                                <label class="block md:col-span-2 xl:col-span-4"><span class="mb-2 block text-sm font-semibold text-slate-600">العنوان</span><textarea id="library-address" rows="2" readonly tabindex="-1" class="readonly-field w-full rounded-xl border border-slate-200 px-4 py-3 text-sm font-semibold outline-none"></textarea></label>
+                            </div>
+                        </section>
+
+                        <section class="overflow-hidden rounded-xl border border-slate-100 bg-white shadow-sm">
+                            <div class="border-b border-slate-100 bg-slate-50/50 px-6 py-4">
+                                <h2 class="text-lg font-bold text-slate-800">بيانات الجهاز</h2>
+                                <p class="mt-1 text-sm text-slate-500">البيانات الأساسية الخاصة بجهاز الـ POS الجديد. يتم توليد المعرفات تلقائياً بالنمط المطلوب.</p>
+                            </div>
+                            <div class="grid gap-4 p-6 md:grid-cols-2 xl:grid-cols-3">
+                                <label class="block">
+                                    <span class="mb-2 block text-sm font-semibold text-slate-600">كود الجهاز POS</span>
+                                    <input id="device-pos-code" type="text" maxlength="50" required readonly tabindex="-1" dir="ltr" class="readonly-field w-full rounded-xl border border-slate-200 px-4 py-3 text-sm font-semibold outline-none">
+                                </label>
+                                <label class="block">
+                                    <span class="mb-2 block text-sm font-semibold text-slate-600">الرقم التسلسلي</span>
+                                    <input id="device-serial" type="text" maxlength="150" readonly tabindex="-1" dir="ltr" class="readonly-field w-full rounded-xl border border-slate-200 px-4 py-3 text-sm font-medium outline-none">
+                                </label>
+                                <label class="block"><span class="mb-2 block text-sm font-semibold text-slate-600">حالة الجهاز</span><select id="device-status" class="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-semibold text-slate-800 outline-none transition focus:border-primary focus:bg-white focus:ring-4 focus:ring-primary/10"><option value="Active">نشط</option><option value="Inactive" selected>غير نشط</option><option value="Suspended">معلق</option><option value="Maintenance">صيانة</option></select></label>
+                                <label class="block"><span class="mb-2 block text-sm font-semibold text-slate-600">الشركة المصنعة</span><select id="device-vendor" class="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-medium text-slate-700 outline-none transition focus:border-primary focus:bg-white focus:ring-4 focus:ring-primary/10"><option value="SUNMI" selected>SUNMI</option><option value="OTHER">OTHER</option></select></label>
+                                <label class="block md:col-span-2"><span class="mb-2 block text-sm font-semibold text-slate-600">موديل الجهاز</span><select id="device-model" class="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-medium text-slate-700 outline-none transition focus:border-primary focus:bg-white focus:ring-4 focus:ring-primary/10"><option value="V2" selected>V2</option><option value="V2SE">V2SE</option><option value="V2SE PRO">V2SE PRO</option></select></label>
+                                <div class="rounded-xl border border-primary/15 bg-primary/5 px-4 py-4 text-sm font-medium text-primary md:col-span-2 xl:col-span-3">
+                                    يتم توليد الرقم التسلسلي تلقائياً بالشكل `POS-9001-SN` وكود الجهاز بالشكل `POS-9D0C-01`.
+                                    <button id="regen-identifiers" type="button" class="mr-3 inline-flex items-center rounded-lg border border-primary/20 bg-white px-3 py-1.5 text-xs font-bold text-primary transition hover:bg-primary/5">توليد جديد</button>
+                                </div>
+                            </div>
+                        </section>
+
+                        <section class="overflow-hidden rounded-xl border border-slate-100 bg-white shadow-sm">
+                            <div class="border-b border-slate-100 bg-slate-50/50 px-6 py-4">
+                                <h2 class="text-lg font-bold text-slate-800">التفعيل والربط</h2>
+                                <p class="mt-1 text-sm text-slate-500">يمكنك تفعيل الجهاز الآن وربطه بحساب من نفس المكتب، أو تركه غير مفعل لحين الاستخدام.</p>
+                            </div>
+                            <div class="grid gap-4 p-6 md:grid-cols-2 xl:grid-cols-4">
+                                <label class="block"><span class="mb-2 block text-sm font-semibold text-slate-600">حالة التفعيل</span><select id="device-is-activated" class="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-semibold text-slate-800 outline-none transition focus:border-primary focus:bg-white focus:ring-4 focus:ring-primary/10"><option value="false" selected>غير مفعل</option><option value="true">مفعل</option></select></label>
+                                <label class="block"><span class="mb-2 block text-sm font-semibold text-slate-600">الحساب المفعّل</span><select id="device-activated-by" class="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-semibold text-slate-800 outline-none transition focus:border-primary focus:bg-white focus:ring-4 focus:ring-primary/10" disabled><option value="">جاري تحميل الحسابات...</option></select></label>
+                                <div class="rounded-xl border border-slate-100 bg-slate-50/80 p-4"><p class="text-xs font-semibold text-slate-400">عدد الحسابات</p><p id="ref-accounts-count" class="mt-2 text-lg font-extrabold text-slate-800">0</p></div>
+                                <div class="rounded-xl border border-slate-100 bg-slate-50/80 p-4"><p class="text-xs font-semibold text-slate-400">عدد الأجهزة</p><p id="ref-devices-count" class="mt-2 text-lg font-extrabold text-slate-800">0</p></div>
+                                <div class="rounded-xl border border-slate-100 bg-slate-50/80 p-4"><p class="text-xs font-semibold text-slate-400">تاريخ إنشاء المكتب</p><p id="ref-created-at" class="mt-2 text-sm font-bold text-slate-800">—</p></div>
+                                <div class="rounded-xl border border-slate-100 bg-slate-50/80 p-4 md:col-span-2 xl:col-span-4"><p class="text-xs font-semibold text-slate-400">آخر تحديث للمكتب</p><p id="ref-updated-at" class="mt-2 text-sm font-bold text-slate-800">—</p></div>
+                                <div class="rounded-xl border border-blue-100 bg-blue-50 px-4 py-4 text-sm font-medium text-blue-800 md:col-span-2 xl:col-span-4">
+                                    عند اختيار التفعيل سيتم ربط الجهاز بالحساب المختار وتحديد وقت التفعيل تلقائياً. إذا تُرك غير مفعل فلن يُربط بأي حساب حالياً.
+                                </div>
+                            </div>
+                        </section>
+                    </form>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script src="js/components.js"></script>
+    <script src="js/auth.js"></script>
+    <script>
+        (() => {
+            if (!window.Auth || !Auth.requireAuth()) {
+                return;
+            }
+
+            const loadingOverlay = document.getElementById('loading-overlay');
+            const errorState = document.getElementById('error-state');
+            const errorMessage = document.getElementById('error-message');
+            const contentContainer = document.getElementById('content-container');
+            const notice = document.getElementById('notice');
+            const form = document.getElementById('device-create-form');
+            const saveButton = document.getElementById('save-button');
+            const saveButtonLabel = document.getElementById('save-button-label');
+            const regenerateIdentifiersButton = document.getElementById('regen-identifiers');
+            const FALLBACK_TEXT = '—';
+            let currentLibraryId = null;
+            let currentAccountsData = [];
+            let isSaving = false;
+
+            const statusMap = {
+                Active: { label: 'مفعل', bg: 'bg-emerald-50', text: 'text-emerald-700', border: 'border-emerald-100', dot: 'bg-emerald-500' },
+                Used: { label: 'مستخدم', bg: 'bg-blue-50', text: 'text-blue-700', border: 'border-blue-100', dot: 'bg-blue-500' },
+                Inactive: { label: 'معطل', bg: 'bg-red-50', text: 'text-red-700', border: 'border-red-100', dot: 'bg-red-500' },
+                Suspended: { label: 'معلق', bg: 'bg-amber-50', text: 'text-amber-700', border: 'border-amber-100', dot: 'bg-amber-500' },
+                Suspend: { label: 'معلق', bg: 'bg-amber-50', text: 'text-amber-700', border: 'border-amber-100', dot: 'bg-amber-500' }
+            };
+
+            document.getElementById('header-username').textContent = Auth.getUsername();
+            document.getElementById('header-fullname').textContent = Auth.getDisplayName();
+
+            function byId(id) { return document.getElementById(id); }
+
+            function escapeHtml(value) {
+                return String(value ?? '')
+                    .replace(/&/g, '&amp;')
+                    .replace(/</g, '&lt;')
+                    .replace(/>/g, '&gt;')
+                    .replace(/"/g, '&quot;')
+                    .replace(/'/g, '&#39;');
+            }
+
+            function displayText(value) {
+                return value === undefined || value === null || String(value).trim() === '' ? FALLBACK_TEXT : String(value);
+            }
+
+            function formatDate(dateString) {
+                if (!dateString) return FALLBACK_TEXT;
+                const date = new Date(dateString);
+                if (Number.isNaN(date.getTime())) return FALLBACK_TEXT;
+                return date.toLocaleString('en-GB', {
+                    year: 'numeric',
+                    month: '2-digit',
+                    day: '2-digit',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+            }
+
+            function normalizeLibraryStatus(status) {
+                if (status === 'Suspend') return 'Suspended';
+                if (status === 'Suspended') return 'Suspended';
+                if (status === 'Inactive') return 'Inactive';
+                if (status === 'Used') return 'Used';
+                return 'Active';
+            }
+
+            function normalizeDeviceStatus(status) {
+                if (status === 'Active') return 'Active';
+                if (status === 'Suspended') return 'Suspended';
+                if (status === 'Maintenance') return 'Maintenance';
+                return 'Inactive';
+            }
+
+            function getStatusLabel(status) {
+                return statusMap[status] ? statusMap[status].label : displayText(status);
+            }
+
+            function getStatusBadgeMarkup(status) {
+                const meta = statusMap[status] || { label: displayText(status), bg: 'bg-slate-100', text: 'text-slate-700', border: 'border-slate-200', dot: 'bg-slate-400' };
+                return `
+                    <span class="inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-bold ${meta.bg} ${meta.text} ${meta.border}">
+                        <span class="h-2 w-2 rounded-full ${meta.dot}"></span>
+                        ${escapeHtml(meta.label)}
+                    </span>
+                `;
+            }
+
+            function setText(id, value) {
+                const element = byId(id);
+                if (element) element.textContent = value;
+            }
+
+            function setFieldValue(id, value) {
+                const element = byId(id);
+                if (element) element.value = value ?? '';
+            }
+
+            function showContent() {
+                loadingOverlay.classList.add('hidden');
+                errorState.classList.add('hidden');
+                errorState.classList.remove('flex');
+                contentContainer.classList.remove('hidden');
+            }
+
+            function showError(message) {
+                loadingOverlay.classList.add('hidden');
+                contentContainer.classList.add('hidden');
+                errorState.classList.remove('hidden');
+                errorState.classList.add('flex');
+                errorMessage.textContent = message || 'تعذر تحميل صفحة إضافة الجهاز.';
+            }
+
+            function showNotice(message, tone) {
+                const tones = {
+                    success: 'border-emerald-200 bg-emerald-50 text-emerald-800',
+                    error: 'border-red-200 bg-red-50 text-red-800',
+                    info: 'border-blue-200 bg-blue-50 text-blue-800'
+                };
+                notice.className = 'rounded-xl border px-5 py-4 text-sm font-semibold ' + (tones[tone] || tones.info);
+                notice.textContent = message;
+                notice.classList.remove('hidden');
+            }
+
+            function hideNotice() {
+                notice.classList.add('hidden');
+                notice.textContent = '';
+            }
+
+            function setLinkTargets(id) {
+                const href = id ? ('office-details.html?id=' + encodeURIComponent(id)) : 'offices.html';
+                byId('details-link').href = href;
+                byId('header-details-link').href = href;
+                byId('breadcrumb-details-link').href = href;
+                byId('error-details-link').href = href;
+            }
+
+            function updateLibrarySummary(library, accounts) {
+                document.title = 'إضافة جهاز POS - ' + displayText(library.libraryName);
+                setText('page-title', 'إضافة جهاز POS: ' + displayText(library.libraryName));
+                setText('library-code-chip', displayText(library.libraryCode));
+                setText('summary-library-code', displayText(library.libraryCode));
+                setText('summary-library-status', getStatusLabel(library.status));
+                setText('summary-devices-count', String(library.posDevicesCount || 0));
+                setText('summary-accounts-count', String(Array.isArray(accounts) ? accounts.length : (library.accountsCount || 0)));
+                setFieldValue('library-code', displayText(library.libraryCode));
+                setFieldValue('library-name', displayText(library.libraryName));
+                setFieldValue('library-province', displayText(library.province));
+                setFieldValue('library-city', displayText(library.city));
+                setFieldValue('library-address', displayText(library.address));
+                setText('ref-accounts-count', String(library.accountsCount || 0));
+                setText('ref-devices-count', String(library.posDevicesCount || 0));
+                setText('ref-created-at', formatDate(library.createdAt));
+                setText('ref-updated-at', formatDate(library.updatedAt));
+                byId('library-status-badge').innerHTML = getStatusBadgeMarkup(normalizeLibraryStatus(library.status));
+            }
+
+            function renderAccountOptions(accounts) {
+                const accountSelect = byId('device-activated-by');
+                currentAccountsData = Array.isArray(accounts) ? accounts : [];
+
+                if (!currentAccountsData.length) {
+                    accountSelect.innerHTML = '<option value="">لا توجد حسابات مرتبطة بالمكتب</option>';
+                    toggleActivationFieldState();
+                    return;
+                }
+
+                accountSelect.innerHTML = `
+                    <option value="">اختر الحساب</option>
+                    ${currentAccountsData.map((account) => `<option value="${escapeHtml(String(account.id))}">${escapeHtml(displayText(account.fullName))} - ${escapeHtml(displayText(account.username))}</option>`).join('')}
+                `;
+                toggleActivationFieldState();
+            }
+
+            function getNullableText(id) {
+                const element = byId(id);
+                const value = element ? element.value.trim() : '';
+                return value === '' ? null : value;
+            }
+
+            function generateRandomCode(length = 4) {
+                const characters = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+                let result = '';
+                for (let index = 0; index < length; index += 1) {
+                    const randomIndex = Math.floor(Math.random() * characters.length);
+                    result += characters.charAt(randomIndex);
+                }
+                return result;
+            }
+
+            function generateRandomDigits(length) {
+                let result = '';
+                for (let index = 0; index < length; index += 1) {
+                    result += String(Math.floor(Math.random() * 10));
+                }
+                return result;
+            }
+
+            function generateDeviceIdentifiers(force = false) {
+                const currentPosCode = byId('device-pos-code').value.trim();
+                const currentSerial = byId('device-serial').value.trim();
+
+                if (!force && currentPosCode && currentSerial) {
+                    return;
+                }
+
+                const serialPart = generateRandomDigits(4);
+                const posMiddlePart = generateRandomCode(4);
+                const posLastPart = generateRandomDigits(2);
+                setFieldValue('device-pos-code', 'POS-' + posMiddlePart + '-' + posLastPart);
+                setFieldValue('device-serial', 'POS-' + serialPart + '-SN');
+            }
+
+            function toggleActivationFieldState() {
+                const activated = byId('device-is-activated').value === 'true';
+                const accountSelect = byId('device-activated-by');
+                const canChooseAccount = activated && currentAccountsData.length > 0;
+                accountSelect.disabled = !canChooseAccount;
+                if (!activated) {
+                    accountSelect.value = '';
+                }
+            }
+
+            function buildPayload() {
+                const isActivated = byId('device-is-activated').value === 'true';
+                const activatedByAccountId = getNullableText('device-activated-by');
+                return {
+                    libraryId: Number(currentLibraryId),
+                    posCode: byId('device-pos-code').value.trim(),
+                    serialNumber: getNullableText('device-serial'),
+                    deviceModel: getNullableText('device-model'),
+                    deviceVendor: getNullableText('device-vendor'),
+                    status: normalizeDeviceStatus(byId('device-status').value),
+                    isActivated,
+                    activatedByAccountId: isActivated && activatedByAccountId ? Number(activatedByAccountId) : null,
+                    activationToken: null,
+                    activatedAt: isActivated ? new Date().toISOString() : null,
+                    lastAuthenticatedAt: null
+                };
+            }
+
+            function setSavingState(saving) {
+                isSaving = saving;
+                saveButton.disabled = saving;
+                saveButtonLabel.textContent = saving ? 'جاري إنشاء الجهاز...' : 'إنشاء الجهاز';
+            }
+
+            async function parseJsonResponse(response, fallbackMessage) {
+                if (!response) throw new Error('انتهت الجلسة الحالية. سجل الدخول مرة أخرى.');
+
+                if (!response.ok) {
+                    let message = fallbackMessage;
+                    try {
+                        const text = await response.text();
+                        if (text) message = text;
+                    } catch {
+                        message = fallbackMessage;
+                    }
+                    throw new Error(message);
+                }
+
+                return response.json();
+            }
+
+            async function fetchJsonWithTimeout(url, fallbackMessage, timeoutMs = 12000) {
+                const controller = new AbortController();
+                const timeoutId = window.setTimeout(() => controller.abort(), timeoutMs);
+
+                try {
+                    const response = await Auth.apiFetch(url, { signal: controller.signal });
+                    return await parseJsonResponse(response, fallbackMessage);
+                } catch (error) {
+                    if (error && error.name === 'AbortError') {
+                        throw new Error('انتهت مهلة الاتصال أثناء تحميل البيانات.');
+                    }
+                    throw error;
+                } finally {
+                    window.clearTimeout(timeoutId);
+                }
+            }
+
+            async function saveDevice(event) {
+                event.preventDefault();
+                if (isSaving) return;
+                if (!form.reportValidity()) return;
+                hideNotice();
+                generateDeviceIdentifiers();
+
+                if (!byId('device-pos-code').value.trim()) {
+                    showNotice('يرجى إدخال كود جهاز POS.', 'error');
+                    byId('device-pos-code').focus();
+                    return;
+                }
+
+                if (byId('device-is-activated').value === 'true' && !getNullableText('device-activated-by')) {
+                    showNotice('يرجى اختيار الحساب الذي سيُفعّل الجهاز عليه.', 'error');
+                    byId('device-activated-by').focus();
+                    return;
+                }
+
+                setSavingState(true);
+
+                try {
+                    await parseJsonResponse(await Auth.apiFetch('/api/posdevices', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(buildPayload())
+                    }), 'تعذر إنشاء جهاز POS الجديد.');
+
+                    showNotice('تم إنشاء جهاز POS بنجاح. سيتم تحويلك الآن إلى تفاصيل المكتب.', 'success');
+                    window.setTimeout(() => {
+                        window.location.href = 'office-details.html?id=' + encodeURIComponent(currentLibraryId);
+                    }, 900);
+                } catch (error) {
+                    console.error('Failed to create POS device', error);
+                    showNotice(error instanceof Error ? error.message : 'تعذر إنشاء جهاز POS الجديد.', 'error');
+                } finally {
+                    setSavingState(false);
+                }
+            }
+
+            async function loadPageData() {
+                const params = new URLSearchParams(window.location.search);
+                const id = params.get('id');
+
+                if (!id) {
+                    showError('لم يتم تحديد المكتب المطلوب.');
+                    return;
+                }
+
+                currentLibraryId = id;
+                setLinkTargets(id);
+
+                try {
+                    const [library, accounts] = await Promise.all([
+                        fetchJsonWithTimeout('/api/libraries/' + encodeURIComponent(id), 'تعذر تحميل بيانات المكتب.'),
+                        fetchJsonWithTimeout('/api/libraryaccounts?libraryId=' + encodeURIComponent(id) + '&limit=200', 'تعذر تحميل الحسابات المرتبطة.')
+                    ]);
+
+                    updateLibrarySummary(library, accounts);
+                    renderAccountOptions(accounts);
+                    generateDeviceIdentifiers();
+                    showContent();
+                } catch (error) {
+                    console.error('Failed to initialize POS create page', error);
+                    showError(error instanceof Error ? error.message : 'تعذر تهيئة الصفحة.');
+                }
+            }
+
+            byId('device-is-activated').addEventListener('change', toggleActivationFieldState);
+            regenerateIdentifiersButton.addEventListener('click', () => generateDeviceIdentifiers(true));
+            form.addEventListener('submit', saveDevice);
+            loadPageData();
+        })();
+    </script>
+</body>
+</html>

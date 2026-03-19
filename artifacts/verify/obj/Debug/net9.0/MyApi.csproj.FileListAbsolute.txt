@@ -1,0 +1,8 @@
+C:\xampp\htdocs\all\k\MyApi\artifacts\verify\obj\Debug\net9.0\MyApi.csproj.AssemblyReference.cache
+C:\xampp\htdocs\all\k\MyApi\artifacts\verify\obj\Debug\net9.0\rpswa.dswa.cache.json
+C:\xampp\htdocs\all\k\MyApi\artifacts\verify\obj\Debug\net9.0\MyApi.GeneratedMSBuildEditorConfig.editorconfig
+C:\xampp\htdocs\all\k\MyApi\artifacts\verify\obj\Debug\net9.0\MyApi.AssemblyInfoInputs.cache
+C:\xampp\htdocs\all\k\MyApi\artifacts\verify\obj\Debug\net9.0\MyApi.AssemblyInfo.cs
+C:\xampp\htdocs\all\k\MyApi\artifacts\verify\obj\Debug\net9.0\MyApi.csproj.CoreCompileInputs.cache
+C:\xampp\htdocs\all\k\MyApi\artifacts\verify\obj\Debug\net9.0\MyApi.MvcApplicationPartsAssemblyInfo.cs
+C:\xampp\htdocs\all\k\MyApi\artifacts\verify\obj\Debug\net9.0\MyApi.MvcApplicationPartsAssemblyInfo.cache

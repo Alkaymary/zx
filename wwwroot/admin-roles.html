@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إدارة أدوار المدراء - نظام الإدارة</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Cairo', sans-serif; }
+    </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#1e3a8a',
+                        secondary: '#3b82f6',
+                        dark: '#0f172a'
+                    }
+                }
+            }
+        };
+    </script>
+</head>
+<body class="bg-slate-50 text-slate-800">
+    <div class="flex min-h-screen">
+        <app-sidebar></app-sidebar>
+        <div class="flex min-w-0 flex-1 flex-col">
+            <nav class="sticky top-0 z-30 border-b border-slate-200 bg-white">
+                <div class="px-4 sm:px-6 lg:px-8">
+                    <div class="flex h-16 items-center justify-between">
+                        <div class="flex items-center space-x-2 space-x-reverse">
+                            <button id="toggle-sidebar" class="ml-2 text-slate-500 transition-colors hover:text-primary focus:outline-none md:hidden">
+                                <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                                </svg>
+                            </button>
+                            <div class="hidden items-center text-sm font-medium text-slate-500 md:flex">
+                                <a href="dashboard.html" class="transition-colors hover:text-primary">الرئيسية</a>
+                                <svg class="mx-2 h-4 w-4 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                                </svg>
+                                <a href="users.html?tab=admin" class="transition-colors hover:text-primary">إدارة المستخدمين</a>
+                                <svg class="mx-2 h-4 w-4 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                                </svg>
+                                <span class="text-slate-800">أدوار المدراء</span>
+                            </div>
+                            <span class="text-lg font-bold text-primary md:hidden">أدوار المدراء</span>
+                        </div>
+                        <div class="flex items-center space-x-4 space-x-reverse">
+                            <div class="hidden flex-col items-end md:flex">
+                                <span id="header-fullname" class="text-sm font-bold text-slate-700">مدير النظام</span>
+                                <span id="header-username" class="text-xs text-slate-500">admin</span>
+                            </div>
+                            <div class="flex h-9 w-9 items-center justify-center rounded-full border border-primary/20 bg-primary/10 font-bold text-primary">A</div>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+
+            <main class="flex-1 p-4 sm:p-6 lg:p-8">
+                <div id="loading-overlay" class="flex min-h-[60vh] items-center justify-center rounded-xl border border-slate-100 bg-white shadow-sm">
+                    <div class="text-center">
+                        <div class="mx-auto mb-4 h-12 w-12 animate-spin rounded-full border-4 border-primary/15 border-t-primary"></div>
+                        <p class="font-bold text-slate-700">جاري تحميل أدوار المدراء...</p>
+                        <p class="mt-1 text-sm text-slate-400">يتم جلب الأدوار الحالية وعدد المدراء المرتبطين بها</p>
+                    </div>
+                </div>
+
+                <div id="error-state" class="hidden min-h-[60vh] items-center justify-center">
+                    <div class="mx-auto max-w-md rounded-xl border border-red-100 bg-white p-8 text-center shadow-sm">
+                        <div class="mx-auto mb-5 flex h-20 w-20 items-center justify-center rounded-full bg-red-50 text-red-500">
+                            <svg class="h-10 w-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-7.938 4h15.876c1.54 0 2.503-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L2.33 16c-.77 1.333.192 3 1.732 3z"></path>
+                            </svg>
+                        </div>
+                        <h2 class="text-3xl font-extrabold text-slate-800">تعذر تحميل الصفحة</h2>
+                        <p id="error-message" class="mt-3 text-sm text-slate-500">تعذر تحميل صفحة أدوار المدراء.</p>
+                        <a href="users.html?tab=admin" class="mt-6 inline-flex items-center justify-center rounded-lg bg-primary px-6 py-3 text-sm font-semibold text-white transition hover:bg-primary/90">العودة إلى المستخدمين</a>
+                    </div>
+                </div>
+
+                <div id="content-container" class="hidden space-y-6">
+                    <div class="flex flex-col gap-4 xl:flex-row xl:items-start xl:justify-between">
+                        <div>
+                            <div class="mt-1 flex flex-wrap items-center gap-3">
+                                <h1 class="text-2xl font-bold text-slate-800 sm:text-3xl">إدارة أدوار المدراء</h1>
+                                <span class="inline-flex items-center rounded-lg bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-600">Admin Roles</span>
+                            </div>
+                            <p class="mt-2 max-w-3xl text-sm text-slate-500">هنا نعرّف أدوار الأدمن القياسية ونوثق الصلاحيات التشغيلية المستهدفة لكل دور قبل ربطها لاحقاً بسياسات النظام التفصيلية.</p>
+                        </div>
+                        <div class="flex flex-wrap gap-3">
+                            <a href="users.html?tab=admin" class="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-primary hover:text-primary">
+                                <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                                </svg>
+                                العودة للمستخدمين
+                            </a>
+                            <button id="apply-templates-button" type="button" class="inline-flex items-center gap-2 rounded-lg bg-primary px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-70">
+                                <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                </svg>
+                                <span id="apply-templates-label">تطبيق القوالب القياسية</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div id="notice" class="hidden rounded-xl border px-5 py-4 text-sm font-semibold"></div>
+
+                    <div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+                        <div class="rounded-xl bg-gradient-to-br from-blue-500 to-blue-700 p-5 text-white shadow-sm">
+                            <p class="text-sm font-semibold text-blue-100">إجمالي أدوار الأدمن</p>
+                            <p id="summary-roles-count" class="mt-3 text-3xl font-extrabold">0</p>
+                        </div>
+                        <div class="rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-700 p-5 text-white shadow-sm">
+                            <p class="text-sm font-semibold text-emerald-100">القوالب القياسية الموجودة</p>
+                            <p id="summary-standard-count" class="mt-3 text-3xl font-extrabold">0</p>
+                        </div>
+                        <div class="rounded-xl bg-gradient-to-br from-amber-500 to-amber-700 p-5 text-white shadow-sm">
+                            <p class="text-sm font-semibold text-amber-100">المدراء المرتبطون بالأدوار</p>
+                            <p id="summary-admin-users-count" class="mt-3 text-3xl font-extrabold">0</p>
+                        </div>
+                        <div class="rounded-xl bg-gradient-to-br from-slate-700 to-slate-900 p-5 text-white shadow-sm">
+                            <p class="text-sm font-semibold text-slate-200">أدوار قابلة للحذف</p>
+                            <p id="summary-deletable-count" class="mt-3 text-3xl font-extrabold">0</p>
+                        </div>
+                    </div>
+
+                    <div class="grid gap-6 xl:grid-cols-[1.35fr,1fr]">
+                        <section class="overflow-hidden rounded-xl border border-slate-100 bg-white shadow-sm">
+                            <div class="flex flex-col gap-4 border-b border-slate-100 bg-slate-50/50 px-6 py-4 lg:flex-row lg:items-center lg:justify-between">
+                                <div>
+                                    <h2 class="text-lg font-bold text-slate-800">الأدوار الحالية</h2>
+                                    <p class="mt-1 text-sm text-slate-500">كل أدوار الأدمن المسجلة حالياً مع عدد المدراء المرتبطين بكل دور.</p>
+                                </div>
+                                <div class="w-full max-w-md">
+                                    <div class="relative">
+                                        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-4">
+                                            <svg class="h-5 w-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35m1.85-5.15a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                                            </svg>
+                                        </div>
+                                        <input id="search-input" type="text" class="w-full rounded-xl border border-slate-200 bg-white py-3 pr-12 pl-4 text-sm transition placeholder:text-slate-400 focus:border-primary focus:outline-none focus:ring-4 focus:ring-primary/10" placeholder="ابحث باسم الدور أو الكود...">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="border-b border-slate-100 px-6 py-3 text-sm font-semibold text-slate-500">
+                                <span id="roles-count">0 دور</span>
+                            </div>
+                            <div id="roles-list" class="space-y-4 p-5"></div>
+                            <div id="roles-empty" class="hidden px-5 pb-5">
+                                <div class="rounded-xl border border-dashed border-slate-200 bg-slate-50 p-10 text-center">
+                                    <svg class="mx-auto mb-4 h-14 w-14 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m-7 5h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+                                    </svg>
+                                    <p class="font-bold text-slate-600">لا توجد أدوار مطابقة</p>
+                                    <p id="roles-empty-description" class="mt-2 text-sm text-slate-400">يمكنك تطبيق القوالب القياسية أو إنشاء دور جديد من النموذج الجانبي.</p>
+                                </div>
+                            </div>
+                        </section>
+
+                        <div class="space-y-6">
+                            <section class="overflow-hidden rounded-xl border border-slate-100 bg-white shadow-sm">
+                                <div class="border-b border-slate-100 bg-slate-50/50 px-6 py-4">
+                                    <h2 class="text-lg font-bold text-slate-800">القوالب القياسية</h2>
+                                    <p class="mt-1 text-sm text-slate-500">اعتماد موحد للأدوار الأربع: مدير عام، مدير المبيعات، مدير التقنيات، والعرض.</p>
+                                </div>
+                                <div id="templates-grid" class="grid gap-4 p-5 sm:grid-cols-2"></div>
+                            </section>
+
+                            <section class="overflow-hidden rounded-xl border border-slate-100 bg-white shadow-sm">
+                                <div class="border-b border-slate-100 bg-slate-50/50 px-6 py-4">
+                                    <div class="flex items-center justify-between gap-3">
+                                        <div>
+                                            <h2 id="form-title" class="text-lg font-bold text-slate-800">إضافة دور جديد</h2>
+                                            <p class="mt-1 text-sm text-slate-500">يمكنك استخدام قالب جاهز أو إنشاء دور مخصص للأدمن.</p>
+                                        </div>
+                                        <span class="inline-flex items-center rounded-lg bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-600">Admin Guard</span>
+                                    </div>
+                                </div>
+                                <form id="role-form" class="space-y-5 p-6">
+                                    <label class="block">
+                                        <span class="mb-2 block text-sm font-semibold text-slate-600">قالب جاهز</span>
+                                        <select id="template-select" class="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-semibold text-slate-800 outline-none transition focus:border-primary focus:bg-white focus:ring-4 focus:ring-primary/10">
+                                            <option value="">دور مخصص</option>
+                                        </select>
+                                    </label>
+                                    <label class="block">
+                                        <span class="mb-2 block text-sm font-semibold text-slate-600">اسم الدور</span>
+                                        <input id="role-name" type="text" maxlength="200" required class="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-semibold text-slate-800 outline-none transition focus:border-primary focus:bg-white focus:ring-4 focus:ring-primary/10" placeholder="مثال: مدير عام">
+                                    </label>
+                                    <label class="block">
+                                        <span class="mb-2 block text-sm font-semibold text-slate-600">كود الدور</span>
+                                        <input id="role-code" type="text" maxlength="100" required dir="ltr" class="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-semibold text-slate-800 outline-none transition focus:border-primary focus:bg-white focus:ring-4 focus:ring-primary/10" placeholder="مثال: super_admin">
+                                    </label>
+                                    <div class="rounded-xl border border-slate-100 bg-slate-50/80 p-4">
+                                        <p class="text-sm font-bold text-slate-800">الوصف التشغيلي</p>
+                                        <p id="profile-preview-note" class="mt-2 text-sm leading-7 text-slate-600">اختر قالباً جاهزاً لعرض وصف الصلاحيات المستهدفة لهذا الدور.</p>
+                                        <div id="profile-preview-capabilities" class="mt-3 space-y-2"></div>
+                                    </div>
+                                    <div class="flex flex-wrap gap-3">
+                                        <button id="save-role-button" type="submit" class="inline-flex items-center gap-2 rounded-lg bg-primary px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-70">
+                                            <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                                            </svg>
+                                            <span id="save-role-label">إنشاء الدور</span>
+                                        </button>
+                                        <button id="cancel-edit-button" type="button" class="hidden inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 transition hover:border-primary hover:text-primary">إلغاء التعديل</button>
+                                    </div>
+                                </form>
+                            </section>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script src="js/components.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/admin-roles.js"></script>
+</body>
+</html>

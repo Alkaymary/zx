@@ -1,0 +1,24 @@
+.git
+.vs
+.vscode
+.env
+.env.local
+.env.docker
+bin/
+obj/
+artifacts/
+logs/
+docker/backups/
+Crashpad/
+tests/
+tests/**/bin/
+tests/**/obj/
+TestResults/
+.codex-build-*/
+.codex-obj-*/
+.codex-refactor-build*/
+.codex-test-bin/
+.codex-test-obj/
+wwwroot - Copy/
+MyApi.zip
+CrashpadMetrics-active.pma

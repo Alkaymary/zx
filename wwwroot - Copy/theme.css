@@ -1,0 +1,196 @@
+:root {
+  /* Admin & Library Variables */
+  --bg: #0b0f19 !important;
+  --panel: rgba(18, 24, 38, 0.7) !important;
+  --sidebar: #0b0f19 !important;
+  --ink: #f8fafc !important;
+  --muted: #94a3b8 !important;
+  --line: rgba(255, 255, 255, 0.08) !important;
+  --brand: #10b981 !important; /* Emerald */
+  --brand-deep: #059669 !important;
+  --accent: #6366f1 !important; /* Indigo */
+  --danger: #ef4444 !important;
+  --soft: rgba(255, 255, 255, 0.03) !important;
+  --soft-brand: rgba(16, 185, 129, 0.1) !important;
+  --shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3) !important;
+  
+  /* Index Variables */
+  --bg-primary: #0b0f19 !important;
+  --bg-secondary: #0d111c !important;
+  --bg-card: rgba(18, 24, 38, 0.7) !important;
+  --bg-input: rgba(255, 255, 255, 0.05) !important;
+  --text-primary: #f8fafc !important;
+  --text-secondary: #cbd5e1 !important;
+  --text-muted: #94a3b8 !important;
+  --accent-hover: #4f46e5 !important;
+  --accent-glow: rgba(99, 102, 241, 0.4) !important;
+  --border: rgba(255, 255, 255, 0.08) !important;
+  --success: #10b981 !important;
+}
+
+body {
+  background: var(--bg) !important;
+  color: var(--ink) !important;
+  background-image: 
+    radial-gradient(circle at 15% 50%, rgba(99, 102, 241, 0.08), transparent 25%),
+    radial-gradient(circle at 85% 30%, rgba(16, 185, 129, 0.08), transparent 25%) !important;
+  background-attachment: fixed !important;
+}
+
+/* Glassmorphism for cards and panels */
+.card, .panel, .sidebar, .topbar, .session-card, .summary-shell, .search-shell, .results-shell, .tiles-shell, .library-card, .mini-card, .tile, .item {
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  box-shadow: 0 4px 24px -1px rgba(0, 0, 0, 0.2) !important;
+  background: var(--panel) !important;
+}
+
+.sidebar {
+  background: var(--sidebar) !important;
+  border-right: 1px solid var(--line) !important;
+  border-left: none !important;
+}
+
+input, select, textarea {
+  background: var(--bg-input) !important;
+  border: 1px solid var(--border) !important;
+  color: var(--ink) !important;
+}
+
+input:focus, select:focus, textarea:focus {
+  border-color: var(--brand) !important;
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2) !important;
+  background: rgba(255, 255, 255, 0.08) !important;
+}
+
+/* Buttons */
+.btn.primary, .top-btn, .mini-btn {
+  background: linear-gradient(135deg, var(--brand), var(--brand-deep)) !important;
+  color: #fff !important;
+  border: none !important;
+  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3) !important;
+  transition: all 0.3s ease !important;
+}
+
+.btn.primary:hover, .top-btn:hover, .mini-btn:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4) !important;
+  color: #fff !important;
+  background: linear-gradient(135deg, var(--brand-deep), var(--brand)) !important;
+}
+
+.btn.secondary, .side-link, .side-btn {
+  background: linear-gradient(135deg, var(--accent), #4f46e5) !important;
+  color: #fff !important;
+  border: none !important;
+  box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3) !important;
+  transition: all 0.3s ease !important;
+}
+
+.btn.secondary:hover, .side-link:hover, .side-btn:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4) !important;
+  color: #fff !important;
+}
+
+.nav-btn {
+  color: var(--text-secondary) !important;
+}
+
+.nav-btn.active {
+  background: rgba(16, 185, 129, 0.15) !important;
+  color: var(--brand) !important;
+  border-color: rgba(16, 185, 129, 0.3) !important;
+}
+
+.nav-btn:hover:not(.active) {
+  background: rgba(255, 255, 255, 0.05) !important;
+  color: #fff !important;
+}
+
+/* Enhancing Interactivity */
+.result-item, .library-card, .quick-btn {
+  transition: transform 0.3s ease, box-shadow 0.3s ease !important;
+  background: rgba(255, 255, 255, 0.03) !important;
+}
+.result-item:hover, .library-card:hover, .quick-btn:hover {
+  transform: translateY(-4px) !important;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4) !important;
+  border-color: var(--line) !important;
+  background: rgba(255, 255, 255, 0.06) !important;
+}
+
+/* Typography Enhancements */
+h1, h2, h3, h4, strong {
+  color: #fff !important;
+}
+
+.brand-mark {
+  background: linear-gradient(135deg, var(--brand), var(--brand-deep)) !important;
+  box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3) !important;
+}
+
+/* Sweet dark scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: rgba(0,0,0,0.2);
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,0.2);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255,255,255,0.3);
+}
+
+/* Animations */
+@keyframes slideUpFade {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.card, .summary-shell, .tiles-shell, .search-shell, .results-shell, .main > section {
+  animation: slideUpFade 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Fix Tiles Overlay Issue */
+.tile.teal, .tile.gold, .tile.blue, .tile.dark {
+  background: rgba(255, 255, 255, 0.03) !important;
+  border: 1px solid var(--border) !important;
+}
+.tile-icon {
+  background: linear-gradient(135deg, var(--brand), var(--brand-deep)) !important;
+  border: none !important;
+  color: #fff !important;
+}
+
+/* Fix specific colors in forms */
+.checkbox-custom {
+  border-color: var(--line) !important;
+}
+.checkbox-wrapper input:checked + .checkbox-custom {
+  background: linear-gradient(135deg, var(--brand), var(--brand-deep)) !important;
+  border-color: var(--brand) !important;
+}
+
+/* Status pills */
+.status-pill {
+  background: rgba(16, 185, 129, 0.15) !important;
+  color: var(--brand) !important;
+  border: 1px solid rgba(16, 185, 129, 0.3) !important;
+}
+.chip {
+  background: rgba(99, 102, 241, 0.15) !important;
+  color: var(--accent) !important;
+  border: 1px solid rgba(99, 102, 241, 0.3) !important;
+}
+
+/* Tables / Grid updates */
+.mini-icon {
+  background: rgba(16, 185, 129, 0.15) !important;
+  color: var(--brand) !important;
+  border: 1px solid rgba(16, 185, 129, 0.3) !important;
+}

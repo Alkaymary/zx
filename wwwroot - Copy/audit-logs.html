@@ -1,0 +1,479 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>سجل العمليات | AdminAPI</title>
+  <style>
+    :root{
+      --bg:#ffffff;--panel:#ffffff;--sidebar:#fbfcfd;--ink:#16202a;--muted:#6f7a84;--line:#e7ebef;
+      --brand:#0f766e;--brand-deep:#0b5c56;--accent:#c88b33;--danger:#bf4f45;--soft:#f5f8fa;--soft-brand:#eef7f6;
+      --blue:#2563eb;--gold:#c88b33;--shadow:0 24px 60px rgba(15,23,42,.08)
+    }
+    *{box-sizing:border-box}
+    body{margin:0;min-height:100vh;background:var(--bg);color:var(--ink);font-family:"Cairo","Tajawal","Segoe UI",Tahoma,sans-serif}
+    button,input,select,a,textarea{font:inherit}
+    a{text-decoration:none;color:inherit}
+    .app{display:grid;grid-template-columns:290px minmax(0,1fr);min-height:100vh}
+    .sidebar{
+      background:var(--sidebar);border-left:1px solid var(--line);padding:22px 18px;display:flex;flex-direction:column;gap:18px;position:sticky;top:0;height:100vh
+    }
+    .brand{display:flex;align-items:center;gap:12px;padding:10px 6px}
+    .brand-mark{
+      width:42px;height:42px;border-radius:14px;display:grid;place-items:center;color:#fff;font-weight:800;
+      background:linear-gradient(135deg,var(--brand),var(--accent));box-shadow:0 14px 30px rgba(15,118,110,.18)
+    }
+    .brand strong{display:block;font-size:18px}
+    .brand span{color:var(--muted);font-size:13px}
+    .session-card,.card,.topbar,.summary-shell,.filters-card,.table-card,.detail-card{
+      background:var(--panel);border:1px solid var(--line);border-radius:24px;box-shadow:var(--shadow)
+    }
+    .session-card{padding:16px}
+    .session-card h3{margin:0 0 12px;font-size:16px}
+    .session-line{display:flex;justify-content:space-between;gap:10px;padding:6px 0;color:var(--muted);font-size:13px}
+    .nav{display:grid;gap:8px;overflow:auto;padding-left:4px}
+    .nav-label{color:var(--muted);font-size:12px;font-weight:800;padding:6px 10px 2px}
+    .nav-btn{
+      width:100%;min-height:46px;border:1px solid transparent;background:transparent;color:var(--ink);border-radius:16px;text-align:right;padding:0 14px;cursor:pointer;font-weight:700;transition:.2s ease
+    }
+    .nav-btn:hover{background:#fff;border-color:var(--line)}
+    .nav-btn.active{background:var(--soft-brand);color:var(--brand);border-color:rgba(15,118,110,.12)}
+    .sidebar-actions{margin-top:auto;display:grid;gap:10px}
+    .side-link,.side-btn{
+      min-height:44px;border-radius:14px;border:1px solid var(--line);background:#fff;display:grid;place-items:center;color:var(--brand);font-weight:800;cursor:pointer
+    }
+    .main{padding:22px;display:grid;gap:18px}
+    .topbar{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;padding:18px 20px}
+    .topbar h1{margin:0;font-size:30px}
+    .topbar p{margin:6px 0 0;color:var(--muted);font-size:14px;line-height:1.9;max-width:920px}
+    .topbar-actions{display:flex;gap:10px;flex-wrap:wrap}
+    .btn{
+      min-height:42px;padding:0 14px;border-radius:14px;border:1px solid var(--line);background:#fff;color:var(--brand);
+      cursor:pointer;font-weight:800;display:inline-flex;align-items:center;justify-content:center;gap:8px
+    }
+    .btn.primary{background:linear-gradient(135deg,var(--brand),var(--brand-deep));border-color:transparent;color:#fff}
+    .summary-shell{padding:18px}
+    .summary-head{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:16px}
+    .summary-head h3{margin:0 0 6px;font-size:22px}
+    .summary-head p{margin:0;color:var(--muted);font-size:13px;line-height:1.8}
+    .summary-chip{min-height:34px;padding:0 12px;border-radius:999px;background:var(--soft-brand);color:var(--brand);border:1px solid rgba(15,118,110,.12);display:inline-flex;align-items:center;font-size:12px;font-weight:800}
+    .summary-grid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:12px}
+    .mini-card{
+      min-height:142px;border-radius:22px;padding:16px;border:1px solid var(--line);background:linear-gradient(180deg,#fff 0%,#fbfdff 100%);
+      display:flex;flex-direction:column;justify-content:space-between
+    }
+    .mini-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+    .mini-top span{color:var(--muted);font-size:13px}
+    .mini-top strong{display:block;margin-top:8px;font-size:32px;line-height:1.05;letter-spacing:-.03em}
+    .mini-icon{
+      width:42px;height:42px;border-radius:15px;display:grid;place-items:center;font-weight:900;color:#fff;background:linear-gradient(135deg,var(--brand),var(--accent))
+    }
+    .mini-foot{display:flex;justify-content:space-between;gap:8px;color:var(--muted);font-size:12px}
+    .filters-card{padding:18px}
+    .filters-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px}
+    .field{display:grid;gap:6px}
+    .field label{font-size:13px;color:var(--muted);font-weight:700}
+    .field input,.field select{
+      min-height:44px;border-radius:14px;border:1px solid var(--line);padding:0 12px;background:#fff;outline:none
+    }
+    .filters-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+    .content-grid{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(360px,.85fr);gap:18px}
+    .table-card,.detail-card{padding:18px}
+    .section-head{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:16px}
+    .section-head h3{margin:0 0 6px;font-size:22px}
+    .section-head p{margin:0;color:var(--muted);font-size:13px;line-height:1.8}
+    .table-wrap{overflow:auto;border:1px solid var(--line);border-radius:18px;background:#fff}
+    table{width:100%;border-collapse:collapse;min-width:1020px}
+    th,td{padding:13px 14px;text-align:right;border-bottom:1px solid var(--line);vertical-align:top;font-size:13px}
+    th{background:#f8fbfd;color:var(--muted);font-size:11px;font-weight:800;white-space:nowrap}
+    tbody tr{cursor:pointer;transition:.15s ease}
+    tbody tr:hover{background:#fbfefd}
+    tbody tr.active{background:#eef7f6}
+    td strong{display:block;font-size:13px;color:var(--ink)}
+    td .sub{display:block;margin-top:4px;color:var(--muted);font-size:11px;line-height:1.7}
+    .badge{
+      min-height:28px;padding:0 10px;border-radius:999px;display:inline-flex;align-items:center;justify-content:center;border:1px solid transparent;font-size:11px;font-weight:800;white-space:nowrap
+    }
+    .badge.success{background:#ecfdf5;border-color:#d1fae5;color:#059669}
+    .badge.client{background:#fff7ed;border-color:#fed7aa;color:#c2410c}
+    .badge.blocked{background:#fef2f2;border-color:#fecaca;color:#b91c1c}
+    .badge.server{background:#fef2f2;border-color:#fecaca;color:#991b1b}
+    .badge.redirected{background:#eff6ff;border-color:#dbeafe;color:#1d4ed8}
+    .badge.public{background:#f8fafc;border-color:#e2e8f0;color:#475569}
+    .badge.protected{background:#eef7f6;border-color:#cde9e4;color:#0f766e}
+    .badge.privileged{background:#fff7ed;border-color:#fde68a;color:#b45309}
+    .pager{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-top:14px}
+    .pager-info{color:var(--muted);font-size:13px}
+    .pager-actions{display:flex;gap:10px}
+    .detail-card{display:grid;gap:14px;align-content:start}
+    .detail-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+    .detail-box{
+      min-height:92px;border:1px solid var(--line);border-radius:18px;background:linear-gradient(180deg,#fff 0%,#fbfdff 100%);padding:14px;display:grid;gap:6px
+    }
+    .detail-box span{font-size:12px;color:var(--muted)}
+    .detail-box strong{font-size:16px;line-height:1.7;word-break:break-word}
+    .payload-box{
+      border:1px solid var(--line);border-radius:20px;background:#fbfdff;padding:14px;display:grid;gap:8px
+    }
+    .payload-box span{font-size:12px;color:var(--muted);font-weight:800}
+    pre{
+      margin:0;white-space:pre-wrap;word-break:break-word;direction:ltr;text-align:left;background:#0f172a;color:#e2e8f0;border-radius:16px;padding:14px;min-height:140px;max-height:280px;overflow:auto;font-size:12px;line-height:1.8
+    }
+    .placeholder,.error-box{
+      border:1px dashed var(--line);border-radius:18px;padding:24px;text-align:center;color:var(--muted);line-height:1.9;background:#fcfdff
+    }
+    .error-box{display:none;background:#fff5f5;border-color:#fecaca;color:#b91c1c}
+    .error-box.show{display:block}
+    @media (max-width:1400px){.summary-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.filters-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+    @media (max-width:1080px){.app{grid-template-columns:1fr}.sidebar{position:static;height:auto}.content-grid{grid-template-columns:1fr}.summary-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+    @media (max-width:720px){.main{padding:16px}.summary-grid,.filters-grid,.detail-grid{grid-template-columns:1fr}.topbar,.summary-shell,.filters-card,.table-card,.detail-card{padding:16px}}
+  </style>
+<link rel="stylesheet" href="/theme.css">
+</head>
+<body>
+  <main class="app">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-mark">A</div>
+        <div>
+          <strong>لوحة المدير</strong>
+          <span>AdminAPI Control</span>
+        </div>
+      </div>
+
+      <section class="session-card">
+        <h3>الجلسة الحالية</h3>
+        <div class="session-line"><span>اسم المستخدم</span><b id="sessionUsername">-</b></div>
+        <div class="session-line"><span>الدور</span><b id="sessionRole">-</b></div>
+        <div class="session-line"><span>المعرّف</span><b id="sessionUserId">-</b></div>
+      </section>
+
+      <nav class="nav">
+        <div class="nav-label">الأقسام الرئيسية</div>
+        <a class="nav-btn" href="/admin.html">نظرة عامة</a>
+        <a class="nav-btn active" href="/audit-logs.html">سجل العمليات</a>
+        <a class="nav-btn" href="/libraries.html">المكتبات</a>
+        <a class="nav-btn" href="/financial.html">المالية</a>
+        <a class="nav-btn" href="/reports.html">التقارير</a>
+      </nav>
+
+      <div class="sidebar-actions">
+        <a class="side-link" href="/">صفحة الدخول</a>
+        <a class="side-link" href="/swagger">Swagger</a>
+        <button class="side-btn" id="logoutBtn" type="button">تسجيل الخروج</button>
+      </div>
+    </aside>
+
+    <section class="main">
+      <section class="topbar">
+        <div>
+          <h1>سجل العمليات الكامل</h1>
+          <p>لوحة متابعة تفصيلية تعرض كل الاستدعاءات المسجلة داخل النظام: من نفّذ العملية، أي نقطة استُدعيت، البيانات المرفوعة، الرد، الحالة الأمنية، والـ IP بشكل واضح ومباشر.</p>
+        </div>
+        <div class="topbar-actions">
+          <button class="btn" id="clearFiltersBtn" type="button">مسح الفلاتر</button>
+          <button class="btn primary" id="refreshBtn" type="button">تحديث السجل</button>
+        </div>
+      </section>
+
+      <section class="summary-shell">
+        <div class="summary-head">
+          <div>
+            <h3>مؤشرات السجل</h3>
+            <p>ملخص سريع يوضح كثافة العمليات، الأخطاء، ومحاولات الوصول حسب مستوى الحماية.</p>
+          </div>
+          <div class="summary-chip">Audit Dashboard</div>
+        </div>
+        <div class="summary-grid">
+          <article class="mini-card"><div class="mini-top"><div><span>إجمالي السجلات</span><strong id="totalLogs">0</strong></div><div class="mini-icon">#</div></div><div class="mini-foot"><small>Logs</small><small>All</small></div></article>
+          <article class="mini-card"><div class="mini-top"><div><span>سجلات اليوم</span><strong id="todayLogs">0</strong></div><div class="mini-icon">T</div></div><div class="mini-foot"><small>Today</small><small>UTC</small></div></article>
+          <article class="mini-card"><div class="mini-top"><div><span>العمليات الناجحة</span><strong id="successLogs">0</strong></div><div class="mini-icon">S</div></div><div class="mini-foot"><small>200s</small><small>Success</small></div></article>
+          <article class="mini-card"><div class="mini-top"><div><span>محاولات محجوبة</span><strong id="blockedLogs">0</strong></div><div class="mini-icon">B</div></div><div class="mini-foot"><small>401/403</small><small>Blocked</small></div></article>
+          <article class="mini-card"><div class="mini-top"><div><span>أخطاء السيرفر</span><strong id="serverLogs">0</strong></div><div class="mini-icon">E</div></div><div class="mini-foot"><small>500s</small><small>Server</small></div></article>
+          <article class="mini-card"><div class="mini-top"><div><span>عمليات إدارية</span><strong id="privilegedLogs">0</strong></div><div class="mini-icon">A</div></div><div class="mini-foot"><small>Privileged</small><small>Admin</small></div></article>
+        </div>
+      </section>
+
+      <section class="filters-card">
+        <div class="section-head">
+          <div>
+            <h3>فلترة السجل</h3>
+            <p>ابحث بالمسار أو الحساب أو الـ IP، وفلتر حسب النوع الأمني والحالة والفترة الزمنية.</p>
+          </div>
+        </div>
+        <div class="filters-grid">
+          <div class="field"><label for="searchInput">بحث عام</label><input id="searchInput" placeholder="endpoint / account / action / IP"></div>
+          <div class="field"><label for="endpointInput">النقطة المستدعاة</label><input id="endpointInput" placeholder="/api/Libraries"></div>
+          <div class="field"><label for="accountInput">الحساب</label><input id="accountInput" placeholder="username"></div>
+          <div class="field"><label for="ipInput">IP</label><input id="ipInput" placeholder="127.0.0.1"></div>
+          <div class="field"><label for="methodSelect">الإجراء</label><select id="methodSelect"><option value="">الكل</option><option>GET</option><option>POST</option><option>PUT</option><option>DELETE</option><option>PATCH</option></select></div>
+          <div class="field"><label for="statusSelect">الحالة</label><select id="statusSelect"><option value="">الكل</option><option value="Succeeded">Succeeded</option><option value="Redirected">Redirected</option><option value="ClientError">ClientError</option><option value="Blocked">Blocked</option><option value="ServerError">ServerError</option></select></div>
+          <div class="field"><label for="securitySelect">المستوى الأمني</label><select id="securitySelect"><option value="">الكل</option><option value="Public">Public</option><option value="Protected">Protected</option><option value="Privileged">Privileged</option></select></div>
+          <div class="field"><label for="fromDateInput">من تاريخ</label><input id="fromDateInput" type="datetime-local"></div>
+          <div class="field"><label for="toDateInput">إلى تاريخ</label><input id="toDateInput" type="datetime-local"></div>
+          <div class="field"><label for="pageSizeSelect">عدد الصفوف</label><select id="pageSizeSelect"><option value="25">25</option><option value="50">50</option><option value="100">100</option><option value="200">200</option></select></div>
+        </div>
+        <div class="filters-actions">
+          <button class="btn primary" id="applyFiltersBtn" type="button">تطبيق الفلاتر</button>
+          <button class="btn" id="resetFiltersBtn" type="button">إعادة التعيين</button>
+        </div>
+      </section>
+
+      <div class="error-box" id="errorBox"></div>
+
+      <section class="content-grid">
+        <article class="table-card">
+          <div class="section-head">
+            <div>
+              <h3>قائمة السجلات</h3>
+              <p>اضغط على أي سطر لعرض التفاصيل الكاملة للطلب والرد والجهة المنفذة.</p>
+            </div>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>التاريخ</th>
+                  <th>الحساب</th>
+                  <th>النقطة المستدعاة</th>
+                  <th>الإجراء</th>
+                  <th>الحالة</th>
+                  <th>الأمان</th>
+                  <th>IP</th>
+                  <th>المدة</th>
+                </tr>
+              </thead>
+              <tbody id="logsTableBody">
+                <tr><td colspan="9"><div class="placeholder">جاري تحميل السجلات...</div></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="pager">
+            <div class="pager-info" id="pagerInfo">-</div>
+            <div class="pager-actions">
+              <button class="btn" id="prevPageBtn" type="button">السابق</button>
+              <button class="btn" id="nextPageBtn" type="button">التالي</button>
+            </div>
+          </div>
+        </article>
+
+        <aside class="detail-card">
+          <div class="section-head">
+            <div>
+              <h3>تفاصيل العملية</h3>
+              <p>عرض كامل للبيانات المرفوعة والرد والهوية المرتبطة بالسجل المحدد.</p>
+            </div>
+          </div>
+
+          <div class="detail-grid">
+            <article class="detail-box"><span>المعرّف</span><strong id="detailId">-</strong></article>
+            <article class="detail-box"><span>تاريخ العملية</span><strong id="detailDate">-</strong></article>
+            <article class="detail-box"><span>الحساب</span><strong id="detailAccount">-</strong></article>
+            <article class="detail-box"><span>النقطة المستدعاة</span><strong id="detailEndpoint">-</strong></article>
+            <article class="detail-box"><span>الإجراء</span><strong id="detailAction">-</strong></article>
+            <article class="detail-box"><span>الحالة</span><strong id="detailStatus">-</strong></article>
+            <article class="detail-box"><span>المستوى الأمني</span><strong id="detailSecurity">-</strong></article>
+            <article class="detail-box"><span>IP</span><strong id="detailIp">-</strong></article>
+            <article class="detail-box"><span>المدة</span><strong id="detailDuration">-</strong></article>
+            <article class="detail-box"><span>Trace ID</span><strong id="detailTrace">-</strong></article>
+          </div>
+
+          <article class="payload-box">
+            <span>البيانات المرفوعة</span>
+            <pre id="detailRequest">اختر سجلًا من الجدول لعرض بيانات الطلب.</pre>
+          </article>
+
+          <article class="payload-box">
+            <span>الرد</span>
+            <pre id="detailResponse">سيظهر الرد هنا بعد اختيار سجل.</pre>
+          </article>
+        </aside>
+      </section>
+    </section>
+  </main>
+
+  <script>
+    const session = readJson("adminSession");
+    let currentPage = 1;
+    let totalPages = 0;
+    let currentItems = [];
+    let selectedLogId = null;
+
+    function byId(id){ return document.getElementById(id); }
+    function readJson(key){ try { return JSON.parse(localStorage.getItem(key) || "null"); } catch { return null; } }
+    function requireSession(){
+      if (!session?.accessToken){
+        window.location.href = "/";
+        throw new Error("لا توجد جلسة مدير.");
+      }
+    }
+    function renderSession(){
+      byId("sessionUsername").textContent = session.username || "-";
+      byId("sessionRole").textContent = session.roleCode || "-";
+      byId("sessionUserId").textContent = session.userId || "-";
+    }
+    function showError(message){
+      const box = byId("errorBox");
+      box.textContent = message;
+      box.classList.add("show");
+    }
+    function hideError(){
+      const box = byId("errorBox");
+      box.textContent = "";
+      box.classList.remove("show");
+    }
+    async function requestJson(url){
+      const response = await fetch(url, { headers: { "Authorization": `Bearer ${session.accessToken}` } });
+      const text = await response.text();
+      let data = null;
+      try { data = text ? JSON.parse(text) : null; } catch { data = text; }
+      if (!response.ok) throw new Error(typeof data === "string" ? data : (data?.title || `HTTP ${response.status}`));
+      return data;
+    }
+    function formatDate(value){ return value ? new Date(value).toLocaleString("ar-IQ") : "-"; }
+    function escapeHtml(value){ return String(value ?? "-").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll("\"","&quot;"); }
+    function buildQuery(page = currentPage){
+      const query = new URLSearchParams();
+      const mapping = [
+        ["search", byId("searchInput").value.trim()],
+        ["endpoint", byId("endpointInput").value.trim()],
+        ["accountUsername", byId("accountInput").value.trim()],
+        ["ipAddress", byId("ipInput").value.trim()],
+        ["httpMethod", byId("methodSelect").value],
+        ["status", byId("statusSelect").value],
+        ["securityLevel", byId("securitySelect").value],
+        ["fromDate", byId("fromDateInput").value],
+        ["toDate", byId("toDateInput").value]
+      ];
+      mapping.forEach(([key, value]) => { if (value) query.set(key, value); });
+      query.set("page", String(page));
+      query.set("pageSize", byId("pageSizeSelect").value);
+      return query.toString();
+    }
+    function badgeForStatus(value){
+      if (value === "Succeeded") return `<span class="badge success">${value}</span>`;
+      if (value === "ClientError") return `<span class="badge client">${value}</span>`;
+      if (value === "Blocked") return `<span class="badge blocked">${value}</span>`;
+      if (value === "ServerError") return `<span class="badge server">${value}</span>`;
+      if (value === "Redirected") return `<span class="badge redirected">${value}</span>`;
+      return `<span class="badge success">${value || "-"}</span>`;
+    }
+    function badgeForSecurity(value){
+      if (value === "Privileged") return `<span class="badge privileged">${value}</span>`;
+      if (value === "Protected") return `<span class="badge protected">${value}</span>`;
+      return `<span class="badge public">${value || "Public"}</span>`;
+    }
+    function renderMetrics(metrics){
+      byId("totalLogs").textContent = metrics.totalLogs ?? 0;
+      byId("todayLogs").textContent = metrics.todayLogs ?? 0;
+      byId("successLogs").textContent = metrics.successfulLogs ?? 0;
+      byId("blockedLogs").textContent = metrics.blockedLogs ?? 0;
+      byId("serverLogs").textContent = metrics.serverErrors ?? 0;
+      byId("privilegedLogs").textContent = metrics.privilegedLogs ?? 0;
+    }
+    function renderTable(response){
+      currentItems = response.items || [];
+      totalPages = response.totalPages || 0;
+
+      if (!currentItems.length){
+        byId("logsTableBody").innerHTML = `<tr><td colspan="9"><div class="placeholder">لا توجد سجلات مطابقة للفلاتر الحالية.</div></td></tr>`;
+        byId("pagerInfo").textContent = "0 نتيجة";
+        clearDetails();
+        return;
+      }
+
+      byId("logsTableBody").innerHTML = currentItems.map((item) => `
+        <tr data-id="${item.id}" class="${selectedLogId === item.id ? "active" : ""}">
+          <td><strong>#${item.id}</strong><span class="sub">${escapeHtml(item.traceIdentifier)}</span></td>
+          <td><strong>${escapeHtml(formatDate(item.operationDate))}</strong></td>
+          <td><strong>${escapeHtml(item.accountUsername || "-")}</strong><span class="sub">${escapeHtml(item.accountType || "-")} • ${escapeHtml(item.roleCode || "-")}</span></td>
+          <td><strong>${escapeHtml(item.endpoint || "-")}</strong><span class="sub">${escapeHtml(item.queryString || "")}</span></td>
+          <td><strong>${escapeHtml(item.httpMethod || "-")}</strong><span class="sub">${escapeHtml(item.actionName || "-")}</span></td>
+          <td>${badgeForStatus(item.status)}</td>
+          <td>${badgeForSecurity(item.securityLevel)}</td>
+          <td><strong>${escapeHtml(item.ipAddress || "-")}</strong></td>
+          <td><strong>${escapeHtml(String(item.durationMs || 0))} ms</strong><span class="sub">HTTP ${escapeHtml(String(item.statusCode || 0))}</span></td>
+        </tr>
+      `).join("");
+
+      byId("pagerInfo").textContent = `الصفحة ${response.page} من ${response.totalPages || 1} • إجمالي ${response.totalCount} سجل`;
+      byId("prevPageBtn").disabled = response.page <= 1;
+      byId("nextPageBtn").disabled = response.page >= (response.totalPages || 1);
+
+      byId("logsTableBody").querySelectorAll("tr[data-id]").forEach((row) => {
+        row.addEventListener("click", () => loadDetails(Number(row.dataset.id)));
+      });
+
+      const fallbackId = selectedLogId && currentItems.some((item) => item.id === selectedLogId)
+        ? selectedLogId
+        : currentItems[0]?.id;
+      if (fallbackId) loadDetails(fallbackId, true);
+    }
+    function clearDetails(){
+      ["detailId","detailDate","detailAccount","detailEndpoint","detailAction","detailStatus","detailSecurity","detailIp","detailDuration","detailTrace"].forEach((id) => byId(id).textContent = "-");
+      byId("detailRequest").textContent = "اختر سجلًا من الجدول لعرض بيانات الطلب.";
+      byId("detailResponse").textContent = "سيظهر الرد هنا بعد اختيار سجل.";
+    }
+    async function loadDetails(id, silent = false){
+      selectedLogId = id;
+      try{
+        const item = await requestJson(`/api/AuditLogs/${id}`);
+        byId("detailId").textContent = `#${item.id}`;
+        byId("detailDate").textContent = formatDate(item.operationDate);
+        byId("detailAccount").textContent = `${item.accountUsername || "-"} • ${item.accountType || "-"}`;
+        byId("detailEndpoint").textContent = item.endpoint || "-";
+        byId("detailAction").textContent = `${item.httpMethod || "-"} • ${item.actionName || "-"}`;
+        byId("detailStatus").textContent = `${item.status || "-"} • HTTP ${item.statusCode || "-"}`;
+        byId("detailSecurity").textContent = item.securityLevel || "-";
+        byId("detailIp").textContent = item.ipAddress || "-";
+        byId("detailDuration").textContent = `${item.durationMs || 0} ms`;
+        byId("detailTrace").textContent = item.traceIdentifier || "-";
+        byId("detailRequest").textContent = item.requestPayload || "لا توجد بيانات مرفوعة محفوظة لهذا السجل.";
+        byId("detailResponse").textContent = item.responsePayload || "لا توجد بيانات رد محفوظة لهذا السجل.";
+        byId("logsTableBody").querySelectorAll("tr[data-id]").forEach((row) => row.classList.toggle("active", Number(row.dataset.id) === id));
+      }catch(error){
+        if (!silent) showError(error.message || "تعذر تحميل تفاصيل السجل.");
+      }
+    }
+    async function loadMetrics(){
+      const metrics = await requestJson(`/api/AuditLogs/metrics?${buildQuery(currentPage)}`);
+      renderMetrics(metrics);
+    }
+    async function loadLogs(page = currentPage){
+      hideError();
+      currentPage = page;
+      try{
+        const response = await requestJson(`/api/AuditLogs?${buildQuery(page)}`);
+        renderTable(response);
+        await loadMetrics();
+      }catch(error){
+        showError(error.message || "تعذر تحميل السجلات.");
+      }
+    }
+    function resetFilters(){
+      ["searchInput","endpointInput","accountInput","ipInput","fromDateInput","toDateInput"].forEach((id) => byId(id).value = "");
+      ["methodSelect","statusSelect","securitySelect"].forEach((id) => byId(id).value = "");
+      byId("pageSizeSelect").value = "25";
+      currentPage = 1;
+      selectedLogId = null;
+      clearDetails();
+      loadLogs(1);
+    }
+
+    byId("refreshBtn").addEventListener("click", () => loadLogs(currentPage));
+    byId("applyFiltersBtn").addEventListener("click", () => loadLogs(1));
+    byId("clearFiltersBtn").addEventListener("click", resetFilters);
+    byId("resetFiltersBtn").addEventListener("click", resetFilters);
+    byId("prevPageBtn").addEventListener("click", () => { if (currentPage > 1) loadLogs(currentPage - 1); });
+    byId("nextPageBtn").addEventListener("click", () => { if (currentPage < totalPages) loadLogs(currentPage + 1); });
+    byId("logoutBtn").addEventListener("click", () => { localStorage.removeItem("adminSession"); window.location.href = "/"; });
+
+    requireSession();
+    renderSession();
+    clearDetails();
+    loadLogs(1);
+  </script>
+</body>
+</html>
+
